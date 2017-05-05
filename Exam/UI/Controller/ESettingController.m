@@ -7,6 +7,7 @@
 //
 
 #import "ESettingController.h"
+#import "EUploadIDCardController.h"
 
 @interface ESettingController ()<UITableViewDelegate,UITableViewDataSource>
 {
@@ -82,7 +83,24 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    if (indexPath.section == 0) {
+        if (indexPath.row == 0) {
+            
+        } else if (indexPath.row == 1) {
+            EUploadIDCardController *uploadIDCardController = [[EUploadIDCardController alloc] init];
+            [self.navigationController pushToController:uploadIDCardController animated:YES];
+        } else if (indexPath.row == 2) {
+            
+        } else {
+            
+        }
+    } else {
+        if (indexPath.row == 0) {
+            
+        } else {
+            
+        }
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

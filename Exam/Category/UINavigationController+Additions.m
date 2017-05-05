@@ -23,7 +23,7 @@
     if (isInStack) {
         [self popToViewController:tempController animated:animated];
     } else {
-        [self pushToController:tempController animated:animated];
+        [self pushViewController:tempController animated:YES];
     }
 }
 
