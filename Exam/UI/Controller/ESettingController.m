@@ -10,6 +10,7 @@
 #import "EUploadIDCardController.h"
 #import "EAboutController.h"
 #import <UShareUI/UShareUI.h>
+#import "EUpdateController.h"
 
 static NSString* const UMS_Title = @"【友盟+】社会化组件U-Share";
 static NSString* const UMS_Web_Desc = @"W欢迎使用【友盟+】社会化组件U-Share，SDK包最小，集成成本最低，助力您的产品开发、运营与推广！";
@@ -189,7 +190,8 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
             EAboutController *aboutController = [[EAboutController alloc] init];
             [self.navigationController pushToController:aboutController animated:YES];
         } else {
-            
+            EUpdateController *updateController = [[EUpdateController alloc] init];
+            [self.navigationController pushToController:updateController animated:YES];
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

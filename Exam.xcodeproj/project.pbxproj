@@ -113,6 +113,7 @@
 		FA9E27811EBC661E00B30249 /* UMSocialSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FA9E27791EBC661E00B30249 /* UMSocialSDKResources.bundle */; };
 		FA9E27821EBC661E00B30249 /* UShareUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA9E277A1EBC661E00B30249 /* UShareUI.framework */; };
 		FA9E27841EBC66E800B30249 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA9E27831EBC66E800B30249 /* CoreGraphics.framework */; };
+		FA9E27871EBC72EB00B30249 /* EUpdateController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA9E27861EBC72EB00B30249 /* EUpdateController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -322,6 +323,8 @@
 		FA9E27791EBC661E00B30249 /* UMSocialSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UMSocialSDKResources.bundle; sourceTree = "<group>"; };
 		FA9E277A1EBC661E00B30249 /* UShareUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UShareUI.framework; sourceTree = "<group>"; };
 		FA9E27831EBC66E800B30249 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		FA9E27851EBC72EB00B30249 /* EUpdateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EUpdateController.h; sourceTree = "<group>"; };
+		FA9E27861EBC72EB00B30249 /* EUpdateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EUpdateController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -711,6 +714,8 @@
 				FA9E27651EBC53C700B30249 /* EMyExerciseController.m */,
 				FA9E27671EBC548A00B30249 /* EAboutController.h */,
 				FA9E27681EBC548A00B30249 /* EAboutController.m */,
+				FA9E27851EBC72EB00B30249 /* EUpdateController.h */,
+				FA9E27861EBC72EB00B30249 /* EUpdateController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -990,6 +995,7 @@
 				FA8A23081E31B9EB007D1E38 /* EExamPane.m in Sources */,
 				456C8C431E2FA21C002EA371 /* MASViewAttribute.m in Sources */,
 				456C8C341E2FA21C002EA371 /* IQUIViewController+Additions.m in Sources */,
+				FA9E27871EBC72EB00B30249 /* EUpdateController.m in Sources */,
 				456C8C351E2FA21C002EA371 /* IQUIWindow+Hierarchy.m in Sources */,
 				456C8C371E2FA21C002EA371 /* IQKeyboardReturnKeyHandler.m in Sources */,
 				456C8C3F1E2FA21C002EA371 /* MASCompositeConstraint.m in Sources */,
