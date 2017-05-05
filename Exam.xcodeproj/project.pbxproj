@@ -90,6 +90,7 @@
 		FA2371C71EB8715900DDBD0F /* ECheckTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2371C61EB8715900DDBD0F /* ECheckTextField.m */; };
 		FA2371CA1EB8728200DDBD0F /* EUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2371C91EB8728200DDBD0F /* EUtils.m */; };
 		FA2371CD1EB88E6000DDBD0F /* ERegisterSuccessController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2371CC1EB88E6000DDBD0F /* ERegisterSuccessController.m */; };
+		FA3073741EBC4E47004E7048 /* EImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3073731EBC4E47004E7048 /* EImagePickerController.m */; };
 		FA62344F1EBAD3170021A6F0 /* ESettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA62344E1EBAD3170021A6F0 /* ESettingController.m */; };
 		FA6234581EBAE5A10021A6F0 /* EUploadIDCardController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6234571EBAE5A10021A6F0 /* EUploadIDCardController.m */; };
 		FA66B43B1EB9849D00DB5B04 /* EAlertWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = FA66B43A1EB9849D00DB5B04 /* EAlertWindow.m */; };
@@ -271,6 +272,8 @@
 		FA2371C91EB8728200DDBD0F /* EUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EUtils.m; sourceTree = "<group>"; };
 		FA2371CB1EB88E6000DDBD0F /* ERegisterSuccessController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ERegisterSuccessController.h; sourceTree = "<group>"; };
 		FA2371CC1EB88E6000DDBD0F /* ERegisterSuccessController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ERegisterSuccessController.m; sourceTree = "<group>"; };
+		FA3073721EBC4E47004E7048 /* EImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EImagePickerController.h; sourceTree = "<group>"; };
+		FA3073731EBC4E47004E7048 /* EImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EImagePickerController.m; sourceTree = "<group>"; };
 		FA62344D1EBAD3170021A6F0 /* ESettingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESettingController.h; sourceTree = "<group>"; };
 		FA62344E1EBAD3170021A6F0 /* ESettingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESettingController.m; sourceTree = "<group>"; };
 		FA6234561EBAE5A10021A6F0 /* EUploadIDCardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EUploadIDCardController.h; sourceTree = "<group>"; };
@@ -665,6 +668,8 @@
 				45C493051E2FB17300FBD8B7 /* EScorePaneController.m */,
 				FA62344D1EBAD3170021A6F0 /* ESettingController.h */,
 				FA62344E1EBAD3170021A6F0 /* ESettingController.m */,
+				FA3073721EBC4E47004E7048 /* EImagePickerController.h */,
+				FA3073731EBC4E47004E7048 /* EImagePickerController.m */,
 				FA6234561EBAE5A10021A6F0 /* EUploadIDCardController.h */,
 				FA6234571EBAE5A10021A6F0 /* EUploadIDCardController.m */,
 			);
@@ -843,6 +848,7 @@
 				FA62344F1EBAD3170021A6F0 /* ESettingController.m in Sources */,
 				456C8C681E2FA4EA002EA371 /* FMDatabase.m in Sources */,
 				45C492FA1E2FAE2600FBD8B7 /* EDBHelper.m in Sources */,
+				FA3073741EBC4E47004E7048 /* EImagePickerController.m in Sources */,
 				456C8C361E2FA21C002EA371 /* IQKeyboardManager.m in Sources */,
 				FA7CE1111E45C11100C4147B /* EScoreContainController.m in Sources */,
 				45D381661E430386005092AD /* ESubject.m in Sources */,

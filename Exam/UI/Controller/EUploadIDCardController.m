@@ -7,8 +7,21 @@
 //
 
 #import "EUploadIDCardController.h"
+#import "EImagePickerController.h"
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTCarrier.h>
+#import <MobileCoreServices/MobileCoreServices.h>
+#import "UIImage+Additions.h"
 
-@interface EUploadIDCardController ()
+@interface EUploadIDCardController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate>
+{
+    UIImage *selectedTopImage; // 选择的正面图片
+    UIImage *selectedBottomImage; // 选择的反面图片
+    BOOL isTopImage;
+    
+    UIButton *topBtn;
+    UIButton *bottomBtn;
+}
 
 @end
 
@@ -49,7 +62,7 @@
     [scrollPane addSubview:topLbl];
     
     originY += lblHeight + kEPadding * 2;
-    UIButton *topBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    topBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     topBtn.frame = CGRectMake(originX, originY, blockWidth, blockHeight);
     [topBtn setBackgroundImage:IMAGE_BY_NAMED(@"Icon") forState:UIControlStateNormal];
     [topBtn addTarget:self action:@selector(topBtnAction) forControlEvents:UIControlEventTouchUpInside];
@@ -64,7 +77,7 @@
     [scrollPane addSubview:bottomLbl];
     
     originY += lblHeight + kEPadding * 2;
-    UIButton *bottomBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    bottomBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     bottomBtn.frame = CGRectMake(originX, originY, blockWidth, blockHeight);
     [bottomBtn setBackgroundImage:IMAGE_BY_NAMED(@"Icon") forState:UIControlStateNormal];
     [bottomBtn addTarget:self action:@selector(bottomBtnAction) forControlEvents:UIControlEventTouchUpInside];
@@ -86,14 +99,100 @@
 
 - (void)topBtnAction {
     DLog(@"上传身份证正面");
+    isTopImage = YES;
+    [self showImagePicker];
 }
 
 - (void)bottomBtnAction {
     DLog(@"上传身份证反面");
+    isTopImage = NO;
+    [self showImagePicker];
+}
+
+- (void)showImagePicker {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"上传身份证" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    __weak typeof (self) weakSelf = self;
+    UIAlertAction *takePhotosAction = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        __strong typeof (self) strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            EImagePickerController *imagePicker = [[EImagePickerController alloc] init];
+            imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            imagePicker.delegate = self;
+            imagePicker.allowsEditing = YES;
+            [strongSelf presentViewController:imagePicker animated:YES completion:nil];
+        }
+    }];
+    UIAlertAction *fromLibrariesAction = [UIAlertAction actionWithTitle:@"从手机相册选取" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        __strong typeof (self) strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+            EImagePickerController *imagePicker = [[EImagePickerController alloc] init];
+            imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            NSMutableArray *mediaTypes = [[NSMutableArray alloc] init];
+            [mediaTypes addObject:(__bridge NSString *)kUTTypeImage];
+            imagePicker.mediaTypes = mediaTypes;
+            imagePicker.delegate = self;
+            imagePicker.allowsEditing = YES;
+            [strongSelf presentViewController:imagePicker animated:YES completion:nil];
+        }
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [alertController addAction:takePhotosAction];
+    [alertController addAction:fromLibrariesAction];
+    [alertController addAction:cancelAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)submitBtnAction {
     DLog(@"提交");
+}
+
+- (void)resetImage {
+    if (isTopImage) {
+        [topBtn setBackgroundImage:selectedTopImage forState:UIControlStateNormal];
+    } else {
+        [bottomBtn setBackgroundImage:selectedBottomImage forState:UIControlStateNormal];
+    }
+}
+
+#pragma mark - UINavigationControllerDelegate  以下两个方法可以统一状态条颜色，避免点击相册到选择照片页面的时候状态条文字颜色变黑不统一!!!
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+}
+
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+}
+
+#pragma mark - UIImagePickerControllerDelegate
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    UIImage *originImage = [info objectForKey:UIImagePickerControllerEditedImage];
+    if (isTopImage) {
+        selectedTopImage = [originImage resizeToSize:CGSizeMake(kFrameWidth - kEPadding * 10, (kFrameWidth - kEPadding * 10) / 2.f)];
+        DLog(@"正面图片大小 : %lu KB",(unsigned long)UIImagePNGRepresentation(selectedTopImage).length / 1024);
+    } else {
+        selectedBottomImage = [originImage resizeToSize:CGSizeMake(kFrameWidth - kEPadding * 10, (kFrameWidth - kEPadding * 10) / 2.f)];
+        DLog(@"反面图片大小 : %lu KB",(unsigned long)UIImagePNGRepresentation(selectedBottomImage).length / 1024);
+    }
+    [self resetImage];
+    
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
 /*
