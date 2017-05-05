@@ -102,6 +102,7 @@
 		FA8A230B1E31DEFE007D1E38 /* EExamContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8A230A1E31DEFE007D1E38 /* EExamContainer.m */; };
 		FA8A230E1E31E467007D1E38 /* EExamContainController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8A230D1E31E467007D1E38 /* EExamContainController.m */; };
 		FA8A23111E31FFCF007D1E38 /* EInstructionWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8A23101E31FFCF007D1E38 /* EInstructionWindow.m */; };
+		FA9E27661EBC53C700B30249 /* EMyExerciseController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA9E27651EBC53C700B30249 /* EMyExerciseController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -296,6 +297,8 @@
 		FA8A230D1E31E467007D1E38 /* EExamContainController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EExamContainController.m; sourceTree = "<group>"; };
 		FA8A230F1E31FFCF007D1E38 /* EInstructionWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EInstructionWindow.h; sourceTree = "<group>"; };
 		FA8A23101E31FFCF007D1E38 /* EInstructionWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EInstructionWindow.m; sourceTree = "<group>"; };
+		FA9E27641EBC53C700B30249 /* EMyExerciseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMyExerciseController.h; sourceTree = "<group>"; };
+		FA9E27651EBC53C700B30249 /* EMyExerciseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMyExerciseController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -672,6 +675,8 @@
 				FA3073731EBC4E47004E7048 /* EImagePickerController.m */,
 				FA6234561EBAE5A10021A6F0 /* EUploadIDCardController.h */,
 				FA6234571EBAE5A10021A6F0 /* EUploadIDCardController.m */,
+				FA9E27641EBC53C700B30249 /* EMyExerciseController.h */,
+				FA9E27651EBC53C700B30249 /* EMyExerciseController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -868,6 +873,7 @@
 				456C8C6D1E2FA4EA002EA371 /* UINavigationBar+Awesome.m in Sources */,
 				456C8C581E2FA21D002EA371 /* UIView+WebCacheOperation.m in Sources */,
 				456C8C3D1E2FA21C002EA371 /* IQUIView+IQKeyboardToolbar.m in Sources */,
+				FA9E27661EBC53C700B30249 /* EMyExerciseController.m in Sources */,
 				FA2371CA1EB8728200DDBD0F /* EUtils.m in Sources */,
 				456C8C4C1E2FA21D002EA371 /* SDWebImageCompat.m in Sources */,
 				456C8C311E2FA21C002EA371 /* IQNSArray+Sort.m in Sources */,
