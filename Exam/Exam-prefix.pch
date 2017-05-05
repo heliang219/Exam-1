@@ -1,0 +1,28 @@
+//
+//  Exam-prefix.pch
+//  Exam
+//
+//  Created by gyq on 2017/1/18.
+//  Copyright © 2017年 shadeless. All rights reserved.
+//
+
+#ifndef Exam_prefix_pch
+#define Exam_prefix_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "EMacro.h"
+#endif
+
+// 调试开关
+#ifdef DEBUG
+#define DLog(...) NSLog(__VA_ARGS__)
+#else
+#define DLog(...)
+#endif
+
+#endif /* Exam_prefix_pch */
