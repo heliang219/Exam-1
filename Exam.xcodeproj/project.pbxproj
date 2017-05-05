@@ -103,6 +103,7 @@
 		FA8A230E1E31E467007D1E38 /* EExamContainController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8A230D1E31E467007D1E38 /* EExamContainController.m */; };
 		FA8A23111E31FFCF007D1E38 /* EInstructionWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8A23101E31FFCF007D1E38 /* EInstructionWindow.m */; };
 		FA9E27661EBC53C700B30249 /* EMyExerciseController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA9E27651EBC53C700B30249 /* EMyExerciseController.m */; };
+		FA9E27691EBC548A00B30249 /* EAboutController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA9E27681EBC548A00B30249 /* EAboutController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -299,6 +300,8 @@
 		FA8A23101E31FFCF007D1E38 /* EInstructionWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EInstructionWindow.m; sourceTree = "<group>"; };
 		FA9E27641EBC53C700B30249 /* EMyExerciseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMyExerciseController.h; sourceTree = "<group>"; };
 		FA9E27651EBC53C700B30249 /* EMyExerciseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMyExerciseController.m; sourceTree = "<group>"; };
+		FA9E27671EBC548A00B30249 /* EAboutController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EAboutController.h; sourceTree = "<group>"; };
+		FA9E27681EBC548A00B30249 /* EAboutController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EAboutController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -677,6 +680,8 @@
 				FA6234571EBAE5A10021A6F0 /* EUploadIDCardController.m */,
 				FA9E27641EBC53C700B30249 /* EMyExerciseController.h */,
 				FA9E27651EBC53C700B30249 /* EMyExerciseController.m */,
+				FA9E27671EBC548A00B30249 /* EAboutController.h */,
+				FA9E27681EBC548A00B30249 /* EAboutController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -925,6 +930,7 @@
 				456C8C331E2FA21C002EA371 /* IQUIView+Hierarchy.m in Sources */,
 				456C8C321E2FA21C002EA371 /* IQUITextFieldView+Additions.m in Sources */,
 				456C8C381E2FA21C002EA371 /* IQSegmentedNextPrevious.m in Sources */,
+				FA9E27691EBC548A00B30249 /* EAboutController.m in Sources */,
 				456C8C461E2FA21C002EA371 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				4512C6681E4320C300DB8358 /* EQuestion.m in Sources */,
 			);

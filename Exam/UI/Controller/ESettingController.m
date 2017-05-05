@@ -8,6 +8,7 @@
 
 #import "ESettingController.h"
 #import "EUploadIDCardController.h"
+#import "EAboutController.h"
 
 @interface ESettingController ()<UITableViewDelegate,UITableViewDataSource>
 {
@@ -96,7 +97,8 @@
         }
     } else {
         if (indexPath.row == 0) {
-            
+            EAboutController *aboutController = [[EAboutController alloc] init];
+            [self.navigationController pushToController:aboutController animated:YES];
         } else {
             
         }
