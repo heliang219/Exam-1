@@ -13,6 +13,7 @@
 #import "EQuestion.h"
 #import "EAnswer.h"
 #import "UILabel+Additions.h"
+#import "EAlertWindow.h"
 
 #define topPaneHeight 64.f
 #define topLblWidth 120.f
@@ -52,6 +53,7 @@
         [self initRightPane];
         [self initExercisePane];
         [self initBottomPane];
+        [self initAlertWindow];
     }
     return self;
 }
@@ -66,6 +68,7 @@
         [self initRightPane];
         [self initExercisePane];
         [self initBottomPane];
+        [self initAlertWindow];
     }
     return self;
 }
@@ -310,6 +313,15 @@
     [_bottomPane addSubview:_commitBtn];
 }
 
+/**
+ 初始化弹窗
+ */
+- (void)initAlertWindow {
+    _alertWindow = [EAlertWindow sharedWindow];
+    _alertWindow.hidden = YES;
+    [self addSubview:_alertWindow];
+}
+
 - (void)layoutSubviews {
     [super layoutSubviews];
     CGRect bounds = self.bounds;
@@ -371,6 +383,9 @@
             _commitBtn.frame = CGRectMake(_nextBtn.frame.origin.x + kEPadding * 3 + bottomBtnWidth, _nextBtn.frame.origin.y, bottomBtnWidth, topBtnHeight);
         }
     }
+    
+#pragma mark - EAlertWindow
+    _alertWindow.frame = CGRectMake(0, 0, bounds.size.width, bounds.size.height);
 }
 
 #pragma mark - collection view

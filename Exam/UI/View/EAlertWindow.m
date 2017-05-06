@@ -124,7 +124,7 @@
         _btnInset = UIEdgeInsetsZero;
         
         // bgview
-        _bgView = [[UIView alloc] initWithFrame:frame];
+        _bgView = [[UIView alloc] init];
         _bgView.backgroundColor = [UIColor blackColor];
         _bgView.alpha = 0.7;
         [self addSubview:_bgView];
@@ -176,6 +176,8 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     CGRect bounds = self.bounds;
+    
+    _bgView.frame = CGRectMake(0, 0, bounds.size.width, bounds.size.height);
     
     // 计算文本高度
     CGFloat textHeight = [UILabel getHeightByWidth:bgViewWidth - 20 title:_titleLbl.text font:_titleLbl.font] + 30;
@@ -229,7 +231,10 @@
         if (!strongSelf) {
             return;
         }
-        [strongSelf makeKeyAndVisible];
+        if (!strongSelf.superview) {
+            [strongSelf makeKeyAndVisible];
+        }
+        strongSelf.hidden = NO;
     });
 }
 
@@ -260,7 +265,9 @@
         if (!strongSelf) {
             return;
         }
-        [strongSelf resignKeyWindow];
+        if (!strongSelf.superview) {
+            [strongSelf resignKeyWindow];
+        }
         strongSelf.hidden = YES;
     });
     // iOS10下hidden之后就变成竖屏了，需要手动恢复现场

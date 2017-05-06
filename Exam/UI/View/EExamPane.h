@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 @class CTCheckbox;
 @class EQuestion;
+@class EAlertWindow;
 
 typedef NS_ENUM(NSInteger,ExamPaneType) {
     ExamPaneTypeBlank,
@@ -64,6 +65,9 @@ typedef NS_ENUM(NSInteger,ExamPaneType) {
 @property (nonatomic,strong) UIButton *previousBtn;  // 上一题
 @property (nonatomic,strong) UIButton *nextBtn;  // 下一题
 @property (nonatomic,strong) UIButton *commitBtn;  // 交卷
+
+#pragma mark - EAlertWindow
+@property (nonatomic,strong) EAlertWindow *alertWindow; // 弹窗
 
 @property (nonatomic,strong,readonly) EQuestion *currentQuestion;  // 当前试题
 

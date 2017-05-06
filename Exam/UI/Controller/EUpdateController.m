@@ -89,7 +89,7 @@
     [self.view addSubview:_progressLbl2];
     
     // 设置进度条高度
-    CGAffineTransform transform = CGAffineTransformMakeScale(1.0, 4.0);
+    CGAffineTransform transform = CGAffineTransformMakeScale(1.0, 3.0);
     _progressView1.transform = transform;
     _progressView2.transform = transform;
     // 设置进度条两端弧度
