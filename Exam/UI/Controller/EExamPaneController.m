@@ -20,6 +20,10 @@
     NSInteger _currentRow;
     
     NSString *_topTitle;
+    
+    NSTimer *_remainTimeTimer; // 剩余时间计时器
+    
+    NSInteger _remainTimeInSeconds; // 剩余时间
 }
 
 @property (nonatomic,assign) BOOL fullScreen;  // 是否是全屏
@@ -93,7 +97,7 @@
     // Do any additional setup after loading the view.
     
     ExamPaneType type = ExamPaneTypeBlank;
-    if (_topTitle) {
+    if ([_topTitle isEqualToString:@"练习复卷"]) {
         type = ExamPaneTypeFull;
     }
     self.examPane = [[EExamPane alloc] initWithFrame:self.view.bounds type:type];
@@ -105,6 +109,10 @@
     [self refreshQuestion:_questions[0][0]];
     
     [self setFullScreen:YES WithAnimation:NO];
+    
+    _remainTimeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(changeRemainTime) userInfo:nil repeats:YES];
+    _remainTimeInSeconds = 5400;
+    [_remainTimeTimer fire];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -135,6 +143,10 @@
 
 - (void)dealloc {
     DLog(@"考试页面即将释放");
+    if (_remainTimeTimer) {
+        [_remainTimeTimer invalidate];
+        _remainTimeTimer = nil;
+    }
 }
 
 #pragma mark - EExamPaneDelegate
@@ -373,9 +385,6 @@
         if (!strongSelf) {
             return;
         }
-//        EAlertWindow *alertWindow = [EAlertWindow sharedWindow];
-//        alertWindow.delegate = strongSelf;
-//        [alertWindow showWithTitle:@"确认交卷？" cancelTitle:@"取消" confirmTitle:@"确认"];
         strongSelf.examPane.alertWindow.delegate = strongSelf;
         [strongSelf.examPane.alertWindow showWithTitle:@"确认交卷？" cancelTitle:@"取消" confirmTitle:@"确认"];
     });
@@ -449,6 +458,22 @@
         [newQuestions addObject:mutipleChoiceArray];
     }
     return newQuestions;
+}
+
+- (void)changeRemainTime {
+    _remainTimeInSeconds --;
+    if (_remainTimeInSeconds > 0 && _remainTimeInSeconds < 60) {
+        self.examPane.remainTimeLbl.text = [NSString stringWithFormat:@"剩余时间：%@秒",@(_remainTimeInSeconds)];
+    } else if (_remainTimeInSeconds >= 60 && _remainTimeInSeconds < 3600) {
+        NSInteger minutes = _remainTimeInSeconds / 60;
+        NSInteger seconds = _remainTimeInSeconds % 60;
+        self.examPane.remainTimeLbl.text = [NSString stringWithFormat:@"剩余时间：%@分钟%@秒",@(minutes),@(seconds)];
+    } else {
+        NSInteger hours = _remainTimeInSeconds / 3600;
+        NSInteger minutes = _remainTimeInSeconds % 3600 / 60;
+        NSInteger seconds = _remainTimeInSeconds % 3600 % 60;
+        self.examPane.remainTimeLbl.text = [NSString stringWithFormat:@"剩余时间：%@小时%@分%@秒",@(hours),@(minutes),@(seconds)];
+    }
 }
 
 /*

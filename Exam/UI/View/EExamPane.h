@@ -73,6 +73,11 @@ typedef NS_ENUM(NSInteger,ExamPaneType) {
 
 - (instancetype)initWithFrame:(CGRect)frame type:(ExamPaneType)type;
 
+/**
+ 刷新标题
+
+ @param title 要显示的标题
+ */
 - (void)refreshTitle:(NSString *)title;
 
 /**
