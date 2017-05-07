@@ -165,8 +165,8 @@
     [_topPane addSubview:_backBtn];
     
     _instructionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_instructionBtn setTitle:@"操作说明" forState:UIControlStateNormal];
-    [_instructionBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_instructionBtn setTitle:@"帮助" forState:UIControlStateNormal];
+    [_instructionBtn setTitleColor:RGBCOLOR(57, 138, 228) forState:UIControlStateNormal];
     _instructionBtn.titleLabel.font = kSmallFont;
     _instructionBtn.backgroundColor = [UIColor orangeColor];
     [_instructionBtn addTarget:self action:@selector(instructionBtnAction:) forControlEvents:UIControlEventTouchUpInside];
