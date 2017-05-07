@@ -13,4 +13,10 @@
  */
 @interface EInstructionWindow : UIWindow
 
+- (void)show;
+
+- (void)hide;
+
++ (instancetype)sharedWindow;
+
 @end

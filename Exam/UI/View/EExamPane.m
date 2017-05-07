@@ -54,6 +54,7 @@
         [self initExercisePane];
         [self initBottomPane];
         [self initAlertWindow];
+        [self initInstructionWindow];
     }
     return self;
 }
@@ -69,6 +70,7 @@
         [self initExercisePane];
         [self initBottomPane];
         [self initAlertWindow];
+        [self initInstructionWindow];
     }
     return self;
 }
@@ -322,6 +324,12 @@
     [self addSubview:_alertWindow];
 }
 
+- (void)initInstructionWindow {
+    _instructionWindow = [EInstructionWindow sharedWindow];
+    _instructionWindow.hidden = YES;
+    [self addSubview:_instructionWindow];
+}
+
 - (void)layoutSubviews {
     [super layoutSubviews];
     CGRect bounds = self.bounds;
@@ -384,8 +392,9 @@
         }
     }
     
-#pragma mark - EAlertWindow
+#pragma mark - Window
     _alertWindow.frame = CGRectMake(0, 0, bounds.size.width, bounds.size.height);
+    _instructionWindow.frame = CGRectMake(0, 0, bounds.size.width, bounds.size.height);
 }
 
 #pragma mark - collection view

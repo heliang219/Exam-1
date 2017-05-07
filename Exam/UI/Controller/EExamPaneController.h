@@ -85,4 +85,9 @@
  */
 - (void)commitExam;
 
+/**
+ 操作指示
+ */
+- (void)showInstructions;
+
 @end

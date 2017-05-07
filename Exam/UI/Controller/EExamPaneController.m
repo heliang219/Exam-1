@@ -110,9 +110,11 @@
     
     [self setFullScreen:YES WithAnimation:NO];
     
-    _remainTimeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(changeRemainTime) userInfo:nil repeats:YES];
-    _remainTimeInSeconds = 5400;
-    [_remainTimeTimer fire];
+    if (type == ExamPaneTypeBlank) {
+        _remainTimeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(changeRemainTime) userInfo:nil repeats:YES];
+        _remainTimeInSeconds = 5400;
+        [_remainTimeTimer fire];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -391,6 +393,17 @@
     if (_isLowIOS) {
         [[UIApplication sharedApplication]setStatusBarOrientation:UIInterfaceOrientationPortrait];
     }
+}
+
+- (void)showInstructions {
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof (self) strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        [strongSelf.examPane.instructionWindow show];
+    });
 }
 
 #pragma mark - other methods

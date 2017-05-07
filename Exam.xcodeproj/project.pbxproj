@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4502BACA1EBEBE6800445A48 /* help.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4502BAC91EBEBE6800445A48 /* help.jpg */; };
 		4512C6681E4320C300DB8358 /* EQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 4512C6671E4320C300DB8358 /* EQuestion.m */; };
 		456C8BB81E2FA01A002EA371 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 456C8BB71E2FA01A002EA371 /* main.m */; };
 		456C8BC11E2FA01A002EA371 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 456C8BBF1E2FA01A002EA371 /* Main.storyboard */; };
@@ -117,6 +118,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4502BAC91EBEBE6800445A48 /* help.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help.jpg; sourceTree = "<group>"; };
 		4512C6661E4320C300DB8358 /* EQuestion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EQuestion.h; sourceTree = "<group>"; };
 		4512C6671E4320C300DB8358 /* EQuestion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EQuestion.m; sourceTree = "<group>"; };
 		456C8BB31E2FA01A002EA371 /* Exam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Exam.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -769,6 +771,7 @@
 			children = (
 				45C493151E2FB59E00FBD8B7 /* Icon@2x.png */,
 				45C493161E2FB59E00FBD8B7 /* Icon@3x.png */,
+				4502BAC91EBEBE6800445A48 /* help.jpg */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -927,6 +930,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				45C493101E2FB4C700FBD8B7 /* Default-568.png in Resources */,
+				4502BACA1EBEBE6800445A48 /* help.jpg in Resources */,
 				45C493111E2FB4C700FBD8B7 /* Default.png in Resources */,
 				456C8BC61E2FA01A002EA371 /* LaunchScreen.storyboard in Resources */,
 				456C8BC31E2FA01A002EA371 /* Assets.xcassets in Resources */,

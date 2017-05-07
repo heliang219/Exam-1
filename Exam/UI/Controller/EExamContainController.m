@@ -61,7 +61,7 @@
 }
 
 - (void)instructionBtnClicked {
-    DLog(@"操作说明");
+    [self.examPaneController showInstructions];
 }
 
 - (void)previousBtnClicked {
