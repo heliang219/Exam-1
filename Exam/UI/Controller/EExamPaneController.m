@@ -26,6 +26,7 @@
     NSTimer *_remainTimeTimer; // 剩余时间计时器
     
     NSInteger _remainTimeInSeconds; // 剩余时间
+    ExamPaneType _type; // 卷面类型
 }
 
 @property (nonatomic,assign) BOOL fullScreen;  // 是否是全屏
@@ -61,7 +62,6 @@
 - (instancetype)initWithQuestions:(NSArray *)questions {
     self = [self init];
     if (self) {
-        //_questions = [self groupQuestions:questions];
         _questions = questions;
         
     }
@@ -72,6 +72,11 @@
     self = [self initWithQuestions:questions];
     if (self) {
         _topTitle = title;
+        if ([_topTitle isEqualToString:@"模拟练习"]) {
+            _type = ExamPaneTypeBlank;
+        } else {
+            _type = ExamPaneTypeFull;
+        }
     }
     return self;
 }
@@ -97,11 +102,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    ExamPaneType type = ExamPaneTypeBlank;
-    if ([_topTitle isEqualToString:@"练习复卷"]) {
-        type = ExamPaneTypeFull;
-    }
-    self.examPane = [[EExamPane alloc] initWithFrame:self.view.bounds type:type];
+    self.examPane = [[EExamPane alloc] initWithFrame:self.view.bounds type:_type];
     self.examPane.delegate = self;
     [self.view addSubview:self.examPane];
     
@@ -111,7 +112,7 @@
     
     [self setFullScreen:YES WithAnimation:NO];
     
-    if (type == ExamPaneTypeBlank) {
+    if (_type == ExamPaneTypeBlank) {
         self.examPane.totalTimeLbl.text = [NSString stringWithFormat:@"考试时间：%@",[self timeStringWithSeconds:totalTimeInSeconds]];
         _remainTimeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(changeRemainTime) userInfo:nil repeats:YES];
         _remainTimeInSeconds = totalTimeInSeconds;
@@ -424,53 +425,6 @@
             }
         }
     }
-}
-
-- (NSArray *)groupQuestions:(NSArray *)oldQuestions {
-    NSMutableArray *newQuestions = [NSMutableArray array];
-    NSMutableArray *judgeArray = [NSMutableArray array];
-    NSMutableArray *singleChoiceArray = [NSMutableArray array];
-    NSMutableArray *mutipleChoiceArray = [NSMutableArray array];
-    for (EQuestion *question in oldQuestions) {
-        if ([question.question_type isEqualToString:@"判断题"]) {
-            if (!judgeArray || judgeArray.count == 0) {
-                judgeArray = [NSMutableArray array];
-            }
-            [judgeArray addObject:question];
-        } else if ([question.question_type isEqualToString:@"单选题"]) {
-            if (!singleChoiceArray || singleChoiceArray.count == 0) {
-                singleChoiceArray = [NSMutableArray array];
-            }
-            [singleChoiceArray addObject:question];
-        } else if ([question.question_type isEqualToString:@"多选题"]) {
-            if (!mutipleChoiceArray || mutipleChoiceArray.count == 0) {
-                mutipleChoiceArray = [NSMutableArray array];
-            }
-            [mutipleChoiceArray addObject:question];
-        }
-    }
-    if (judgeArray && judgeArray.count > 0) {
-        for (NSUInteger i = 0; i < judgeArray.count; i ++) {
-            EQuestion *question = judgeArray[i];
-            question.question_index = i;
-        }
-        [newQuestions addObject:judgeArray];
-    }
-    if (singleChoiceArray && singleChoiceArray.count > 0) {
-        for (NSUInteger i = judgeArray.count; i < judgeArray.count + singleChoiceArray.count; i ++) {
-            EQuestion *question = singleChoiceArray[i - judgeArray.count];
-            question.question_index = i;
-        }
-        [newQuestions addObject:singleChoiceArray];
-    }
-    if (mutipleChoiceArray && mutipleChoiceArray.count > 0) {
-        for (NSUInteger i = judgeArray.count + singleChoiceArray.count; i < judgeArray.count + singleChoiceArray.count + mutipleChoiceArray.count; i ++) {
-            EQuestion *question = mutipleChoiceArray[i - judgeArray.count - singleChoiceArray.count];
-            question.question_index = i;
-        }
-        [newQuestions addObject:mutipleChoiceArray];
-    }
-    return newQuestions;
 }
 
 - (void)changeRemainTime {

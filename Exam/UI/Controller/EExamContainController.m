@@ -11,6 +11,10 @@
 #import "EQuestion.h"
 
 @interface EExamContainController ()<EExamPaneControllerDelegate>
+{
+    BOOL _questionRefreshed;
+    EQuestion *_questionToRefresh;
+}
 
 @property (nonatomic,strong) EExamPaneController *examPaneController;
 @property (nonatomic,strong) NSString *topTitle;
@@ -46,6 +50,18 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.examPaneController = [EExamPaneController createWithController:self view:self.view delegate:self title:_topTitle questions:_questions];
     self.examPaneController.orientationWanted = _orientationWanted;
+    if (!_questionRefreshed) {
+        [self refreshQuestion:_questionToRefresh];
+    }
+}
+
+- (void)refreshQuestion:(EQuestion *)question {
+    if (self.examPaneController) {
+        [self.examPaneController refreshQuestion:question];
+        _questionRefreshed = YES;
+    } else {
+        _questionToRefresh = question;
+    }
 }
 
 - (void)didReceiveMemoryWarning {

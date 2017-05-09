@@ -13,8 +13,8 @@
 #import "EInstructionWindow.h"
 
 typedef NS_ENUM(NSInteger,ExamPaneType) {
-    ExamPaneTypeBlank,
-    ExamPaneTypeFull,
+    ExamPaneTypeBlank, // 模拟练习
+    ExamPaneTypeFull, // 练习复卷/查看试题
 };
 
 @protocol EExamPaneDelegate <NSObject>

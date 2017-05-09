@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EQuestion.h"
 
 @interface EExamContainController : UIViewController
 
 - (instancetype)initWithQuestions:(NSArray *)questions;
 
 - (instancetype)initWithTitle:(NSString *)title questions:(NSArray *)questions orientationWanted:(UIInterfaceOrientation)ori;
+
+- (void)refreshQuestion:(EQuestion *)question;
 
 @end

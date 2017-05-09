@@ -20,9 +20,6 @@
 @implementation EQuestion
 
 - (NSString *)question_type {
-    if (_question_is_required == 1) {
-        return @"必知必会题";
-    }
     if ([_question_type isEqualToString:@"judge"]) {
         return @"判断题";
     } else if ([_question_type isEqualToString:@"single_choice"]) {

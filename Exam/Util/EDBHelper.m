@@ -124,7 +124,7 @@
     NSMutableArray *singleChoiceArray = [NSMutableArray array];
     NSMutableArray *mutipleChoiceArray = [NSMutableArray array];
     for (EQuestion *question in oldQuestions) {
-        if ([question.question_type isEqualToString:@"必知必会题"]) {
+        if (question.question_is_required == 1) {
             if (!requiredArray || requiredArray.count == 0) {
                 requiredArray = [NSMutableArray array];
             }

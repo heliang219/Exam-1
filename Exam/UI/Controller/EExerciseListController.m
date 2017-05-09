@@ -11,6 +11,7 @@
 #import "EBlockCell.h"
 #import "ESubject.h"
 #import "EDBHelper.h"
+#import "EExamContainController.h"
 
 @interface EExerciseListController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 {
@@ -172,11 +173,21 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == 0) {
-        
-    } else {
-        
+    // 查看试题
+    EExamContainController *exam = [[EExamContainController alloc] initWithTitle:@"查看试题" questions:_contentArray orientationWanted:UIInterfaceOrientationPortrait];
+    EQuestion *question = nil;
+    NSInteger totalCount = 0;
+    for (NSInteger i = 0; i < _contentArray.count; i ++) {
+        NSArray *arr = _contentArray[i];
+        totalCount += arr.count;
+        if (indexPath.row < totalCount) {
+            NSInteger lastTotalCount = totalCount - arr.count;
+            question = arr[indexPath.row - lastTotalCount];
+            break;
+        }
     }
+    [exam refreshQuestion:question];
+    [self.navigationController pushToController:exam animated:YES];
     
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }

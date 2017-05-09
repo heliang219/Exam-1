@@ -419,112 +419,41 @@
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
-        UICollectionReusableView *reusableview = nil;
+    UICollectionReusableView *reusableview = nil;
+    
+    if (kind == UICollectionElementKindSectionHeader){
         
-        if (kind == UICollectionElementKindSectionHeader){
-            
-            UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
-            for (UIView *view in headerView.subviews) {
-                [view removeFromSuperview];
-            }
-            
-            UILabel *titleLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, kEPadding, headerView.bounds.size.width, headerView.bounds.size.height - kEPadding * 2)];
-            titleLbl.backgroundColor = [UIColor clearColor];
-            titleLbl.textColor = [UIColor blackColor];
-            titleLbl.font = kMediumFont;
-            
-            NSString *title = ((EQuestion *)_questions[indexPath.section][0]).question_type;
-            
-            titleLbl.text = title;
-            
-            headerView.backgroundColor = [UIColor clearColor];
-            [headerView addSubview:titleLbl];
-            
-            reusableview = headerView;
-        } else if (kind == UICollectionElementKindSectionFooter) {
-            UICollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
-            for (UIView *view in footerView.subviews) {
-                [view removeFromSuperview];
-            }
-            
-            footerView.backgroundColor = [UIColor clearColor];
-            
-            reusableview = footerView;
+        UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
+        for (UIView *view in headerView.subviews) {
+            [view removeFromSuperview];
         }
         
-        return reusableview;
-    } else if (indexPath.section == 1) {
-        UICollectionReusableView *reusableview = nil;
+        UILabel *titleLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, kEPadding, headerView.bounds.size.width, headerView.bounds.size.height - kEPadding * 2)];
+        titleLbl.backgroundColor = [UIColor clearColor];
+        titleLbl.textColor = [UIColor blackColor];
+        titleLbl.font = kMediumFont;
         
-        if (kind == UICollectionElementKindSectionHeader){
-            
-            UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
-            for (UIView *view in headerView.subviews) {
-                [view removeFromSuperview];
-            }
-            
-            UILabel *titleLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, kEPadding, headerView.bounds.size.width, headerView.bounds.size.height - kEPadding * 2)];
-            titleLbl.backgroundColor = [UIColor clearColor];
-            titleLbl.textColor = [UIColor blackColor];
-            titleLbl.font = kMediumFont;
-            
-            NSString *title = ((EQuestion *)_questions[indexPath.section][0]).question_type;
-            
-            titleLbl.text = title;
-            
-            headerView.backgroundColor = [UIColor clearColor];
-            [headerView addSubview:titleLbl];
-            
-            reusableview = headerView;
-        } else if (kind == UICollectionElementKindSectionFooter) {
-            UICollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
-            for (UIView *view in footerView.subviews) {
-                [view removeFromSuperview];
-            }
-            
-            footerView.backgroundColor = [UIColor clearColor];
-            
-            reusableview = footerView;
+        EQuestion *question = (EQuestion *)_questions[indexPath.section][0];
+        NSString *title = question.question_is_required == 1 ? @"必知必会题" : question.question_type;
+        
+        titleLbl.text = title;
+        
+        headerView.backgroundColor = [UIColor clearColor];
+        [headerView addSubview:titleLbl];
+        
+        reusableview = headerView;
+    } else if (kind == UICollectionElementKindSectionFooter) {
+        UICollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
+        for (UIView *view in footerView.subviews) {
+            [view removeFromSuperview];
         }
         
-        return reusableview;
-    } else {
-        UICollectionReusableView *reusableview = nil;
+        footerView.backgroundColor = [UIColor clearColor];
         
-        if (kind == UICollectionElementKindSectionHeader){
-            
-            UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
-            for (UIView *view in headerView.subviews) {
-                [view removeFromSuperview];
-            }
-            
-            UILabel *titleLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, kEPadding, headerView.bounds.size.width, headerView.bounds.size.height - kEPadding * 2)];
-            titleLbl.backgroundColor = [UIColor clearColor];
-            titleLbl.textColor = [UIColor blackColor];
-            titleLbl.font = kMediumFont;
-            
-            NSString *title = ((EQuestion *)_questions[indexPath.section][0]).question_type;
-            
-            titleLbl.text = title;
-            
-            headerView.backgroundColor = [UIColor clearColor];
-            [headerView addSubview:titleLbl];
-            
-            reusableview = headerView;
-        } else if (kind == UICollectionElementKindSectionFooter) {
-            UICollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
-            for (UIView *view in footerView.subviews) {
-                [view removeFromSuperview];
-            }
-            
-            footerView.backgroundColor = [UIColor clearColor];
-            
-            reusableview = footerView;
-        }
-        
-        return reusableview;
+        reusableview = footerView;
     }
+    
+    return reusableview;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -563,7 +492,7 @@
 - (void)refreshQuestion:(EQuestion *)question {
     if (question) {
         _currentQuestion = question;
-        _questionLbl.text = [NSString stringWithFormat:@"第%@题 %@ %@",@(_currentQuestion.question_index + 1),_currentQuestion.question_type,_currentQuestion.question_content];
+        _questionLbl.text = [NSString stringWithFormat:@"第%@题 %@ %@",@(_currentQuestion.question_index + 1),_currentQuestion.question_is_required == 1 ? @"必知必会题" : _currentQuestion.question_type,_currentQuestion.question_content];
         _previousBtn.hidden = _currentQuestion.question_index == 0;
         _nextBtn.hidden = _currentQuestion.question_index == ([self getQuestionTotalCount] - 1);
         switch (_currentQuestion.answers.count) {
