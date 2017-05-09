@@ -21,6 +21,8 @@
     if (self) {
         _bgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, kBlockWidth, kBlockWidth)];
         _bgView.backgroundColor = [UIColor orangeColor];
+        _bgView.layer.cornerRadius = 2.f;
+        _bgView.layer.masksToBounds = YES;
         [self.contentView addSubview:_bgView];
         
         _titleLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kBlockWidth, kBlockWidth)];

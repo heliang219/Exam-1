@@ -55,6 +55,7 @@ typedef NS_ENUM(NSInteger,ExamPaneType) {
 #pragma mark - exercisePane
 @property (nonatomic,strong) UIView *exercisePane;
 @property (nonatomic,strong) UIScrollView *scrollView;  // 可以滚动的容器
+@property (nonatomic,strong) UILabel *kindLbl; // 问题类型
 @property (nonatomic,strong) UILabel *questionLbl;  // 问题
 @property (nonatomic,strong) CTCheckbox *checkbox1;  // 答案选项
 @property (nonatomic,strong) CTCheckbox *checkbox2;

@@ -128,6 +128,11 @@
 
 - (void)checkboxDidChange:(CTCheckbox *)checkbox {
     ((EAnswer *)_currentQuestion.answers[checkbox.tag - 1000]).checked = checkbox.checked;
+    if (checkbox.checked) {
+         [checkbox setBackgroundColor:kThemeColor forControlState:UIControlStateNormal];
+    } else {
+         [checkbox setBackgroundColor:RGBCOLOR(222, 224, 220) forControlState:UIControlStateNormal];
+    }
     if (([_currentQuestion.question_type isEqualToString:@"判断题"] || [_currentQuestion.question_type isEqualToString:@"单选题"]) && checkbox.checked) {
         // 其它checkbox取消选中
         for (int i = 0; i < _currentQuestion.answers.count; i ++) {
@@ -203,7 +208,7 @@
  */
 - (void)initRightPane {
     _rightPane = [[UIView alloc] init];
-    _rightPane.backgroundColor = [UIColor cyanColor];
+    _rightPane.backgroundColor = RGBCOLOR(247, 248, 241);
     [self addSubview:_rightPane];
     
     // 创建一个layout布局类
@@ -243,6 +248,17 @@
     _scrollView.showsHorizontalScrollIndicator = NO;
     [_exercisePane addSubview:_scrollView];
     
+    _kindLbl = [[UILabel alloc] init];
+    _kindLbl.font = kTinyFont;
+    _kindLbl.backgroundColor = RGBCOLOR(123, 153, 217);
+    _kindLbl.numberOfLines = 0;
+    _kindLbl.layer.cornerRadius = 2.f;
+    _kindLbl.layer.masksToBounds = YES;
+    _kindLbl.text = @"必";
+    _kindLbl.textColor = [UIColor whiteColor];
+    _kindLbl.textAlignment = NSTextAlignmentCenter;
+    [_scrollView addSubview:_kindLbl];
+    
     _questionLbl = [[UILabel alloc] init];
     _questionLbl.font = kSmallFont;
     _questionLbl.backgroundColor = [UIColor clearColor];
@@ -250,34 +266,46 @@
     [_scrollView addSubview:_questionLbl];
     
     _checkbox1 = [[CTCheckbox alloc] init];
+    [_checkbox1 setBackgroundColor:RGBCOLOR(222, 224, 220) forControlState:UIControlStateNormal];
     _checkbox1.textLabel.font = kSmallFont;
     _checkbox1.textLabel.backgroundColor = [UIColor clearColor];
     _checkbox1.textLabel.numberOfLines = 20;
     _checkbox1.tag = 1000;
+    _checkbox1.layer.cornerRadius = 2.f;
+    _checkbox1.layer.masksToBounds = YES;
     [_checkbox1 addTarget:self action:@selector(checkboxDidChange:) forControlEvents:UIControlEventValueChanged];
     [_scrollView addSubview:_checkbox1];
     
     _checkbox2 = [[CTCheckbox alloc] init];
+    [_checkbox2 setBackgroundColor:RGBCOLOR(222, 224, 220) forControlState:UIControlStateNormal];
     _checkbox2.textLabel.font = kSmallFont;
     _checkbox2.textLabel.backgroundColor = [UIColor clearColor];
     _checkbox2.textLabel.numberOfLines = 20;
     _checkbox2.tag = 1001;
+    _checkbox2.layer.cornerRadius = 2.f;
+    _checkbox2.layer.masksToBounds = YES;
     [_checkbox2 addTarget:self action:@selector(checkboxDidChange:) forControlEvents:UIControlEventValueChanged];
     [_scrollView addSubview:_checkbox2];
     
     _checkbox3 = [[CTCheckbox alloc] init];
+    [_checkbox3 setBackgroundColor:RGBCOLOR(222, 224, 220) forControlState:UIControlStateNormal];
     _checkbox3.textLabel.font = kSmallFont;
     _checkbox3.textLabel.backgroundColor = [UIColor clearColor];
     _checkbox3.textLabel.numberOfLines = 20;
     _checkbox3.tag = 1002;
+    _checkbox3.layer.cornerRadius = 2.f;
+    _checkbox3.layer.masksToBounds = YES;
     [_checkbox3 addTarget:self action:@selector(checkboxDidChange:) forControlEvents:UIControlEventValueChanged];
     [_scrollView addSubview:_checkbox3];
     
     _checkbox4 = [[CTCheckbox alloc] init];
+    [_checkbox4 setBackgroundColor:RGBCOLOR(222, 224, 220) forControlState:UIControlStateNormal];
     _checkbox4.textLabel.font = kSmallFont;
     _checkbox4.textLabel.backgroundColor = [UIColor clearColor];
     _checkbox4.textLabel.numberOfLines = 20;
     _checkbox4.tag = 1003;
+    _checkbox4.layer.cornerRadius = 2.f;
+    _checkbox4.layer.masksToBounds = YES;
     [_checkbox4 addTarget:self action:@selector(checkboxDidChange:) forControlEvents:UIControlEventValueChanged];
     [_scrollView addSubview:_checkbox4];
 }
@@ -287,14 +315,21 @@
  */
 - (void)initBottomPane {
     _bottomPane = [[UIView alloc] init];
-    _bottomPane.backgroundColor = [UIColor cyanColor];
+    _bottomPane.layer.borderWidth = 1.f;
+    _bottomPane.layer.borderColor = RGBCOLOR(222, 224, 220).CGColor;
+    _bottomPane.layer.masksToBounds = YES;
+    _bottomPane.backgroundColor = [UIColor clearColor];
     [self addSubview:_bottomPane];
     
     _previousBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_previousBtn setTitle:@"上一题" forState:UIControlStateNormal];
     [_previousBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     _previousBtn.titleLabel.font = kSmallFont;
-    _previousBtn.backgroundColor = [UIColor lightGrayColor];
+    _previousBtn.backgroundColor = [UIColor clearColor];
+    _previousBtn.layer.borderColor = kThemeColor.CGColor;
+    _previousBtn.layer.borderWidth = 1.f;
+    _previousBtn.layer.cornerRadius = 2.f;
+    _previousBtn.layer.masksToBounds = YES;
     [_previousBtn addTarget:self action:@selector(previousBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [_bottomPane addSubview:_previousBtn];
     
@@ -302,7 +337,11 @@
     [_nextBtn setTitle:@"下一题" forState:UIControlStateNormal];
     [_nextBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     _nextBtn.titleLabel.font = kSmallFont;
-    _nextBtn.backgroundColor = [UIColor lightGrayColor];
+    _nextBtn.backgroundColor = [UIColor clearColor];
+    _nextBtn.layer.borderColor = kThemeColor.CGColor;
+    _nextBtn.layer.borderWidth = 1.f;
+    _nextBtn.layer.cornerRadius = 2.f;
+    _nextBtn.layer.masksToBounds = YES;
     [_nextBtn addTarget:self action:@selector(nextBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [_bottomPane addSubview:_nextBtn];
     
@@ -310,7 +349,11 @@
     [_commitBtn setTitle:@"交卷" forState:UIControlStateNormal];
     [_commitBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     _commitBtn.titleLabel.font = kSmallFont;
-    _commitBtn.backgroundColor = [UIColor lightGrayColor];
+    _commitBtn.backgroundColor = [UIColor clearColor];
+    _commitBtn.layer.borderColor = kThemeColor.CGColor;
+    _commitBtn.layer.borderWidth = 1.f;
+    _commitBtn.layer.cornerRadius = 2.f;
+    _commitBtn.layer.masksToBounds = YES;
     [_commitBtn addTarget:self action:@selector(commitBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [_bottomPane addSubview:_commitBtn];
 }
@@ -357,20 +400,23 @@
 #pragma mark - exercisePane
     _exercisePane.frame = CGRectMake(0, topPaneHeight, bounds.size.width - rightPaneWidth - kEPadding / 2.f, bounds.size.height - topPaneHeight - bottomPaneHeight);
     _scrollView.frame = _exercisePane.bounds;
+    CGFloat kindLblHeight = [UILabel getHeightByWidth:20 title:@"必" font:kTinyFont] - 10.f;
+    CGFloat kindLblWidth = kindLblHeight;
+    _kindLbl.frame = CGRectMake(kEPadding * 2, kEPadding * 2 + 2.f, kindLblWidth, kindLblHeight);
     // 试题label的宽度
-    CGFloat lblWidth = _scrollView.bounds.size.width - kEPadding * 2;
+    CGFloat lblWidth = _scrollView.bounds.size.width - kEPadding * 4 - _kindLbl.bounds.size.width - kEPadding;
     // 答案label（除去checkbox）的宽度
-    CGFloat answerWidth = lblWidth - 5.f - _checkbox1.checkboxSideLength;
-    _questionLbl.frame = CGRectMake(kEPadding, kEPadding, lblWidth, [UILabel getHeightByWidth:lblWidth title:[NSString stringWithFormat:@"第%@题 %@ %@",@(_currentQuestion.question_index + 1),_currentQuestion.question_type,_currentQuestion.question_content] font:kSmallFont]);
-    _checkbox1.frame = CGRectMake(kEPadding, _questionLbl.frame.origin.y + _questionLbl.bounds.size.height + kEPadding, lblWidth, [UILabel getHeightByWidth:answerWidth title:[NSString stringWithFormat:@"A.%@",((EAnswer *)_currentQuestion.answers[0]).answer_content] font:kSmallFont]);
-    _checkbox2.frame = CGRectMake(kEPadding, _checkbox1.frame.origin.y + _checkbox1.bounds.size.height + kEPadding, lblWidth, [UILabel getHeightByWidth:answerWidth title:[NSString stringWithFormat:@"B.%@",((EAnswer *)_currentQuestion.answers[1]).answer_content] font:kSmallFont]);
+    CGFloat answerWidth = lblWidth - 10.f - _checkbox1.checkboxSideLength;
+    _questionLbl.frame = CGRectMake(_kindLbl.frame.origin.x + _kindLbl.bounds.size.width + kEPadding, kEPadding * 2, lblWidth, [UILabel getHeightByWidth:lblWidth title:[NSString stringWithFormat:@"第%@题  %@",@(_currentQuestion.question_index + 1),_currentQuestion.question_content] font:kSmallFont] - 10.f);
+    _checkbox1.frame = CGRectMake(_questionLbl.frame.origin.x, _questionLbl.frame.origin.y + _questionLbl.bounds.size.height + kEPadding, lblWidth, [UILabel getHeightByWidth:answerWidth title:[NSString stringWithFormat:@"A.%@",((EAnswer *)_currentQuestion.answers[0]).answer_content] font:kSmallFont]);
+    _checkbox2.frame = CGRectMake(_questionLbl.frame.origin.x, _checkbox1.frame.origin.y + _checkbox1.bounds.size.height + kEPadding, lblWidth, [UILabel getHeightByWidth:answerWidth title:[NSString stringWithFormat:@"B.%@",((EAnswer *)_currentQuestion.answers[1]).answer_content] font:kSmallFont]);
     UIView *lastView = _checkbox2;
     if (_currentQuestion.answers.count == 3) {
-        _checkbox3.frame = CGRectMake(kEPadding, _checkbox2.frame.origin.y + _checkbox2.bounds.size.height + kEPadding, lblWidth, [UILabel getHeightByWidth:answerWidth title:[NSString stringWithFormat:@"C.%@",((EAnswer *)_currentQuestion.answers[2]).answer_content] font:kSmallFont]);
+        _checkbox3.frame = CGRectMake(_questionLbl.frame.origin.x, _checkbox2.frame.origin.y + _checkbox2.bounds.size.height + kEPadding, lblWidth, [UILabel getHeightByWidth:answerWidth title:[NSString stringWithFormat:@"C.%@",((EAnswer *)_currentQuestion.answers[2]).answer_content] font:kSmallFont]);
         lastView = _checkbox3;
     } else if (_currentQuestion.answers.count == 4) {
-        _checkbox3.frame = CGRectMake(kEPadding, _checkbox2.frame.origin.y + _checkbox2.bounds.size.height + kEPadding, lblWidth, [UILabel getHeightByWidth:answerWidth title:[NSString stringWithFormat:@"C.%@",((EAnswer *)_currentQuestion.answers[2]).answer_content] font:kSmallFont]);
-        _checkbox4.frame = CGRectMake(kEPadding, _checkbox3.frame.origin.y + _checkbox3.bounds.size.height + kEPadding, lblWidth, [UILabel getHeightByWidth:answerWidth title:[NSString stringWithFormat:@"D.%@",((EAnswer *)_currentQuestion.answers[3]).answer_content] font:kSmallFont]);
+        _checkbox3.frame = CGRectMake(_questionLbl.frame.origin.x, _checkbox2.frame.origin.y + _checkbox2.bounds.size.height + kEPadding, lblWidth, [UILabel getHeightByWidth:answerWidth title:[NSString stringWithFormat:@"C.%@",((EAnswer *)_currentQuestion.answers[2]).answer_content] font:kSmallFont]);
+        _checkbox4.frame = CGRectMake(_questionLbl.frame.origin.x, _checkbox3.frame.origin.y + _checkbox3.bounds.size.height + kEPadding, lblWidth, [UILabel getHeightByWidth:answerWidth title:[NSString stringWithFormat:@"D.%@",((EAnswer *)_currentQuestion.answers[3]).answer_content] font:kSmallFont]);
         lastView = _checkbox4;
     }
     _scrollView.contentSize = CGSizeMake(_scrollView.bounds.size.width, lastView.frame.origin.y + lastView.bounds.size.height + kEPadding);
@@ -431,7 +477,7 @@
         UILabel *titleLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, kEPadding, headerView.bounds.size.width, headerView.bounds.size.height - kEPadding * 2)];
         titleLbl.backgroundColor = [UIColor clearColor];
         titleLbl.textColor = [UIColor blackColor];
-        titleLbl.font = kMediumFont;
+        titleLbl.font = kSmallFont;
         
         EQuestion *question = (EQuestion *)_questions[indexPath.section][0];
         NSString *title = question.question_is_required == 1 ? @"必知必会题" : question.question_type;
@@ -492,7 +538,14 @@
 - (void)refreshQuestion:(EQuestion *)question {
     if (question) {
         _currentQuestion = question;
-        _questionLbl.text = [NSString stringWithFormat:@"第%@题 %@ %@",@(_currentQuestion.question_index + 1),_currentQuestion.question_is_required == 1 ? @"必知必会题" : _currentQuestion.question_type,_currentQuestion.question_content];
+        if (_currentQuestion.question_is_required == 1) {
+            _kindLbl.text = @"必";
+            _kindLbl.backgroundColor = RGBCOLOR(123, 153, 217);
+        } else {
+            _kindLbl.text = [_currentQuestion.question_type substringToIndex:1];
+            _kindLbl.backgroundColor = kThemeColor;
+        }
+        _questionLbl.text = [NSString stringWithFormat:@"第%@题  %@",@(_currentQuestion.question_index + 1),_currentQuestion.question_content];
         _previousBtn.hidden = _currentQuestion.question_index == 0;
         _nextBtn.hidden = _currentQuestion.question_index == ([self getQuestionTotalCount] - 1);
         switch (_currentQuestion.answers.count) {
