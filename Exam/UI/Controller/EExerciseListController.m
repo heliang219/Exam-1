@@ -94,7 +94,11 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return _contentArray.count;
+    NSInteger count = 0;
+    for (NSArray *arr in _contentArray) {
+        count += arr.count;
+    }
+    return count;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
