@@ -9,12 +9,12 @@
 #import "EScorePaneController.h"
 #import "EScorePane.h"
 #import "EExamContainer.h"
+#import "EMainTypeController.h"
 
 @interface EScorePaneController ()<EScorePaneDelegate>
 
 @property (nonatomic,assign) BOOL fullScreen;  // 是否是全屏
 @property (nonatomic,assign) UIInterfaceOrientation currentOrientation; // 当前的方向
-@property (nonatomic,assign) UIInterfaceOrientation orientation;
 @property (nonatomic,assign) BOOL statusbarHidden;  // 状态条是否隐藏
 @property (nonatomic,assign) UIInterfaceOrientation orientationWhenFullScreen; // 记住全屏时画面的方向，用来决定弹框方向，<8.3的bug
 @property (nonatomic,assign) BOOL isLowIOS; // iOS版本是否小于8.3
@@ -58,6 +58,22 @@
     [self refreshScore:@"10" rate:@"10%"];
     
     [self setFullScreen:YES WithAnimation:NO];
+}
+
+- (void)goBack {
+    [((EExamContainer *)self.view).containerView addSubview:self.view];
+    [self.view.window makeKeyAndVisible];
+    
+    if (!self.view.window) {
+        return;
+    }
+    
+    // 重置设备方向
+    _orientationWanted = UIInterfaceOrientationPortrait;
+    [self setFullScreen:NO WithAnimation:NO];
+    
+    EMainTypeController *mainTypeController = [[EMainTypeController alloc] init];
+    [self.navigationController pushToController:mainTypeController animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -119,7 +135,6 @@
     _fullScreen = fullScreen;
     BOOL hiddenStatusbar = _statusbarHidden;
     if (fullScreen) {
-        _orientation = [[UIApplication sharedApplication] statusBarOrientation];
         _statusbarHidden = [[UIApplication sharedApplication] isStatusBarHidden];
         UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
         if (UIDeviceOrientationIsLandscape(deviceOrientation)) {
@@ -129,7 +144,7 @@
         }
         _orientationWhenFullScreen = orientation;
     } else {
-        orientation = _orientation;
+        orientation = _orientationWanted;
     }
     if (!_isLowIOS) {
         [[UIApplication sharedApplication] setStatusBarOrientation:orientation];

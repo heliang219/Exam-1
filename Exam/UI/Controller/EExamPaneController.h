@@ -33,6 +33,7 @@
 @property (nonatomic,weak) id<EExamPaneControllerDelegate> delegate;
 @property (nonatomic,strong,readonly) NSArray *questions;  // 所有试题
 @property (nonatomic,strong,readonly) EQuestion *currentQuestion;  // 当前试题
+@property (nonatomic,assign) UIInterfaceOrientation orientationWanted; // 期望返回到的页面的方向
 
 #pragma mark - 初始化方法
 

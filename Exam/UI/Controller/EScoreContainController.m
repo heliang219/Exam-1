@@ -43,12 +43,12 @@
 #pragma mark - EScorePaneControllerDelegate
 
 - (void)backBtnClicked {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.scorePaneController goBack];
 }
 
 - (void)correctBtnClicked {
     // 练习复卷
-    EExamContainController *exam = [[EExamContainController alloc] initWithTitle:@"练习复卷" questions:self.scorePaneController.questions];
+    EExamContainController *exam = [[EExamContainController alloc] initWithTitle:@"练习复卷" questions:self.scorePaneController.questions orientationWanted:UIInterfaceOrientationLandscapeRight];
     [self.navigationController pushViewController:exam animated:YES];
 }
 

@@ -12,6 +12,6 @@
 
 - (instancetype)initWithQuestions:(NSArray *)questions;
 
-- (instancetype)initWithTitle:(NSString *)title questions:(NSArray *)questions;
+- (instancetype)initWithTitle:(NSString *)title questions:(NSArray *)questions orientationWanted:(UIInterfaceOrientation)ori;
 
 @end

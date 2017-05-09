@@ -24,6 +24,7 @@
 
 @property (nonatomic,weak) id<EScorePaneControllerDelegate> delegate;
 @property (nonatomic,strong,readonly) NSArray *questions;  // 所有试题
+@property (nonatomic,assign) UIInterfaceOrientation orientationWanted; // 期望返回到的页面的方向
 
 + (instancetype)createWithController:(UIViewController *)controller view:(UIView *)view delegate:(id<EScorePaneControllerDelegate>)delegate questions:(NSArray *)questions;
 

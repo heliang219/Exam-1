@@ -202,7 +202,7 @@
     if (indexPath.row == 0) {
         // 开始练习
         NSArray *questions = [[EDBHelper defaultHelper] queryQuestions:_subject.subject_id];
-        EExamContainController *exam = [[EExamContainController alloc] initWithTitle:@"模拟练习" questions:questions];
+        EExamContainController *exam = [[EExamContainController alloc] initWithTitle:@"模拟练习" questions:questions orientationWanted:UIInterfaceOrientationPortrait];
         [self.navigationController pushViewController:exam animated:YES];
     } else {
         // 查看试题

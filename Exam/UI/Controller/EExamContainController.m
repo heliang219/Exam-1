@@ -15,6 +15,7 @@
 @property (nonatomic,strong) EExamPaneController *examPaneController;
 @property (nonatomic,strong) NSString *topTitle;
 @property (nonatomic,strong) NSArray *questions;
+@property (nonatomic,assign) UIInterfaceOrientation orientationWanted; // 期望返回到的页面的方向
 
 @end
 
@@ -30,10 +31,11 @@
     return self;
 }
 
-- (instancetype)initWithTitle:(NSString *)title questions:(NSArray *)questions {
+- (instancetype)initWithTitle:(NSString *)title questions:(NSArray *)questions orientationWanted:(UIInterfaceOrientation)ori {
     self = [self initWithQuestions:questions];
     if (self) {
         _topTitle = title;
+        _orientationWanted = ori;
     }
     return self;
 }
@@ -43,6 +45,7 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
     self.examPaneController = [EExamPaneController createWithController:self view:self.view delegate:self title:_topTitle questions:_questions];
+    self.examPaneController.orientationWanted = _orientationWanted;
 }
 
 - (void)didReceiveMemoryWarning {

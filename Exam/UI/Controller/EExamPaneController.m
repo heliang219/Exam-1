@@ -14,6 +14,8 @@
 #import "EAlertWindow.h"
 #import "EScoreContainController.h"
 
+#define totalTimeInSeconds 9
+
 @interface EExamPaneController ()<EExamPaneDelegate,EAlertWindowDelegate>
 {
     NSInteger _currentSection;
@@ -28,7 +30,6 @@
 
 @property (nonatomic,assign) BOOL fullScreen;  // 是否是全屏
 @property (nonatomic,assign) UIInterfaceOrientation currentOrientation; // 当前的方向
-@property (nonatomic,assign) UIInterfaceOrientation orientation;
 @property (nonatomic,assign) BOOL statusbarHidden;  // 状态条是否隐藏
 @property (nonatomic,assign) UIInterfaceOrientation orientationWhenFullScreen; // 记住全屏时画面的方向，用来决定弹框方向，<8.3的bug
 @property (nonatomic,assign) BOOL isLowIOS; // iOS版本是否小于8.3
@@ -111,8 +112,9 @@
     [self setFullScreen:YES WithAnimation:NO];
     
     if (type == ExamPaneTypeBlank) {
+        self.examPane.totalTimeLbl.text = [NSString stringWithFormat:@"考试时间：%@",[self timeStringWithSeconds:totalTimeInSeconds]];
         _remainTimeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(changeRemainTime) userInfo:nil repeats:YES];
-        _remainTimeInSeconds = 5400;
+        _remainTimeInSeconds = totalTimeInSeconds;
         [_remainTimeTimer fire];
     }
 }
@@ -225,8 +227,7 @@
     if (buttonIndex == 0) {
         return;
     } else {
-        EScoreContainController *score = [[EScoreContainController alloc] initWithQuestions:self.questions];
-        [self.navigationController pushViewController:score animated:YES];
+        [self readyForCommit];
     }
 }
 
@@ -262,7 +263,6 @@
     _fullScreen = fullScreen;
     BOOL hiddenStatusbar = _statusbarHidden;
     if (fullScreen) {
-        _orientation = [[UIApplication sharedApplication] statusBarOrientation];
         _statusbarHidden = [[UIApplication sharedApplication] isStatusBarHidden];
         UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
         if (UIDeviceOrientationIsLandscape(deviceOrientation)) {
@@ -272,7 +272,7 @@
         }
         _orientationWhenFullScreen = orientation;
     } else {
-        orientation = _orientation;
+        orientation = _orientationWanted;
     }
     if (!_isLowIOS) {
         [[UIApplication sharedApplication] setStatusBarOrientation:orientation];
@@ -475,18 +475,47 @@
 
 - (void)changeRemainTime {
     _remainTimeInSeconds --;
-    if (_remainTimeInSeconds > 0 && _remainTimeInSeconds < 60) {
-        self.examPane.remainTimeLbl.text = [NSString stringWithFormat:@"剩余时间：%@秒",@(_remainTimeInSeconds)];
-    } else if (_remainTimeInSeconds >= 60 && _remainTimeInSeconds < 3600) {
-        NSInteger minutes = _remainTimeInSeconds / 60;
-        NSInteger seconds = _remainTimeInSeconds % 60;
-        self.examPane.remainTimeLbl.text = [NSString stringWithFormat:@"剩余时间：%@分钟%@秒",@(minutes),@(seconds)];
-    } else {
-        NSInteger hours = _remainTimeInSeconds / 3600;
-        NSInteger minutes = _remainTimeInSeconds % 3600 / 60;
-        NSInteger seconds = _remainTimeInSeconds % 3600 % 60;
-        self.examPane.remainTimeLbl.text = [NSString stringWithFormat:@"剩余时间：%@小时%@分%@秒",@(hours),@(minutes),@(seconds)];
+    if (_remainTimeInSeconds <= 0) {
+        [self readyForCommit];
     }
+    self.examPane.remainTimeLbl.text = [NSString stringWithFormat:@"剩余时间：%@",[self timeStringWithSeconds:_remainTimeInSeconds]];
+}
+
+/**
+ 将秒转化为xx小时xx分钟xx秒
+
+ @param timeInSeconds 秒
+ @return 转化后的字符串形式
+ */
+- (NSString *)timeStringWithSeconds:(NSInteger)timeInSeconds {
+    if (timeInSeconds > 0 && timeInSeconds < 60) {
+        return [NSString stringWithFormat:@"%@秒",@(timeInSeconds)];
+    } else if (timeInSeconds >= 60 && timeInSeconds < 3600) {
+        NSInteger minutes = timeInSeconds / 60;
+        NSInteger seconds = timeInSeconds % 60;
+        return [NSString stringWithFormat:@"%@分钟%@秒",@(minutes),@(seconds)];
+    } else {
+        NSInteger hours = timeInSeconds / 3600;
+        NSInteger minutes = timeInSeconds % 3600 / 60;
+        NSInteger seconds = timeInSeconds % 3600 % 60;
+        return [NSString stringWithFormat:@"%@小时%@分%@秒",@(hours),@(minutes),@(seconds)];
+    }
+}
+
+/**
+ 准备交卷
+ */
+- (void)readyForCommit {
+    // 停止计时
+    if (_remainTimeTimer) {
+        [_remainTimeTimer invalidate];
+        _remainTimeTimer = nil;
+    }
+    // 隐藏弹窗
+    [self.examPane.alertWindow hide];
+    // 交卷
+    EScoreContainController *score = [[EScoreContainController alloc] initWithQuestions:self.questions];
+    [self.navigationController pushViewController:score animated:YES];
 }
 
 /*
