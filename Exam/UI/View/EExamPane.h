@@ -77,6 +77,20 @@ typedef NS_ENUM(NSInteger,ExamPaneType) {
 - (instancetype)initWithFrame:(CGRect)frame type:(ExamPaneType)type;
 
 /**
+ 刷新checkbox实心圆点的颜色
+
+ @param color 更新后的颜色
+ */
+- (void)refreshCheckboxHeartColor:(UIColor *)color;
+
+/**
+ 刷新checkbox背景色
+ 
+ @param color 更新后的背景色
+ */
+- (void)refreshCheckboxBackgroundColor:(UIColor *)color;
+
+/**
  刷新标题
 
  @param title 要显示的标题

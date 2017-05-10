@@ -113,10 +113,15 @@
     [self setFullScreen:YES WithAnimation:NO];
     
     if (_type == ExamPaneTypeBlank) {
+        [self.examPane refreshCheckboxHeartColor:[UIColor blackColor]];
+        [self.examPane refreshCheckboxBackgroundColor:RGBCOLOR(238, 208, 113)];
         self.examPane.totalTimeLbl.text = [NSString stringWithFormat:@"考试时间：%@",[self timeStringWithSeconds:totalTimeInSeconds]];
         _remainTimeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(changeRemainTime) userInfo:nil repeats:YES];
         _remainTimeInSeconds = totalTimeInSeconds;
         [_remainTimeTimer fire];
+    } else {
+        [self.examPane refreshCheckboxHeartColor:RGBCOLOR(159, 219, 137)];
+        [self.examPane refreshCheckboxBackgroundColor:RGBCOLOR(159, 219, 137)];
     }
 }
 

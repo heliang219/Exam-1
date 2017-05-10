@@ -27,6 +27,7 @@
 @interface EExamPane()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 {
     ExamPaneType _type;
+    UIColor *_checkboxSelectedBgColor;
 }
 
 @property (nonatomic,strong,readwrite) EQuestion *currentQuestion;  // 当前试题
@@ -129,7 +130,7 @@
 - (void)checkboxDidChange:(CTCheckbox *)checkbox {
     ((EAnswer *)_currentQuestion.answers[checkbox.tag - 1000]).checked = checkbox.checked;
     if (checkbox.checked) {
-         [checkbox setBackgroundColor:kThemeColor forControlState:UIControlStateNormal];
+         [checkbox setBackgroundColor:_checkboxSelectedBgColor forControlState:UIControlStateNormal];
     } else {
          [checkbox setBackgroundColor:RGBCOLOR(222, 224, 220) forControlState:UIControlStateNormal];
     }
@@ -528,6 +529,17 @@
 
 #pragma mark - public methods
 
+- (void)refreshCheckboxHeartColor:(UIColor *)color {
+    [_checkbox1 setHeartColor:color];
+    [_checkbox2 setHeartColor:color];
+    [_checkbox3 setHeartColor:color];
+    [_checkbox4 setHeartColor:color];
+}
+
+- (void)refreshCheckboxBackgroundColor:(UIColor *)color {
+    _checkboxSelectedBgColor = color;
+}
+
 - (void)refreshTitle:(NSString *)title {
     if (title) {
         _titleLbl.text = title;
@@ -543,7 +555,11 @@
             _kindLbl.backgroundColor = RGBCOLOR(123, 153, 217);
         } else {
             _kindLbl.text = [_currentQuestion.question_type substringToIndex:1];
-            _kindLbl.backgroundColor = kThemeColor;
+            if ([_currentQuestion.question_type isEqualToString:@"多选题"]) {
+                _kindLbl.backgroundColor = RGBCOLOR(159, 219, 137);
+            } else {
+                _kindLbl.backgroundColor = kThemeColor;
+            }
         }
         _questionLbl.text = [NSString stringWithFormat:@"第%@题  %@",@(_currentQuestion.question_index + 1),_currentQuestion.question_content];
         _previousBtn.hidden = _currentQuestion.question_index == 0;

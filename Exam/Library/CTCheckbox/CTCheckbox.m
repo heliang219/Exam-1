@@ -12,10 +12,13 @@ static const float CTCheckboxDefaultSideLength = 15.0;
 
 @interface CTCheckbox ()
 @property (nonatomic, strong) NSMutableDictionary *colorDictionary;
+@property (nonatomic, strong) NSMutableDictionary *heartColorDictionary;
 @property (nonatomic, strong) NSMutableDictionary *backgroundColorDictionary;
 @end
 
 @implementation CTCheckbox
+
+@synthesize heartColor = _heartColor;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -128,7 +131,15 @@ static const float CTCheckboxDefaultSideLength = 15.0;
         color = [UIColor clearColor];
     }
 
+    self.selectedBgColor = color;
     self.backgroundColor = color;
+}
+
+- (UIColor *)heartColor {
+    if (!_heartColor) {
+        _heartColor = [UIColor colorWithRed:159.f / 255 green:219.f / 255 blue:137.f / 255 alpha:1.f];
+    }
+    return _heartColor;
 }
 
 - (void)setChecked:(BOOL)checked
@@ -171,6 +182,11 @@ static const float CTCheckboxDefaultSideLength = 15.0;
     [self changeColorForState:self.state];
 }
 
+- (void)setHeartColor:(UIColor *)color {
+    _heartColor = color;
+    [self setNeedsDisplay];
+}
+
 - (void)setBackgroundColor:(UIColor *)backgroundColor forControlState:(UIControlState)state
 {
     switch (state) {
@@ -195,27 +211,18 @@ static const float CTCheckboxDefaultSideLength = 15.0;
 {
     CGRect frame = CGRectIntegral(CGRectMake(5, self.textLabel.frame.origin.y + 2.f, self.checkboxSideLength, self.checkboxSideLength));
 
+    UIBezierPath *ovalPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(CGRectGetMinX(frame) + floor(CGRectGetWidth(frame) * 0.05000 + 0.5), CGRectGetMinY(frame) + floor(CGRectGetHeight(frame) * 0.05000 + 0.5), floor(CGRectGetWidth(frame) * 0.95000 + 0.5) - floor(CGRectGetWidth(frame) * 0.05000 + 0.5), floor(CGRectGetHeight(frame) * 0.95000 + 0.5) - floor(CGRectGetHeight(frame) * 0.05000 + 0.5))];
+    ovalPath.lineWidth = 1 * self.checkboxSideLength / CTCheckboxDefaultSideLength;
+    [[UIColor whiteColor] setFill];
+    [ovalPath fill];
+    [[UIColor lightGrayColor] setStroke];
+    [ovalPath stroke];
+    
     if (self.checked) {
         UIBezierPath *bezierPath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(CGRectGetMinX(frame) + floor(CGRectGetWidth(frame) * 0.05000 + 0.5) + (floor(CGRectGetWidth(frame) * 0.95000 + 0.5) - floor(CGRectGetWidth(frame) * 0.05000 + 0.5)) * 0.2, CGRectGetMinY(frame) + floor(CGRectGetHeight(frame) * 0.05000 + 0.5) + (floor(CGRectGetHeight(frame) * 0.95000 + 0.5) - floor(CGRectGetHeight(frame) * 0.05000 + 0.5)) * 0.2, (floor(CGRectGetWidth(frame) * 0.95000 + 0.5) - floor(CGRectGetWidth(frame) * 0.05000 + 0.5)) * 0.6, (floor(CGRectGetHeight(frame) * 0.95000 + 0.5) - floor(CGRectGetHeight(frame) * 0.05000 + 0.5)) * 0.6)];
-
-//        [bezierPath moveToPoint:CGPointMake(CGRectGetMinX(frame) + 0.75000 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.21875 * CGRectGetHeight(frame))];
-//        [bezierPath addLineToPoint:CGPointMake(CGRectGetMinX(frame) + 0.40000 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.52500 * CGRectGetHeight(frame))];
-//        [bezierPath addLineToPoint:CGPointMake(CGRectGetMinX(frame) + 0.28125 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.37500 * CGRectGetHeight(frame))];
-//        [bezierPath addLineToPoint:CGPointMake(CGRectGetMinX(frame) + 0.17500 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.47500 * CGRectGetHeight(frame))];
-//        [bezierPath addLineToPoint:CGPointMake(CGRectGetMinX(frame) + 0.40000 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.75000 * CGRectGetHeight(frame))];
-//        [bezierPath addLineToPoint:CGPointMake(CGRectGetMinX(frame) + 0.81250 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.28125 * CGRectGetHeight(frame))];
-//        [bezierPath addLineToPoint:CGPointMake(CGRectGetMinX(frame) + 0.75000 * CGRectGetWidth(frame), CGRectGetMinY(frame) + 0.21875 * CGRectGetHeight(frame))];
-//        [bezierPath closePath];
-
-        [[UIColor colorWithRed:159.f / 255 green:219.f / 255 blue:137.f / 255 alpha:1.f] setFill];
+        [self.heartColor setFill];
         [bezierPath fill];
     }
-
-//    UIBezierPath *roundedRectanglePath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(CGRectGetMinX(frame) + floor(CGRectGetWidth(frame) * 0.05000 + 0.5), CGRectGetMinY(frame) + floor(CGRectGetHeight(frame) * 0.05000 + 0.5), floor(CGRectGetWidth(frame) * 0.95000 + 0.5) - floor(CGRectGetWidth(frame) * 0.05000 + 0.5), floor(CGRectGetHeight(frame) * 0.95000 + 0.5) - floor(CGRectGetHeight(frame) * 0.05000 + 0.5)) cornerRadius:1];
-    UIBezierPath *oval = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(CGRectGetMinX(frame) + floor(CGRectGetWidth(frame) * 0.05000 + 0.5), CGRectGetMinY(frame) + floor(CGRectGetHeight(frame) * 0.05000 + 0.5), floor(CGRectGetWidth(frame) * 0.95000 + 0.5) - floor(CGRectGetWidth(frame) * 0.05000 + 0.5), floor(CGRectGetHeight(frame) * 0.95000 + 0.5) - floor(CGRectGetHeight(frame) * 0.05000 + 0.5))];
-    oval.lineWidth = 1 * self.checkboxSideLength / CTCheckboxDefaultSideLength;
-    [[UIColor lightGrayColor] setStroke];
-    [oval stroke];
 }
 
 - (void)layoutSubviews
