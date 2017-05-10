@@ -186,7 +186,7 @@
             break;
         }
     }
-    [exam refreshQuestion:question];
+    [exam refreshQuestion:question lock:YES];
     [self.navigationController pushToController:exam animated:YES];
     
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];

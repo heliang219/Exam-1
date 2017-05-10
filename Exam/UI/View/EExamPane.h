@@ -101,8 +101,9 @@ typedef NS_ENUM(NSInteger,ExamPaneType) {
  刷新当前试题
 
  @param question 刷新后的当前试题
+ @param lock     是否锁定答题面板
  */
-- (void)refreshQuestion:(EQuestion *)question;
+- (void)refreshQuestion:(EQuestion *)question lock:(BOOL)lock;
 
 /**
  刷新所有试题

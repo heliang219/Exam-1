@@ -8,7 +8,7 @@
 
 #import "EBaseController.h"
 @class EQuestion;
-@class EExamPane;
+#import "EExamPane.h"
 
 @protocol EExamPaneControllerDelegate <NSObject>
 
@@ -34,6 +34,7 @@
 @property (nonatomic,strong,readonly) NSArray *questions;  // 所有试题
 @property (nonatomic,strong,readonly) EQuestion *currentQuestion;  // 当前试题
 @property (nonatomic,assign) UIInterfaceOrientation orientationWanted; // 期望返回到的页面的方向
+@property (nonatomic,assign) ExamPaneType type; // 面板类型
 
 #pragma mark - 初始化方法
 
@@ -61,8 +62,9 @@
  刷新答题面板上的question
 
  @param question 刷新后的question
+ @param lock     是否锁定答题面板
  */
-- (void)refreshQuestion:(EQuestion *)question;
+- (void)refreshQuestion:(EQuestion *)question lock:(BOOL)lock;
 
 /**
  刷新右侧题号面板上的所有question

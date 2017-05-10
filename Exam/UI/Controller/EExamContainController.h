@@ -15,6 +15,6 @@
 
 - (instancetype)initWithTitle:(NSString *)title questions:(NSArray *)questions orientationWanted:(UIInterfaceOrientation)ori;
 
-- (void)refreshQuestion:(EQuestion *)question;
+- (void)refreshQuestion:(EQuestion *)question lock:(BOOL)lock;
 
 @end

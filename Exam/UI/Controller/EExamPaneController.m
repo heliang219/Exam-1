@@ -7,7 +7,6 @@
 //
 
 #import "EExamPaneController.h"
-#import "EExamPane.h"
 #import "EExamContainer.h"
 #import "EQuestion.h"
 #import "EScorePaneController.h"
@@ -26,7 +25,6 @@
     NSTimer *_remainTimeTimer; // 剩余时间计时器
     
     NSInteger _remainTimeInSeconds; // 剩余时间
-    ExamPaneType _type; // 卷面类型
 }
 
 @property (nonatomic,assign) BOOL fullScreen;  // 是否是全屏
@@ -106,9 +104,17 @@
     self.examPane.delegate = self;
     [self.view addSubview:self.examPane];
     
+    if (_type == ExamPaneTypeBlank) {
+        [self.examPane refreshCheckboxHeartColor:[UIColor blackColor]];
+        [self.examPane refreshCheckboxBackgroundColor:RGBCOLOR(238, 208, 113)];
+    } else {
+        [self.examPane refreshCheckboxHeartColor:RGBCOLOR(159, 219, 137)];
+        [self.examPane refreshCheckboxBackgroundColor:RGBCOLOR(159, 219, 137)];
+    }
+    
     [self refreshTitle:_topTitle];
     [self refreshQuestions:_questions];
-    [self refreshQuestion:_questions[0][0]];
+    [self refreshQuestion:_questions[0][0] lock:_type == ExamPaneTypeFull];
     
     [self setFullScreen:YES WithAnimation:NO];
     
@@ -362,8 +368,8 @@
     [self.examPane refreshTitle:title];
 }
 
-- (void)refreshQuestion:(EQuestion *)question {
-    [self.examPane refreshQuestion:question];
+- (void)refreshQuestion:(EQuestion *)question lock:(BOOL)lock {
+    [self.examPane refreshQuestion:question lock:lock];
 }
 
 - (void)refreshQuestions:(NSArray *)questions {
@@ -373,13 +379,13 @@
 - (void)previousQuestion {
     NSInteger currentIndex = self.currentQuestion.question_index - 1;
     [self getCurrentSectionAndRowWithIndex:currentIndex];
-    [self refreshQuestion:_questions[_currentSection][_currentRow]];
+    [self refreshQuestion:_questions[_currentSection][_currentRow] lock:_type == ExamPaneTypeFull];
 }
 
 - (void)nextQuestion {
     NSInteger currentIndex = self.currentQuestion.question_index + 1;
     [self getCurrentSectionAndRowWithIndex:currentIndex];
-    [self refreshQuestion:_questions[_currentSection][_currentRow]];
+    [self refreshQuestion:_questions[_currentSection][_currentRow] lock:_type == ExamPaneTypeFull];
 }
 
 - (void)commitExam {

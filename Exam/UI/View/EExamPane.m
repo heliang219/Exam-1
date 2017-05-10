@@ -547,7 +547,7 @@
     }
 }
 
-- (void)refreshQuestion:(EQuestion *)question {
+- (void)refreshQuestion:(EQuestion *)question lock:(BOOL)lock {
     if (question) {
         _currentQuestion = question;
         if (_currentQuestion.question_is_required == 1) {
@@ -564,6 +564,10 @@
         _questionLbl.text = [NSString stringWithFormat:@"第%@题  %@",@(_currentQuestion.question_index + 1),_currentQuestion.question_content];
         _previousBtn.hidden = _currentQuestion.question_index == 0;
         _nextBtn.hidden = _currentQuestion.question_index == ([self getQuestionTotalCount] - 1);
+        _checkbox1.userInteractionEnabled = !lock;
+        _checkbox2.userInteractionEnabled = !lock;
+        _checkbox3.userInteractionEnabled = !lock;
+        _checkbox4.userInteractionEnabled = !lock;
         switch (_currentQuestion.answers.count) {
             case 2:
             {
@@ -573,8 +577,13 @@
                 _checkbox4.hidden = YES;
                 _checkbox1.textLabel.text = [NSString stringWithFormat:@"A.%@",((EAnswer *)_currentQuestion.answers[0]).answer_content];
                 _checkbox2.textLabel.text = [NSString stringWithFormat:@"B.%@",((EAnswer *)_currentQuestion.answers[1]).answer_content];
-                _checkbox1.checked = ((EAnswer *)_currentQuestion.answers[0]).checked;
-                _checkbox2.checked = ((EAnswer *)_currentQuestion.answers[1]).checked;
+                if (lock) {
+                    _checkbox1.checked = ((EAnswer *)_currentQuestion.answers[0]).answer_correct;
+                    _checkbox2.checked = ((EAnswer *)_currentQuestion.answers[1]).answer_correct;
+                } else {
+                    _checkbox1.checked = ((EAnswer *)_currentQuestion.answers[0]).checked;
+                    _checkbox2.checked = ((EAnswer *)_currentQuestion.answers[1]).checked;
+                }
             }
                 break;
             case 3:
@@ -586,9 +595,15 @@
                 _checkbox1.textLabel.text = [NSString stringWithFormat:@"A.%@",((EAnswer *)_currentQuestion.answers[0]).answer_content];
                 _checkbox2.textLabel.text = [NSString stringWithFormat:@"B.%@",((EAnswer *)_currentQuestion.answers[1]).answer_content];
                 _checkbox3.textLabel.text = [NSString stringWithFormat:@"C.%@",((EAnswer *)_currentQuestion.answers[2]).answer_content];
-                _checkbox1.checked = ((EAnswer *)_currentQuestion.answers[0]).checked;
-                _checkbox2.checked = ((EAnswer *)_currentQuestion.answers[1]).checked;
-                _checkbox3.checked = ((EAnswer *)_currentQuestion.answers[2]).checked;
+                if (lock) {
+                    _checkbox1.checked = ((EAnswer *)_currentQuestion.answers[0]).answer_correct;
+                    _checkbox2.checked = ((EAnswer *)_currentQuestion.answers[1]).answer_correct;
+                    _checkbox3.checked = ((EAnswer *)_currentQuestion.answers[2]).answer_correct;
+                } else {
+                    _checkbox1.checked = ((EAnswer *)_currentQuestion.answers[0]).checked;
+                    _checkbox2.checked = ((EAnswer *)_currentQuestion.answers[1]).checked;
+                    _checkbox3.checked = ((EAnswer *)_currentQuestion.answers[2]).checked;
+                }
             }
                 break;
             case 4:
@@ -601,14 +616,41 @@
                 _checkbox2.textLabel.text = [NSString stringWithFormat:@"B.%@",((EAnswer *)_currentQuestion.answers[1]).answer_content];
                 _checkbox3.textLabel.text = [NSString stringWithFormat:@"C.%@",((EAnswer *)_currentQuestion.answers[2]).answer_content];
                 _checkbox4.textLabel.text = [NSString stringWithFormat:@"D.%@",((EAnswer *)_currentQuestion.answers[3]).answer_content];
-                _checkbox1.checked = ((EAnswer *)_currentQuestion.answers[0]).checked;
-                _checkbox2.checked = ((EAnswer *)_currentQuestion.answers[1]).checked;
-                _checkbox3.checked = ((EAnswer *)_currentQuestion.answers[2]).checked;
-                _checkbox4.checked = ((EAnswer *)_currentQuestion.answers[3]).checked;
+                if (lock) {
+                    _checkbox1.checked = ((EAnswer *)_currentQuestion.answers[0]).answer_correct;
+                    _checkbox2.checked = ((EAnswer *)_currentQuestion.answers[1]).answer_correct;
+                    _checkbox3.checked = ((EAnswer *)_currentQuestion.answers[2]).answer_correct;
+                    _checkbox4.checked = ((EAnswer *)_currentQuestion.answers[3]).answer_correct;
+                } else {
+                    _checkbox1.checked = ((EAnswer *)_currentQuestion.answers[0]).checked;
+                    _checkbox2.checked = ((EAnswer *)_currentQuestion.answers[1]).checked;
+                    _checkbox3.checked = ((EAnswer *)_currentQuestion.answers[2]).checked;
+                    _checkbox4.checked = ((EAnswer *)_currentQuestion.answers[3]).checked;
+                }
             }
                 break;
             default:
                 break;
+        }
+        if (_checkbox1.checked) {
+            [_checkbox1 setBackgroundColor:_checkboxSelectedBgColor forControlState:UIControlStateNormal];
+        } else {
+            [_checkbox1 setBackgroundColor:RGBCOLOR(222, 224, 220) forControlState:UIControlStateNormal];
+        }
+        if (_checkbox2.checked) {
+            [_checkbox2 setBackgroundColor:_checkboxSelectedBgColor forControlState:UIControlStateNormal];
+        } else {
+            [_checkbox2 setBackgroundColor:RGBCOLOR(222, 224, 220) forControlState:UIControlStateNormal];
+        }
+        if (_checkbox3.checked) {
+            [_checkbox3 setBackgroundColor:_checkboxSelectedBgColor forControlState:UIControlStateNormal];
+        } else {
+            [_checkbox3 setBackgroundColor:RGBCOLOR(222, 224, 220) forControlState:UIControlStateNormal];
+        }
+        if (_checkbox4.checked) {
+            [_checkbox4 setBackgroundColor:_checkboxSelectedBgColor forControlState:UIControlStateNormal];
+        } else {
+            [_checkbox4 setBackgroundColor:RGBCOLOR(222, 224, 220) forControlState:UIControlStateNormal];
         }
         [self setNeedsLayout];
     }

@@ -51,13 +51,13 @@
     self.examPaneController = [EExamPaneController createWithController:self view:self.view delegate:self title:_topTitle questions:_questions];
     self.examPaneController.orientationWanted = _orientationWanted;
     if (!_questionRefreshed) {
-        [self refreshQuestion:_questionToRefresh];
+        [self refreshQuestion:_questionToRefresh lock:self.examPaneController.type == ExamPaneTypeFull];
     }
 }
 
-- (void)refreshQuestion:(EQuestion *)question {
+- (void)refreshQuestion:(EQuestion *)question lock:(BOOL)lock {
     if (self.examPaneController) {
-        [self.examPaneController refreshQuestion:question];
+        [self.examPaneController refreshQuestion:question lock:lock];
         _questionRefreshed = YES;
     } else {
         _questionToRefresh = question;
@@ -97,7 +97,7 @@
 
 - (void)numberBtnClickedAtSection:(NSInteger)section row:(NSInteger)row {
     DLog(@"您点击了section : %@,row : %@",@(section),@(row));
-    [self.examPaneController refreshQuestion:self.examPaneController.questions[section][row]];
+    [self.examPaneController refreshQuestion:self.examPaneController.questions[section][row] lock:self.examPaneController.type == ExamPaneTypeFull];
 }
 
 /*
