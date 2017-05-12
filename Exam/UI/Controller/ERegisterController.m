@@ -40,10 +40,10 @@
     scrollPane.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:scrollPane];
     
-    CGFloat originX = kEPadding * 2;
-    CGFloat originY = kEPadding * 2;
+    CGFloat originX = kEPadding * 3;
+    CGFloat originY = kEPadding * 4;
     
-    CGFloat barHeight = 40.f;
+    CGFloat barHeight = 45.f;
     CGFloat lblHeight = 20.f;
     
     UILabel *nameLbl = [[UILabel alloc] initWithFrame:CGRectMake(originX, originY, 40, lblHeight)];
@@ -51,7 +51,7 @@
     nameLbl.font = kSmallFont;
     [scrollPane addSubview:nameLbl];
     
-    originY += lblHeight + 5;
+    originY += lblHeight + 9;
     ECheckTextField *nameTf = [[ECheckTextField alloc] initWithFrame:CGRectMake(originX, originY, kFrameWidth - originX * 2, barHeight)];
     nameTf.font = kMediumFont;
     nameTf.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -63,7 +63,7 @@
     idLbl.font = kSmallFont;
     [scrollPane addSubview:idLbl];
     
-    originY += lblHeight + 5;
+    originY += lblHeight + 9;
     _idTf = [[ECheckTextField alloc] initWithFrame:CGRectMake(originX, originY, kFrameWidth - originX * 2, barHeight)];
     _idTf.font = kMediumFont;
     _idTf.secureTextEntry = YES;
@@ -83,7 +83,7 @@
 
     [scrollPane addSubview:phoneLbl];
     
-    originY += lblHeight + 5;
+    originY += lblHeight + 9;
     _phoneTf = [[ECheckTextField alloc] initWithFrame:CGRectMake(originX, originY, kFrameWidth - originX * 2, barHeight)];
     _phoneTf.font = kMediumFont;
     _phoneTf.keyboardType = UIKeyboardTypeNumberPad;

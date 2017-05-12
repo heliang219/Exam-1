@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "EWelcomeController.h"
 #import "EMainTypeController.h"
 #import "ERegisterController.h"
 #import "ELoginController.h"
@@ -47,11 +46,6 @@
     }
 }
 
-- (void)switchToWelcomeController {
-    EWelcomeController *welcome = [[EWelcomeController alloc] init];
-    self.window.rootViewController = welcome;
-}
-
 - (void)switchToLoginRegisterController {
     ELoginController *loginController = [[ELoginController alloc] init];
     self.nav = [[ENavigationController alloc] initWithRootViewController:loginController];
@@ -81,7 +75,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
-    [self switchToWelcomeController];
+    [self switchToLoginRegisterController];
     
     // 增加标识，用于判断是否是第一次启动应用...
     if (![kUserDefaults boolForKey:@"everLaunched"]) {

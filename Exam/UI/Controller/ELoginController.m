@@ -56,10 +56,10 @@
     scrollPane.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:scrollPane];
     
-    CGFloat originX = kEPadding * 2;
-    CGFloat originY = kEPadding * 2;
+    CGFloat originX = kEPadding * 3;
+    CGFloat originY = kEPadding * 4;
     
-    CGFloat barHeight = 40.f;
+    CGFloat barHeight = 45.f;
     CGFloat lblHeight = 20.f;
     
     UILabel *phoneLbl = [[UILabel alloc] initWithFrame:CGRectMake(originX, originY, 100, lblHeight)];
@@ -68,7 +68,7 @@
     
     [scrollPane addSubview:phoneLbl];
     
-    originY += lblHeight + 5;
+    originY += lblHeight + 9;
     _phoneTf = [[ECheckTextField alloc] initWithFrame:CGRectMake(originX, originY, kFrameWidth - originX * 2, barHeight)];
     _phoneTf.font = kMediumFont;
     _phoneTf.keyboardType = UIKeyboardTypeNumberPad;
@@ -76,21 +76,21 @@
     _phoneTf.immediatelyCheck = YES;
     [scrollPane addSubview:_phoneTf];
     
-    originY += barHeight + 15;
+    originY += barHeight + 20;
     UILabel *verifyLbl = [[UILabel alloc] initWithFrame:CGRectMake(originX, originY, 100, lblHeight)];
     verifyLbl.text = @"验证码";
     verifyLbl.font = kSmallFont;
     [scrollPane addSubview:verifyLbl];
     
-    originY += lblHeight + 5;
-    _verifyTf = [[ECheckTextField alloc] initWithFrame:CGRectMake(originX, originY, kFrameWidth - originX * 2 - 125, barHeight)];
+    originY += lblHeight + 9;
+    _verifyTf = [[ECheckTextField alloc] initWithFrame:CGRectMake(originX, originY, kFrameWidth - originX * 2 - 105, barHeight)];
     _verifyTf.font = kMediumFont;
     _verifyTf.keyboardType = UIKeyboardTypeNumberPad;
     [scrollPane addSubview:_verifyTf];
     
     originX += _verifyTf.bounds.size.width + 5;
     _verifyBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    _verifyBtn.frame = CGRectMake(originX, originY, 120, barHeight);
+    _verifyBtn.frame = CGRectMake(originX, originY, 100, barHeight);
     [_verifyBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
     _verifyBtn.backgroundColor = kThemeColor;
     [_verifyBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -100,7 +100,7 @@
     [_verifyBtn addTarget:self action:@selector(verifyBtnAction) forControlEvents:UIControlEventTouchUpInside];
     [scrollPane addSubview:_verifyBtn];
     
-    originX = kEPadding * 2;
+    originX = kEPadding * 3;
     originY += barHeight * 2;
     UIButton *loginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     loginBtn.frame = CGRectMake(originX, originY, kFrameWidth - originX * 2, barHeight);

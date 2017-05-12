@@ -50,6 +50,8 @@
 
 #define kNumberOfBlocksPerRow 3 // 每行的block数量
 #define kBlockWidth (kFrameWidth - kEPadding * (kNumberOfBlocksPerRow + 1)) / kNumberOfBlocksPerRow  // 方块block的size
-#define kHeaderViewHeight kBlockWidth + kEPadding * 2 + kNavigationBarHeight // 头部视图高度（从导航栏顶部开始）
+#define kLogoHeight 105.f
+#define kLogoWidth kLogoHeight
+#define kHeaderViewHeight kLogoHeight + kEPadding * 2 + kNavigationBarHeight // 头部视图高度（从导航栏顶部开始）
 
 #endif /* EMacro_h */

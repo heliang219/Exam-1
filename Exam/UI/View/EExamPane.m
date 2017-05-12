@@ -152,7 +152,7 @@
  */
 - (void)initTopPane {
     _topPane = [[UIView alloc] init];
-    _topPane.backgroundColor = kThemeColor;
+    _topPane.backgroundColor = [UIColor whiteColor];
     [self addSubview:_topPane];
     
     _titleLbl = [[UILabel alloc] init];
@@ -174,7 +174,8 @@
     [_instructionBtn setTitle:@"帮助" forState:UIControlStateNormal];
     [_instructionBtn setTitleColor:RGBCOLOR(57, 138, 228) forState:UIControlStateNormal];
     _instructionBtn.titleLabel.font = kSmallFont;
-    _instructionBtn.backgroundColor = [UIColor orangeColor];
+    _instructionBtn.backgroundColor = [UIColor clearColor];
+    [_instructionBtn setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
     [_instructionBtn addTarget:self action:@selector(instructionBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [_topPane addSubview:_instructionBtn];
 }

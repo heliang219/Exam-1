@@ -38,8 +38,8 @@
     // 交给子类去实现
     UIButton *goBackBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     goBackBtn.frame = CGRectMake(0, 0, 20, 20);
-    [goBackBtn setImage:IMAGE_BY_NAMED(@"Icon") forState:UIControlStateNormal];
-    [goBackBtn setImage:IMAGE_BY_NAMED(@"Icon") forState:UIControlStateHighlighted];
+    [goBackBtn setImage:IMAGE_BY_NAMED(@"back") forState:UIControlStateNormal];
+    [goBackBtn setImage:IMAGE_BY_NAMED(@"back") forState:UIControlStateHighlighted];
     [goBackBtn addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:goBackBtn];
 }

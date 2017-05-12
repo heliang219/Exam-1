@@ -44,7 +44,7 @@
 - (void)initHelpPage {
     _page = [[UIImageView alloc] init];
     _page.userInteractionEnabled = YES;
-    _page.image = IMAGE_BY_NAMED(@"help.jpg");
+    _page.image = IMAGE_BY_NAMED(@"help_bg");
     [self addSubview:_page];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hide)];
     [self addGestureRecognizer:tap];

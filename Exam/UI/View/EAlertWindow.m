@@ -18,6 +18,7 @@
 {
     UIView *_bgView;
     UIView *_contentView;
+    UIImageView *_contentImageView;
     UIView *_textView;
     UILabel *_titleLbl;
     UIButton *_cancelBtn;
@@ -139,6 +140,11 @@
         _contentView.layer.cornerRadius = 12.f;
         [self addSubview:_contentView];
         
+        _contentImageView = [[UIImageView alloc] init];
+        _contentImageView.userInteractionEnabled = YES;
+        _contentImageView.backgroundColor = [UIColor clearColor];
+        [_contentView addSubview:_contentImageView];
+        
         _textView = [[UIView alloc] init];
         _textView.backgroundColor = [UIColor colorWithRed:220 / 255.0 green:220 / 255.0 blue:220 / 255.0 alpha:1.0];
         [_contentView addSubview:_textView];
@@ -185,6 +191,12 @@
     CGFloat contentHeight = (textHeight + btnHeight) > bgViewHeight ? (textHeight + btnHeight) : bgViewHeight;
     contentHeight = (contentHeight < (bounds.size.height - 40) ? contentHeight : (bounds.size.height - 40));
     _contentView.frame = CGRectMake((bounds.size.width - bgViewWidth) / 2, (bounds.size.height - contentHeight) / 2, bgViewWidth, contentHeight);
+    _contentImageView.frame = _contentView.bounds;
+    if (_style == EAlertWindowStyleSystem) {
+        _contentImageView.image = nil;
+    } else {
+        _contentImageView.image = IMAGE_BY_NAMED(@"alert_bg");
+    }
     _textView.frame = CGRectMake(0, 0, bgViewWidth, contentHeight - lineWidth * 0.7 - btnHeight);
     _titleLbl.frame = CGRectMake(10, 0, bgViewWidth - 20, _textView.bounds.size.height);
     

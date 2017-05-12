@@ -10,6 +10,8 @@
 #import "EAlertWindow.h"
 #import "ELoginController.h"
 
+#define logo_success_width 104
+
 @interface ERegisterSuccessController ()<EAlertWindowDelegate>
 
 @end
@@ -29,11 +31,11 @@
 }
 
 - (void)initContentView {
-    UIImageView *logo = [[UIImageView alloc] initWithFrame:CGRectMake((kFrameWidth - kBlockWidth) / 2, kNavigationBarHeight + 100, kBlockWidth, kBlockWidth)];
-    logo.image = IMAGE_BY_NAMED(@"Icon");
+    UIImageView *logo = [[UIImageView alloc] initWithFrame:CGRectMake((kFrameWidth - logo_success_width) / 2, kNavigationBarHeight + logo_success_width, logo_success_width, logo_success_width)];
+    logo.image = IMAGE_BY_NAMED(@"registerSuccess_logo");
     [self.view addSubview:logo];
     
-    UILabel *lbl = [[UILabel alloc] initWithFrame:CGRectMake((kFrameWidth - 200) / 2.f, logo.frame.origin.y + logo.bounds.size.height + kEPadding * 3, 200, 40)];
+    UILabel *lbl = [[UILabel alloc] initWithFrame:CGRectMake((kFrameWidth - 200) / 2.f, logo.frame.origin.y + logo.bounds.size.height + 36, 200, 40)];
     lbl.text = @"感谢您注册!";
     lbl.textColor = [UIColor blackColor];
     lbl.textAlignment = NSTextAlignmentCenter;
@@ -41,7 +43,7 @@
     [self.view addSubview:lbl];
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = CGRectMake((kFrameWidth - 200) / 2.f, lbl.frame.origin.y + lbl.bounds.size.height + kEPadding * 2, 200, 20);
+    btn.frame = CGRectMake((kFrameWidth - 200) / 2.f, lbl.frame.origin.y + lbl.bounds.size.height + 22, 200, 20);
     NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@"您当前的版本：试用版"];
     [attrStr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, 7)];
     [attrStr addAttribute:NSForegroundColorAttributeName value:RGBCOLOR(87, 142, 251) range:NSMakeRange(7, 3)];

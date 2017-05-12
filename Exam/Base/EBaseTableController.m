@@ -38,8 +38,8 @@
     headView.backgroundColor = kThemeColor;
     [self.view addSubview:headView];
     
-    UIImageView *logo = [[UIImageView alloc] initWithFrame:CGRectMake((kFrameWidth - kBlockWidth) / 2, kNavigationBarHeight + kEPadding, kBlockWidth, kBlockWidth)];
-    logo.image = IMAGE_BY_NAMED(@"Icon");
+    UIImageView *logo = [[UIImageView alloc] initWithFrame:CGRectMake((kFrameWidth - kLogoWidth) / 2, kNavigationBarHeight + kEPadding, kLogoWidth, kLogoHeight)];
+    logo.image = IMAGE_BY_NAMED(@"logo");
     [headView addSubview:logo];
 }
 
