@@ -63,7 +63,7 @@
     // 设置布局方向为垂直流布局
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
     // 创建collectionView 通过一个布局策略layout来创建
-    UICollectionView *collect = [[UICollectionView alloc] initWithFrame:CGRectMake(kEPadding, kNavigationBarHeight + kEPadding * 2 + kBlockWidth, kFrameWidth - kEPadding * 2, kFrameHeight - (kNavigationBarHeight + kEPadding * 2 + kBlockWidth)) collectionViewLayout:layout];
+    UICollectionView *collect = [[UICollectionView alloc] initWithFrame:CGRectMake(kEPadding, kHeaderViewHeight + kEPadding, kFrameWidth - kEPadding * 2, kFrameHeight - (kHeaderViewHeight + kEPadding)) collectionViewLayout:layout];
     collect.backgroundColor = kBackgroundColor;
     collect.showsVerticalScrollIndicator = NO;
     // 代理设置

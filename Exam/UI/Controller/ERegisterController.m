@@ -34,7 +34,7 @@
 }
 
 - (void)initScrollView {
-    UIScrollView *scrollPane = [[UIScrollView alloc] initWithFrame:CGRectMake(0, kNavigationBarHeight + kBlockWidth + kEPadding * 2, kFrameWidth, kFrameHeight - (kNavigationBarHeight + kBlockWidth + kEPadding * 2))];
+    UIScrollView *scrollPane = [[UIScrollView alloc] initWithFrame:CGRectMake(0, kHeaderViewHeight + kEPadding, kFrameWidth, kFrameHeight - (kHeaderViewHeight + kEPadding))];
     scrollPane.contentSize = scrollPane.bounds.size;
     scrollPane.showsVerticalScrollIndicator = NO;
     scrollPane.showsHorizontalScrollIndicator = NO;

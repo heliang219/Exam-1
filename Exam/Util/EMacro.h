@@ -21,7 +21,7 @@
 #define HEXCOLOR(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 // 主题颜色
-#define kThemeColor RGBACOLOR(238, 208, 113, 1.0)
+#define kThemeColor RGBACOLOR(241, 209, 101, 1.0)
 
 // 背景颜色（赭石）
 #define kBackgroundColor [UIColor whiteColor]
@@ -50,5 +50,6 @@
 
 #define kNumberOfBlocksPerRow 3 // 每行的block数量
 #define kBlockWidth (kFrameWidth - kEPadding * (kNumberOfBlocksPerRow + 1)) / kNumberOfBlocksPerRow  // 方块block的size
+#define kHeaderViewHeight kBlockWidth + kEPadding * 2 + kNavigationBarHeight // 头部视图高度（从导航栏顶部开始）
 
 #endif /* EMacro_h */

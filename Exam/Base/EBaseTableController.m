@@ -34,9 +34,13 @@
  初始化顶部logo视图
  */
 - (void)initHeader {
+    UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kFrameWidth, kHeaderViewHeight)];
+    headView.backgroundColor = kThemeColor;
+    [self.view addSubview:headView];
+    
     UIImageView *logo = [[UIImageView alloc] initWithFrame:CGRectMake((kFrameWidth - kBlockWidth) / 2, kNavigationBarHeight + kEPadding, kBlockWidth, kBlockWidth)];
     logo.image = IMAGE_BY_NAMED(@"Icon");
-    [self.view addSubview:logo];
+    [headView addSubview:logo];
 }
 
 #pragma mark - UITableViewDatasource
