@@ -400,6 +400,7 @@
             return;
         }
         strongSelf.examPane.alertWindow.delegate = strongSelf;
+        strongSelf.examPane.alertWindow.style = EAlertWindowStyleSystem;
         [strongSelf.examPane.alertWindow showWithTitle:@"确认交卷？" cancelTitle:@"取消" confirmTitle:@"确认"];
     });
     if (_isLowIOS) {

@@ -57,7 +57,7 @@
     DLog(@"试用版");
     EAlertWindow *alertWindow = [EAlertWindow sharedWindow];
     alertWindow.style = EAlertWindowStyleCustom;
-    alertWindow.bgColor = [UIColor whiteColor];
+    alertWindow.bgColor = [UIColor clearColor];
     alertWindow.confirmBtnBgColor = kThemeColor;
     alertWindow.confirmBtnTitleColor = [UIColor blackColor];
     alertWindow.btnInset = UIEdgeInsetsMake(0, kEPadding, kEPadding, kEPadding);

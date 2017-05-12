@@ -136,8 +136,9 @@
     DLog(@"登录");
     EAlertWindow *alertWindow = [EAlertWindow sharedWindow];
     alertWindow.style = EAlertWindowStyleCustom;
-    alertWindow.titleFont = [UIFont boldSystemFontOfSize:25.f];
-    alertWindow.bgColor = [UIColor whiteColor];
+    alertWindow.icon = IMAGE_BY_NAMED(@"registerSuccess_logo");
+    alertWindow.titleFont = [UIFont boldSystemFontOfSize:24.f];
+    alertWindow.bgColor = [UIColor clearColor];
     alertWindow.confirmBtnBgColor = kThemeColor;
     alertWindow.confirmBtnTitleColor = [UIColor blackColor];
     alertWindow.btnInset = UIEdgeInsetsMake(0, kEPadding, kEPadding, kEPadding);

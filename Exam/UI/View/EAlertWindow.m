@@ -13,12 +13,15 @@
 #define bgViewHeight 131.f
 #define btnHeight 50.f
 #define lineWidth 1.f
+#define iconWidth 88.f
+#define iconHeight 88.f
 
 @implementation EAlertWindow
 {
     UIView *_bgView;
     UIView *_contentView;
     UIImageView *_contentImageView;
+    UIImageView *_iconImageView;
     UIView *_textView;
     UILabel *_titleLbl;
     UIButton *_cancelBtn;
@@ -48,8 +51,26 @@
     return window;
 }
 
+/**
+ 重置系统状态
+ */
+- (void)resetSystemState {
+    _contentView.backgroundColor = [UIColor clearColor];
+    _contentImageView.hidden = YES;
+    _contentImageView.image = nil;
+    _iconImageView.hidden = YES;
+    _textView.backgroundColor = [UIColor colorWithRed:220 / 255.0 green:220 / 255.0 blue:220 / 255.0 alpha:1.0];
+    _titleLbl.font = [UIFont systemFontOfSize:15.f];
+    _cancelBtn.backgroundColor = [UIColor colorWithRed:220 / 255.0 green:220 / 255.0 blue:220 / 255.0 alpha:1.0];
+    _confirmBtn.backgroundColor = [UIColor colorWithRed:220 / 255.0 green:220 / 255.0 blue:220 / 255.0 alpha:1.0];
+    _btnInset = UIEdgeInsetsMake(0, 0, 0, 0);
+}
+
 - (void)setStyle:(EAlertWindowStyle)style {
     _style = style;
+    if (_style == EAlertWindowStyleSystem) {
+        [self resetSystemState];
+    }
     [self setNeedsLayout];
 }
 
@@ -63,6 +84,20 @@
 
 - (UIColor *)bgColor {
     return _textView.backgroundColor;
+}
+
+- (UIImage *)icon {
+    return _iconImageView.image;
+}
+
+- (void)setIcon:(UIImage *)icon {
+    if (icon) {
+        _iconImageView.hidden = NO;
+    } else {
+        _iconImageView.hidden = YES;
+    }
+    _iconImageView.image = icon;
+    [self setNeedsLayout];
 }
 
 - (void)setCancelBtnBgColor:(UIColor *)cancelBtnBgColor {
@@ -140,11 +175,19 @@
         _contentView.layer.cornerRadius = 12.f;
         [self addSubview:_contentView];
         
+        // content bg image view
         _contentImageView = [[UIImageView alloc] init];
         _contentImageView.userInteractionEnabled = YES;
         _contentImageView.backgroundColor = [UIColor clearColor];
         [_contentView addSubview:_contentImageView];
         
+        // icon image view
+        _iconImageView = [[UIImageView alloc] init];
+        _iconImageView.userInteractionEnabled = YES;
+        _iconImageView.hidden = YES;
+        [_contentView addSubview:_iconImageView];
+        
+        // text view
         _textView = [[UIView alloc] init];
         _textView.backgroundColor = [UIColor colorWithRed:220 / 255.0 green:220 / 255.0 blue:220 / 255.0 alpha:1.0];
         [_contentView addSubview:_textView];
@@ -189,15 +232,27 @@
     CGFloat textHeight = [UILabel getHeightByWidth:bgViewWidth - 20 title:_titleLbl.text font:_titleLbl.font] + 30;
     // 限制最小和最大高度（131~(屏幕高度-40)）
     CGFloat contentHeight = (textHeight + btnHeight) > bgViewHeight ? (textHeight + btnHeight) : bgViewHeight;
+    if (!_iconImageView.hidden && _iconImageView.image) {
+        contentHeight += 88 + 35 * 2;
+    }
     contentHeight = (contentHeight < (bounds.size.height - 40) ? contentHeight : (bounds.size.height - 40));
     _contentView.frame = CGRectMake((bounds.size.width - bgViewWidth) / 2, (bounds.size.height - contentHeight) / 2, bgViewWidth, contentHeight);
     _contentImageView.frame = _contentView.bounds;
     if (_style == EAlertWindowStyleSystem) {
         _contentImageView.image = nil;
+        _contentView.layer.borderWidth = 0.5;
+        _contentView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     } else {
+        _contentView.layer.borderWidth = 0.1;
+        _contentView.layer.borderColor = [UIColor clearColor].CGColor;
         _contentImageView.image = IMAGE_BY_NAMED(@"alert_bg");
     }
-    _textView.frame = CGRectMake(0, 0, bgViewWidth, contentHeight - lineWidth * 0.7 - btnHeight);
+    if (!_iconImageView.hidden && _iconImageView.image) {
+        _iconImageView.frame = CGRectMake((bgViewWidth - iconWidth) / 2.f, 35, iconWidth, iconHeight);
+        _textView.frame = CGRectMake(0, 88 + 35 * 2, bgViewWidth, contentHeight - lineWidth * 0.7 - btnHeight - (88 + 35 * 2));
+    } else {
+        _textView.frame = CGRectMake(0, 0, bgViewWidth, contentHeight - lineWidth * 0.7 - btnHeight);
+    }
     _titleLbl.frame = CGRectMake(10, 0, bgViewWidth - 20, _textView.bounds.size.height);
     
     if (!_confirmBtn.hidden) {

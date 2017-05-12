@@ -56,6 +56,10 @@ typedef NS_ENUM(NSUInteger,EAlertWindowStyle) {
  文字字体
  */
 @property (nonatomic,strong) UIFont *titleFont;
+/**
+ icon图标
+ */
+@property (nonatomic,strong) UIImage *icon;
 
 + (instancetype)sharedWindow;
 
