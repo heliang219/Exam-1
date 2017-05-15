@@ -14,7 +14,7 @@
 
 typedef NS_ENUM(NSInteger,ExamPaneType) {
     ExamPaneTypeBlank, // 模拟练习
-    ExamPaneTypeFull, // 练习复卷/查看试题
+    ExamPaneTypeFull, // 练习复卷/查看题目
 };
 
 @protocol EExamPaneDelegate <NSObject>

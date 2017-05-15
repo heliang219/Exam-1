@@ -9,6 +9,9 @@
 #import "ECheckTextField.h"
 #import "EUtils.h"
 
+#define errorTipLabelHeight 20.f
+#define errorTipLabelBottomMargin 9.f
+
 @interface ETextField : UITextField
 
 @end
@@ -100,11 +103,11 @@
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    CGRect realFrame = CGRectMake(frame.origin.x, frame.origin.y - 20, frame.size.width, frame.size.height + 20);
+    CGRect realFrame = CGRectMake(frame.origin.x, frame.origin.y - errorTipLabelHeight - errorTipLabelBottomMargin, frame.size.width, frame.size.height + errorTipLabelHeight + errorTipLabelBottomMargin);
     self = [super initWithFrame:realFrame];
     self.backgroundColor = [UIColor clearColor];
     if (self) {
-        _lbl = [[UILabel alloc] initWithFrame:CGRectMake(frame.size.width - 100, 0, 100, 10)];
+        _lbl = [[UILabel alloc] initWithFrame:CGRectMake(frame.size.width - 100, 0, 100, errorTipLabelHeight)];
         _lbl.font = kTinyFont;
         _lbl.text = @"格式不正确";
         _lbl.textColor = RGBCOLOR(211, 69, 69);
@@ -113,7 +116,7 @@
         _lbl.hidden = YES;
         [self addSubview:_lbl];
         
-        _tf = [[ETextField alloc] initWithFrame:CGRectMake(0, 20, frame.size.width, frame.size.height)];
+        _tf = [[ETextField alloc] initWithFrame:CGRectMake(0, errorTipLabelHeight + errorTipLabelBottomMargin, frame.size.width, frame.size.height)];
         _tf.layer.cornerRadius = 5.f;
         _tf.layer.masksToBounds = YES;_tf.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tf.leftViewMode = UITextFieldViewModeAlways;

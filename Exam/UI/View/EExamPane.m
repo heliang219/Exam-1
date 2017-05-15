@@ -17,8 +17,8 @@
 
 #define topPaneHeight 64.f
 #define topLblWidth 120.f
-#define topBtnWidth 100.f
-#define topBtnHeight 30.f
+#define topBtnWidth 24.f
+#define topBtnHeight 24.f
 #define timerPaneHeight 44.f
 #define bottomPaneHeight 44.f
 
@@ -163,10 +163,9 @@
     [_topPane addSubview:_titleLbl];
     
     _backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_backBtn setTitle:@"返回" forState:UIControlStateNormal];
-    [_backBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    _backBtn.titleLabel.font = kSmallFont;
-    _backBtn.backgroundColor = [UIColor orangeColor];
+    [_backBtn setImage:IMAGE_BY_NAMED(@"back") forState:UIControlStateNormal];
+    [_backBtn setImage:IMAGE_BY_NAMED(@"back") forState:UIControlStateHighlighted];
+    _backBtn.backgroundColor = [UIColor clearColor];
     [_backBtn addTarget:self action:@selector(backBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [_topPane addSubview:_backBtn];
     
@@ -383,7 +382,7 @@
     _topPane.frame = CGRectMake(0, 0, bounds.size.width, topPaneHeight);
     _titleLbl.frame = CGRectMake((bounds.size.width - topLblWidth) / 2.f, (topPaneHeight - 20.f - topBtnHeight) / 2.f + 20.f, topLblWidth, topBtnHeight);
     _backBtn.frame = CGRectMake(kEPadding, (topPaneHeight - 20.f - topBtnHeight) / 2.f + 20.f, topBtnWidth, topBtnHeight);
-    _instructionBtn.frame = CGRectMake(bounds.size.width - kEPadding - topBtnWidth, _backBtn.frame.origin.y, topBtnWidth, topBtnHeight);
+    _instructionBtn.frame = CGRectMake(bounds.size.width - kEPadding - 100, _backBtn.frame.origin.y, 100, 24);
 #pragma mark - timerPane
     if (_type == ExamPaneTypeBlank) {
         _timerPane.frame = CGRectMake(bounds.size.width - rightPaneWidth, topPaneHeight, rightPaneWidth, timerPaneHeight);
@@ -513,6 +512,8 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     EBlockCell *cell  = [collectionView dequeueReusableCellWithReuseIdentifier:@"EBlockCell" forIndexPath:indexPath];
+    cell.indicatorImgView.hidden = YES;
+    cell.titleLbl.textAlignment = NSTextAlignmentCenter;
     CGFloat blockWidth = (_rightPane.bounds.size.width - (numberOfCols + 1) * kEPadding) / numberOfCols;
     CGFloat blockHeight = blockWidth * 0.618;
     [cell refreshSize:CGSizeMake(blockWidth, blockHeight)];

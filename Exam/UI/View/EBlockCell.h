@@ -12,7 +12,14 @@
 
 @property (nonatomic,strong) UIImageView *bgView;
 @property (nonatomic,strong) UILabel *titleLbl;
+@property (nonatomic,strong) UIImageView *indicatorImgView;
+@property (nonatomic,strong) UILabel *bottomLine;
 
+/**
+ 动态改变block尺寸
+
+ @param newSize 改变后的尺寸
+ */
 - (void)refreshSize:(CGSize)newSize;
 
 - (void)refreshWithTitle:(NSString *)title background:(UIImage *)bgImg;

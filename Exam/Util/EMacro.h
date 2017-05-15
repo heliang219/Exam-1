@@ -24,7 +24,7 @@
 #define kThemeColor RGBACOLOR(241, 209, 101, 1.0)
 
 // 背景颜色（赭石）
-#define kBackgroundColor [UIColor whiteColor]
+#define kBackgroundColor RGBACOLOR(240, 240, 240, 1.0)
 
 // 控件之间的间隔
 #define kEPadding 10.f
@@ -48,8 +48,9 @@
 
 #define kUserDefaults [NSUserDefaults standardUserDefaults]
 
-#define kNumberOfBlocksPerRow 3 // 每行的block数量
+#define kNumberOfBlocksPerRow 1 // 每行的block数量
 #define kBlockWidth (kFrameWidth - kEPadding * (kNumberOfBlocksPerRow + 1)) / kNumberOfBlocksPerRow  // 方块block的size
+#define kBlockHeight kBlockWidth * 180.f / 702.f
 #define kLogoHeight 105.f
 #define kLogoWidth kLogoHeight
 #define kHeaderViewHeight kLogoHeight + kEPadding * 2 + kNavigationBarHeight // 头部视图高度（从导航栏顶部开始）

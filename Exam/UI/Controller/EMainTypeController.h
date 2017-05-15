@@ -6,11 +6,11 @@
 //  Copyright © 2017年 shadeless. All rights reserved.
 //
 
-#import "EBaseTableController.h"
+#import "EBaseController.h"
 
 /**
  工种
  */
-@interface EMainTypeController : EBaseTableController
+@interface EMainTypeController : EBaseController
 
 @end

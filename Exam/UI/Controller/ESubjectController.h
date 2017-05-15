@@ -6,13 +6,13 @@
 //  Copyright © 2017年 shadeless. All rights reserved.
 //
 
-#import "EBaseTableController.h"
+#import "EBaseController.h"
 @class ESubject;
 
 /**
  科目
  */
-@interface ESubjectController : EBaseTableController
+@interface ESubjectController : EBaseController
 
 - (instancetype)initWithSubject:(ESubject *)subject;
 

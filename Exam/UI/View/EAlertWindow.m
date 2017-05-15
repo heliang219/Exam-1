@@ -207,6 +207,8 @@
         [_cancelBtn setTitleColor:[UIColor colorWithRed:0 / 255.0 green:122 / 255.0 blue:255 / 255.0 alpha:1.0] forState:UIControlStateNormal];
         _cancelBtn.backgroundColor = [UIColor colorWithRed:220 / 255.0 green:220 / 255.0 blue:220 / 255.0 alpha:1.0];
         _cancelBtn.titleLabel.font = [UIFont systemFontOfSize:16.f];
+        _cancelBtn.layer.cornerRadius = 2.f;
+        _cancelBtn.layer.masksToBounds = YES;
         [_cancelBtn addTarget:self action:@selector(cancelBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_contentView addSubview:_cancelBtn];
         
@@ -216,6 +218,8 @@
         [_confirmBtn setTitleColor:[UIColor colorWithRed:0 / 255.0 green:122 / 255.0 blue:255 / 255.0 alpha:1.0] forState:UIControlStateNormal];
         _confirmBtn.backgroundColor = [UIColor colorWithRed:220 / 255.0 green:220 / 255.0 blue:220 / 255.0 alpha:1.0];
         _confirmBtn.titleLabel.font = [UIFont systemFontOfSize:16.f];
+        _confirmBtn.layer.cornerRadius = 2.f;
+        _confirmBtn.layer.masksToBounds = YES;
         [_confirmBtn addTarget:self action:@selector(confirmBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_contentView addSubview:_confirmBtn];
     }

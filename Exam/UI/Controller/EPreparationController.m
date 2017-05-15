@@ -14,7 +14,8 @@
 #import "ESubject.h"
 #import "EDBHelper.h"
 
-#define blockWidth (kFrameWidth - kEPadding * 3) / 2.f
+#define blockWidth 282.f / 350.f * kFrameWidth
+#define blockHeight 62.f / 667.f * kFrameHeight
 
 @interface EPreparationController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 {
@@ -40,7 +41,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"考试准备";
+    self.view.backgroundColor = kBackgroundColor;
+    self.title = _subject.subject_title;
     [self initCollectionView];
 }
 
@@ -63,8 +65,8 @@
     // 设置布局方向为垂直流布局
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
     // 创建collectionView 通过一个布局策略layout来创建
-    UICollectionView *collect = [[UICollectionView alloc] initWithFrame:CGRectMake(kEPadding, kHeaderViewHeight + kEPadding, kFrameWidth - kEPadding * 2, kFrameHeight - (kHeaderViewHeight + kEPadding)) collectionViewLayout:layout];
-    collect.backgroundColor = kBackgroundColor;
+    UICollectionView *collect = [[UICollectionView alloc] initWithFrame:CGRectMake(kEPadding, 0, kFrameWidth - kEPadding * 2, kFrameHeight) collectionViewLayout:layout];
+    collect.backgroundColor = [UIColor clearColor];
     collect.showsVerticalScrollIndicator = NO;
     // 代理设置
     collect.delegate = self;
@@ -73,8 +75,6 @@
     [collect registerClass:[EBlockCell class] forCellWithReuseIdentifier:@"EBlockCell"];
     // 注册header
     [collect registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"UICollectionReusableView"];
-    // 注册footer
-    [collect registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"UICollectionReusableView"];
     
     [self.view addSubview:collect];
 }
@@ -86,126 +86,66 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if (section == 0) {
-        return 0;
-    }
-    return 2;
+    return 1;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    return CGSizeMake(kFrameWidth - kEPadding * 2, 50);
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
     if (section == 0) {
-        return CGSizeMake(0, 0);
+        return CGSizeMake(kFrameWidth - kEPadding * 2, 30);
+    } else {
+        return CGSizeMake(kFrameWidth - kEPadding * 2, 24);
     }
-    return CGSizeMake(kFrameWidth - kEPadding * 2, 50);
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
-        UICollectionReusableView *reusableview = nil;
+    UICollectionReusableView *reusableview = nil;
+    
+    if (kind == UICollectionElementKindSectionHeader){
         
-        if (kind == UICollectionElementKindSectionHeader){
-            
-            UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
-            for (UIView *view in headerView.subviews) {
-                [view removeFromSuperview];
-            }
-            
-            UILabel *titleLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, headerView.bounds.size.width, headerView.bounds.size.height - kEPadding)];
-            titleLbl.backgroundColor = [UIColor darkGrayColor];
-            titleLbl.textColor = [UIColor whiteColor];
-            titleLbl.textAlignment = NSTextAlignmentCenter;
-            titleLbl.font = [UIFont boldSystemFontOfSize:20.f];
-            
-            NSString *title = _pSubject.subject_title;
-            titleLbl.text = title;
-            
-            headerView.backgroundColor = [UIColor clearColor];
-            [headerView addSubview:titleLbl];
-            
-            reusableview = headerView;
+        UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
+        for (UIView *view in headerView.subviews) {
+            [view removeFromSuperview];
         }
         
-        return reusableview;
-    } else {
-        UICollectionReusableView *reusableview = nil;
+        headerView.backgroundColor = [UIColor clearColor];
         
-        if (kind == UICollectionElementKindSectionHeader){
-            
-            UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
-            for (UIView *view in headerView.subviews) {
-                [view removeFromSuperview];
-            }
-            
-            UILabel *titleLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, headerView.bounds.size.width, headerView.bounds.size.height - kEPadding)];
-            titleLbl.backgroundColor = [UIColor darkGrayColor];
-            titleLbl.textColor = [UIColor whiteColor];
-            titleLbl.textAlignment = NSTextAlignmentCenter;
-            titleLbl.font = [UIFont boldSystemFontOfSize:20.f];
-            
-            NSString *title = _subject.subject_title;
-            titleLbl.text = title;
-            
-            headerView.backgroundColor = [UIColor clearColor];
-            [headerView addSubview:titleLbl];
-            
-            reusableview = headerView;
-        } else if (kind == UICollectionElementKindSectionFooter) {
-            UICollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
-            for (UIView *view in footerView.subviews) {
-                [view removeFromSuperview];
-            }
-            
-            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-            btn.backgroundColor = [UIColor cyanColor];
-            [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            btn.titleLabel.font = [UIFont boldSystemFontOfSize:20.f];
-            [btn setTitle:@"返回选择科目" forState:UIControlStateNormal];
-            btn.frame = CGRectMake(0, kEPadding, footerView.bounds.size.width, footerView.bounds.size.height - kEPadding);
-            [btn addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-            
-            footerView.backgroundColor = [UIColor clearColor];
-            [footerView addSubview:btn];
-            
-            reusableview = footerView;
-        }
-        
-        return reusableview;
+        reusableview = headerView;
     }
-}
-
-- (void)back {
-    [self.navigationController popViewControllerAnimated:YES];
+    
+    return reusableview;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    CGSize itemSize = CGSizeMake(blockWidth, blockWidth);
+    CGSize itemSize = CGSizeMake(blockWidth, blockHeight);
     return itemSize;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     EBlockCell *cell  = [collectionView dequeueReusableCellWithReuseIdentifier:@"EBlockCell" forIndexPath:indexPath];
-    [cell refreshSize:CGSizeMake(blockWidth, blockWidth)];
+    [cell refreshSize:CGSizeMake(blockWidth, blockHeight)];
+    cell.contentView.layer.cornerRadius = blockHeight / 2.f;
+    cell.contentView.layer.borderColor = [UIColor blackColor].CGColor;
+    cell.contentView.layer.borderWidth = 1.f;
+    cell.contentView.layer.masksToBounds = YES;
     cell.backgroundColor = [UIColor clearColor];
-    if (indexPath.row == 0) {
+    cell.titleLbl.textAlignment = NSTextAlignmentCenter;
+    cell.indicatorImgView.hidden = YES;
+    if (indexPath.section == 0) {
         [cell refreshWithTitle:@"开始练习" background:nil];
     } else {
-        [cell refreshWithTitle:@"查看试题" background:nil];
+        [cell refreshWithTitle:@"查看习题" background:nil];
     }
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == 0) {
+    if (indexPath.section == 0) {
         // 开始练习
         NSArray *questions = [[EDBHelper defaultHelper] queryQuestions:_subject.subject_id];
         EExamContainController *exam = [[EExamContainController alloc] initWithTitle:@"模拟练习" questions:questions orientationWanted:UIInterfaceOrientationPortrait];
         [self.navigationController pushViewController:exam animated:YES];
     } else {
-        // 查看试题
+        // 查看习题
         EExerciseListController *exercise = [[EExerciseListController alloc] initWithSubject:_subject];
         [self.navigationController pushViewController:exercise animated:YES];
     }

@@ -13,6 +13,7 @@
 #import "EDBHelper.h"
 #import "ESubject.h"
 #import "ESettingController.h"
+#import "UINavigationBar+Awesome.h"
 
 @interface EMainTypeController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 {
@@ -36,9 +37,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"工种";
+    self.title = @"选择工种";
     [self initData];
     [self initCollectionView];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar lt_setBackgroundColor:[UIColor clearColor]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -57,10 +63,11 @@
 - (void)settingAction {
     ESettingController *settingVC = [[ESettingController alloc] init];
     CATransition *transition = [CATransition animation];
+    transition.duration = 0.2;
     transition.type = kCATransitionMoveIn; // 可更改为其他方式
     transition.subtype = kCATransitionFromTop; // 可更改为其他方式
     [self.navigationController.view.layer addAnimation:transition forKey:kCATransition];
-    [self.navigationController pushViewController:settingVC animated:YES];
+    [self.navigationController pushViewController:settingVC animated:NO];
 }
 
 /**
@@ -79,8 +86,8 @@
     // 设置布局方向为垂直流布局
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
     // 创建collectionView 通过一个布局策略layout来创建
-    UICollectionView *collect = [[UICollectionView alloc] initWithFrame:CGRectMake(kEPadding, kHeaderViewHeight + kEPadding, kFrameWidth - kEPadding * 2, kFrameHeight - (kHeaderViewHeight + kEPadding)) collectionViewLayout:layout];
-    collect.backgroundColor = kBackgroundColor;
+    UICollectionView *collect = [[UICollectionView alloc] initWithFrame:CGRectMake(kEPadding, 0, kFrameWidth - kEPadding * 2, kFrameHeight) collectionViewLayout:layout];
+    collect.backgroundColor = [UIColor clearColor];
     collect.showsVerticalScrollIndicator = NO;
     // 代理设置
     collect.delegate = self;
@@ -106,7 +113,7 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    return CGSizeMake(kFrameWidth - kEPadding * 2, 50);
+    return CGSizeMake(kFrameWidth - kEPadding * 2, 28);
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
@@ -123,18 +130,7 @@
             [view removeFromSuperview];
         }
         
-        UILabel *titleLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, headerView.bounds.size.width, headerView.bounds.size.height - kEPadding)];
-        titleLbl.backgroundColor = [UIColor darkGrayColor];
-        titleLbl.textColor = [UIColor whiteColor];
-        titleLbl.textAlignment = NSTextAlignmentCenter;
-        titleLbl.font = [UIFont boldSystemFontOfSize:20.f];
-        
-        NSString *title = @"请选择您的练习工种";
-        
-        titleLbl.text = title;
-        
         headerView.backgroundColor = [UIColor clearColor];
-        [headerView addSubview:titleLbl];
         
         reusableview = headerView;
     } else if (kind == UICollectionElementKindSectionFooter) {
@@ -152,7 +148,7 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    CGSize itemSize = CGSizeMake(kBlockWidth, kBlockWidth);
+    CGSize itemSize = CGSizeMake(kBlockWidth, kBlockHeight);
     return itemSize;
 }
 
@@ -160,7 +156,9 @@
     EBlockCell *cell  = [collectionView dequeueReusableCellWithReuseIdentifier:@"EBlockCell" forIndexPath:indexPath];
     cell.backgroundColor = [UIColor clearColor];
     ESubject *subject = _contentArray[indexPath.row];
-    [cell refreshWithTitle:subject.subject_title background:nil];
+    NSString *imageName = [NSString stringWithFormat:@"maintype_%@",@(indexPath.row)];
+    UIImage *bgImage = IMAGE_BY_NAMED(imageName);
+    [cell refreshWithTitle:subject.subject_title background:bgImage];
     return cell;
 }
 

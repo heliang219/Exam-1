@@ -17,7 +17,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor = kBackgroundColor;
+    self.view.backgroundColor = [UIColor whiteColor];
     
     [self configNavigationBar];
 }
@@ -37,7 +37,7 @@
 - (void)configNavigationBar {
     // 交给子类去实现
     UIButton *goBackBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    goBackBtn.frame = CGRectMake(0, 0, 20, 20);
+    goBackBtn.frame = CGRectMake(0, 0, 24, 24);
     [goBackBtn setImage:IMAGE_BY_NAMED(@"back") forState:UIControlStateNormal];
     [goBackBtn setImage:IMAGE_BY_NAMED(@"back") forState:UIControlStateHighlighted];
     [goBackBtn addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];

@@ -13,6 +13,10 @@
 #import "UIImage+Additions.h"
 #import "ESubject.h"
 #import "EDBHelper.h"
+#import "UINavigationBar+Awesome.h"
+
+#define blockWidth kFrameWidth
+#define blockHeight 70.f / 667.f * kFrameHeight
 
 @interface ESubjectController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 {
@@ -45,9 +49,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"科目";
+    self.view.backgroundColor = kBackgroundColor;
+    self.title = _subject.subject_title;
     [self initData];
     [self initCollectionView];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar lt_setBackgroundColor:kThemeColor];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -73,8 +83,8 @@
     // 设置布局方向为垂直流布局
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
     // 创建collectionView 通过一个布局策略layout来创建
-    UICollectionView *collect = [[UICollectionView alloc] initWithFrame:CGRectMake(kEPadding, kHeaderViewHeight + kEPadding, kFrameWidth - kEPadding * 2, kFrameHeight - (kHeaderViewHeight + kEPadding)) collectionViewLayout:layout];
-    collect.backgroundColor = kBackgroundColor;
+    UICollectionView *collect = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, kFrameWidth, kFrameHeight) collectionViewLayout:layout];
+    collect.backgroundColor = [UIColor clearColor];
     collect.showsVerticalScrollIndicator = NO;
     // 代理设置
     collect.delegate = self;
@@ -83,8 +93,6 @@
     [collect registerClass:[EBlockCell class] forCellWithReuseIdentifier:@"EBlockCell"];
     // 注册header
     [collect registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"UICollectionReusableView"];
-    // 注册footer
-    [collect registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"UICollectionReusableView"];
     
     [self.view addSubview:collect];
 }
@@ -92,119 +100,63 @@
 #pragma mark - collection view
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 2;
+    return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if (section == 0) {
-        return 0;
-    }
-    return _contentArray.count + 1;
+    return _contentArray.count;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    return CGSizeMake(kFrameWidth - kEPadding * 2, 50);
+    return CGSizeMake(blockWidth, 30);
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
-    if (section == 0) {
-        return CGSizeMake(0, 0);
-    }
-    return CGSizeMake(kFrameWidth - kEPadding * 2, kEPadding);
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return 0;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
-        UICollectionReusableView *reusableview = nil;
+    UICollectionReusableView *reusableview = nil;
+    
+    if (kind == UICollectionElementKindSectionHeader){
         
-        if (kind == UICollectionElementKindSectionHeader){
-            
-            UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
-            for (UIView *view in headerView.subviews) {
-                [view removeFromSuperview];
-            }
-            
-            UILabel *titleLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, headerView.bounds.size.width, headerView.bounds.size.height - kEPadding)];
-            titleLbl.backgroundColor = [UIColor darkGrayColor];
-            titleLbl.textColor = [UIColor whiteColor];
-            titleLbl.textAlignment = NSTextAlignmentCenter;
-            titleLbl.font = [UIFont boldSystemFontOfSize:20.f];
-            
-            NSString *title = _subject.subject_title;
-            titleLbl.text = title;
-            
-            headerView.backgroundColor = [UIColor clearColor];
-            [headerView addSubview:titleLbl];
-            
-            reusableview = headerView;
+        UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
+        for (UIView *view in headerView.subviews) {
+            [view removeFromSuperview];
         }
         
-        return reusableview;
-    } else {
-        UICollectionReusableView *reusableview = nil;
+        headerView.backgroundColor = [UIColor clearColor];
         
-        if (kind == UICollectionElementKindSectionHeader){
-            
-            UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
-            for (UIView *view in headerView.subviews) {
-                [view removeFromSuperview];
-            }
-            
-            UILabel *titleLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, headerView.bounds.size.width, headerView.bounds.size.height - kEPadding)];
-            titleLbl.backgroundColor = [UIColor darkGrayColor];
-            titleLbl.textColor = [UIColor whiteColor];
-            titleLbl.textAlignment = NSTextAlignmentCenter;
-            titleLbl.font = [UIFont boldSystemFontOfSize:20.f];
-            
-            NSString *title = @"请选择您的练习科目";
-            titleLbl.text = title;
-            
-            headerView.backgroundColor = [UIColor clearColor];
-            [headerView addSubview:titleLbl];
-            
-            reusableview = headerView;
-        } else if (kind == UICollectionElementKindSectionFooter) {
-            UICollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
-            for (UIView *view in footerView.subviews) {
-                [view removeFromSuperview];
-            }
-            
-            footerView.backgroundColor = [UIColor clearColor];
-            
-            reusableview = footerView;
-        }
-        
-        return reusableview;
+        reusableview = headerView;
     }
+    
+    return reusableview;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    CGSize itemSize = CGSizeMake(kBlockWidth, kBlockWidth);
+    CGSize itemSize = CGSizeMake(blockWidth, blockHeight);
     return itemSize;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     EBlockCell *cell  = [collectionView dequeueReusableCellWithReuseIdentifier:@"EBlockCell" forIndexPath:indexPath];
     cell.backgroundColor = [UIColor clearColor];
-    UIImage *bgImg = nil;
-    if (indexPath.row == _contentArray.count) {
-        bgImg = [UIImage e_imageWithColor:[UIColor cyanColor]];
-        [cell refreshWithTitle:@"返回" background:bgImg];
+    if (indexPath.row == _contentArray.count - 1) {
+        cell.bottomLine.hidden = YES;
     } else {
-        ESubject *subject = _contentArray[indexPath.row];
-        [cell refreshWithTitle:subject.subject_title background:bgImg];
+        cell.bottomLine.hidden = NO;
     }
+    [cell refreshSize:CGSizeMake(blockWidth, blockHeight)];
+    UIImage *bgImg = nil;
+    ESubject *subject = _contentArray[indexPath.row];
+    [cell refreshWithTitle:subject.subject_title background:bgImg];
     
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == _contentArray.count) {
-        [self.navigationController popViewControllerAnimated:YES];
-    } else {
-        EPreparationController *subject = [[EPreparationController alloc] initWithSubject:_contentArray[indexPath.row] parentSubject:_subject];
-        [self.navigationController pushViewController:subject animated:YES];
-    }
+    EPreparationController *subject = [[EPreparationController alloc] initWithSubject:_contentArray[indexPath.row] parentSubject:_subject];
+    [self.navigationController pushViewController:subject animated:YES];
     
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }
