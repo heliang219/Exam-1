@@ -49,10 +49,9 @@
 - (void)configNavigationBar {
     UIButton *settingBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     settingBtn.frame = CGRectMake(0, 0, 40, 20);
-    [settingBtn setTitle:@"设置" forState:UIControlStateNormal];
-    [settingBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [settingBtn setImage:IMAGE_BY_NAMED(@"setting") forState:UIControlStateNormal];
     [settingBtn addTarget:self action:@selector(settingAction) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:settingBtn];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:settingBtn];
 }
 
 - (void)settingAction {

@@ -71,8 +71,8 @@
     _idTf.immediatelyCheck = YES;
     UIButton *eyeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     eyeBtn.frame = CGRectMake(0, 0, 20, 20);
-    [eyeBtn setBackgroundImage:IMAGE_BY_NAMED(@"Icon") forState:UIControlStateNormal];
-    [eyeBtn addTarget:self action:@selector(eyeButtonAction) forControlEvents:UIControlEventTouchUpInside];
+    [eyeBtn setBackgroundImage:IMAGE_BY_NAMED(@"eye_closed") forState:UIControlStateNormal];
+    [eyeBtn addTarget:self action:@selector(eyeButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     _idTf.rightView = eyeBtn;
     [scrollPane addSubview:_idTf];
     
@@ -132,9 +132,10 @@
     [self.navigationController pushToController:loginController animated:YES];
 }
 
-- (void)eyeButtonAction {
+- (void)eyeButtonAction:(UIButton *)btn {
     DLog(@"eye");
     _idTf.secureTextEntry = !_idTf.secureTextEntry;
+    [btn setBackgroundImage:IMAGE_BY_NAMED(_idTf.secureTextEntry?@"eye_closed":@"eye_open") forState:UIControlStateNormal];
 }
 
 /*
