@@ -34,7 +34,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icon_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="fze-ne-5HF">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icon_logo.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="fze-ne-5HF">
                                 <rect key="frame" x="119" y="152" width="137" height="174"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -63,10 +63,10 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-80.799999999999997" y="165.06746626686657"/>
+            <point key="canvasLocation" x="-414" y="117"/>
         </scene>
     </scenes>
     <resources>
-        <image name="icon_logo.png" width="137" height="174"/>
+        <image name="icon_logo.jpg" width="137" height="174"/>
     </resources>
 </document>
