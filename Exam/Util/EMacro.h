@@ -53,6 +53,6 @@
 #define kBlockHeight kBlockWidth * 180.f / 702.f
 #define kLogoHeight 105.f
 #define kLogoWidth kLogoHeight
-#define kHeaderViewHeight kLogoHeight + kEPadding * 2 + kNavigationBarHeight // 头部视图高度（从导航栏顶部开始）
+#define kHeaderViewHeight 200.f // 头部视图高度（从导航栏顶部开始）
 
 #endif /* EMacro_h */

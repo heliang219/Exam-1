@@ -19,8 +19,9 @@
 #define topLblWidth 120.f
 #define topBtnWidth 24.f
 #define topBtnHeight 24.f
+#define bottomBtnHeight 30.f
 #define timerPaneHeight 44.f
-#define bottomPaneHeight 44.f
+#define bottomPaneHeight 50.f
 
 #define numberOfCols 4
 
@@ -426,16 +427,16 @@
     _topPane.frame = CGRectMake(0, 0, bounds.size.width, topPaneHeight);
     CGFloat bottomBtnWidth = (_bottomPane.bounds.size.width - kEPadding * 7) / 4.f;
     if (_currentQuestion.question_index == 0) {
-        _nextBtn.frame = CGRectMake(kEPadding, (bottomPaneHeight - topBtnHeight) / 2.f, bottomBtnWidth, topBtnHeight);
-        _commitBtn.frame = CGRectMake(_nextBtn.frame.origin.x + kEPadding * 3 + bottomBtnWidth, _nextBtn.frame.origin.y, bottomBtnWidth, topBtnHeight);
+        _nextBtn.frame = CGRectMake(kEPadding, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
+        _commitBtn.frame = CGRectMake(_nextBtn.frame.origin.x + kEPadding * 3 + bottomBtnWidth, _nextBtn.frame.origin.y, bottomBtnWidth, bottomBtnHeight);
     } else {
         if (_currentQuestion.question_index == [self getQuestionTotalCount] - 1) {
-            _previousBtn.frame = CGRectMake(kEPadding, (bottomPaneHeight - topBtnHeight) / 2.f, bottomBtnWidth, topBtnHeight);
-            _commitBtn.frame = CGRectMake(_previousBtn.frame.origin.x + kEPadding * 3 + bottomBtnWidth, _previousBtn.frame.origin.y, bottomBtnWidth, topBtnHeight);
+            _previousBtn.frame = CGRectMake(kEPadding, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
+            _commitBtn.frame = CGRectMake(_previousBtn.frame.origin.x + kEPadding * 3 + bottomBtnWidth, _previousBtn.frame.origin.y, bottomBtnWidth, bottomBtnHeight);
         } else {
-            _previousBtn.frame = CGRectMake(kEPadding, (bottomPaneHeight - topBtnHeight) / 2.f, bottomBtnWidth, topBtnHeight);
-            _nextBtn.frame = CGRectMake(_previousBtn.frame.origin.x + kEPadding + bottomBtnWidth, (bottomPaneHeight - topBtnHeight) / 2.f, bottomBtnWidth, topBtnHeight);
-            _commitBtn.frame = CGRectMake(_nextBtn.frame.origin.x + kEPadding * 3 + bottomBtnWidth, _nextBtn.frame.origin.y, bottomBtnWidth, topBtnHeight);
+            _previousBtn.frame = CGRectMake(kEPadding, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
+            _nextBtn.frame = CGRectMake(_previousBtn.frame.origin.x + kEPadding + bottomBtnWidth, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
+            _commitBtn.frame = CGRectMake(_nextBtn.frame.origin.x + kEPadding * 3 + bottomBtnWidth, _nextBtn.frame.origin.y, bottomBtnWidth, bottomBtnHeight);
         }
     }
     

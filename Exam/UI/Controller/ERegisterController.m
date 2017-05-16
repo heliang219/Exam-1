@@ -34,7 +34,7 @@
 }
 
 - (void)initScrollView {
-    UIScrollView *scrollPane = [[UIScrollView alloc] initWithFrame:CGRectMake(0, kHeaderViewHeight + kEPadding, kFrameWidth, kFrameHeight - (kHeaderViewHeight + kEPadding))];
+    UIScrollView *scrollPane = [[UIScrollView alloc] initWithFrame:CGRectMake(0, kHeaderViewHeight, kFrameWidth, kFrameHeight - kHeaderViewHeight)];
     scrollPane.contentSize = scrollPane.bounds.size;
     scrollPane.showsVerticalScrollIndicator = NO;
     scrollPane.showsHorizontalScrollIndicator = NO;
@@ -114,6 +114,8 @@
     loginBtn.backgroundColor = [UIColor clearColor];
     [loginBtn addTarget:self action:@selector(loginAction) forControlEvents:UIControlEventTouchUpInside];
     [scrollPane addSubview:loginBtn];
+    
+    scrollPane.contentSize = CGSizeMake(scrollPane.bounds.size.width, originY + lblHeight + 40);
 }
 
 - (void)registerBtnAction {

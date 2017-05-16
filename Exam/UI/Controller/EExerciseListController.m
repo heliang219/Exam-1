@@ -113,7 +113,12 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     EBlockCell *cell  = [collectionView dequeueReusableCellWithReuseIdentifier:@"EBlockCell" forIndexPath:indexPath];
     cell.backgroundColor = [UIColor clearColor];
-    if (indexPath.row == _contentArray.count - 1) {
+    NSInteger totalCount = 0;
+    for (NSInteger i = 0; i < _contentArray.count; i ++) {
+        NSArray *arr = _contentArray[i];
+        totalCount += arr.count;
+    }
+    if (indexPath.row == totalCount - 1) {
         cell.bottomLine.hidden = YES;
     } else {
         cell.bottomLine.hidden = NO;

@@ -116,7 +116,7 @@
     [self refreshQuestions:_questions];
     [self refreshQuestion:_questions[0][0] lock:_type == ExamPaneTypeFull];
     
-    [self setFullScreen:YES WithAnimation:NO];
+    [self setFullScreen:YES WithAnimation:YES];
     
     if (_type == ExamPaneTypeBlank) {
         [self.examPane refreshCheckboxHeartColor:[UIColor blackColor]];
