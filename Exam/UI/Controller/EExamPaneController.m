@@ -13,7 +13,7 @@
 #import "EAlertWindow.h"
 #import "EScoreContainController.h"
 
-#define totalTimeInSeconds 9
+#define totalTimeInSeconds 5400 // 考试总时长（单位：s）
 
 @interface EExamPaneController ()<EExamPaneDelegate,EAlertWindowDelegate>
 {
@@ -121,7 +121,6 @@
     if (_type == ExamPaneTypeBlank) {
         [self.examPane refreshCheckboxHeartColor:[UIColor blackColor]];
         [self.examPane refreshCheckboxBackgroundColor:RGBCOLOR(238, 208, 113)];
-        self.examPane.totalTimeLbl.text = [NSString stringWithFormat:@"考试时间：%@",[self timeStringWithSeconds:totalTimeInSeconds]];
         _remainTimeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(changeRemainTime) userInfo:nil repeats:YES];
         _remainTimeInSeconds = totalTimeInSeconds;
         [_remainTimeTimer fire];
@@ -448,23 +447,23 @@
 }
 
 /**
- 将秒转化为xx小时xx分钟xx秒
+ 将秒转化为xx:xx:xx
 
  @param timeInSeconds 秒
  @return 转化后的字符串形式
  */
 - (NSString *)timeStringWithSeconds:(NSInteger)timeInSeconds {
     if (timeInSeconds > 0 && timeInSeconds < 60) {
-        return [NSString stringWithFormat:@"%@秒",@(timeInSeconds)];
+        return [NSString stringWithFormat:@"00:00:%02ld",timeInSeconds];
     } else if (timeInSeconds >= 60 && timeInSeconds < 3600) {
         NSInteger minutes = timeInSeconds / 60;
         NSInteger seconds = timeInSeconds % 60;
-        return [NSString stringWithFormat:@"%@分钟%@秒",@(minutes),@(seconds)];
+        return [NSString stringWithFormat:@"00:%02ld:%02ld",minutes,seconds];
     } else {
         NSInteger hours = timeInSeconds / 3600;
         NSInteger minutes = timeInSeconds % 3600 / 60;
         NSInteger seconds = timeInSeconds % 3600 % 60;
-        return [NSString stringWithFormat:@"%@小时%@分%@秒",@(hours),@(minutes),@(seconds)];
+        return [NSString stringWithFormat:@"%02ld:%02ld:%02ld",hours,minutes,seconds];
     }
 }
 

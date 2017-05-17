@@ -19,16 +19,20 @@
 #define topLblWidth 120.f
 #define topBtnWidth 24.f
 #define topBtnHeight 24.f
+#define bottomBtnWidth 84.f
 #define bottomBtnHeight 30.f
 #define timerPaneHeight 44.f
 #define bottomPaneHeight 50.f
+#define rightScrollBtnWidth 25.f
+#define rightScrollBtnHeight 70.f
 
-#define numberOfCols 4
+#define numberOfCols 10
 
 @interface EExamPane()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 {
     ExamPaneType _type;
     UIColor *_checkboxSelectedBgColor;
+    BOOL _isRightPaneShowing;
 }
 
 @property (nonatomic,strong,readwrite) EQuestion *currentQuestion;  // 当前试题
@@ -51,12 +55,11 @@
     if (self) {
         _questions = [NSMutableArray array];
         [self initTopPane];
-        [self initTimerPane];
-        [self initRightPane];
         [self initExercisePane];
         [self initBottomPane];
-        [self initAlertWindow];
-        [self initInstructionWindow];
+        [self initRightPane];
+//        [self initAlertWindow];
+//        [self initInstructionWindow];
     }
     return self;
 }
@@ -67,12 +70,16 @@
         _type = type;
         _questions = [NSMutableArray array];
         [self initTopPane];
-        [self initTimerPane];
-        [self initRightPane];
         [self initExercisePane];
         [self initBottomPane];
-        [self initAlertWindow];
-        [self initInstructionWindow];
+        [self initRightPane];
+//        [self initAlertWindow];
+//        [self initInstructionWindow];
+        
+        UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideRightNumber)];
+        [_topPane addGestureRecognizer:tap1];
+        UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideRightNumber)];
+        [_bottomPane addGestureRecognizer:tap2];
     }
     return self;
 }
@@ -181,36 +188,11 @@
 }
 
 /**
- 初始化计时器面板
- */
-- (void)initTimerPane {
-    _timerPane = [[UIView alloc] init];
-    _timerPane.backgroundColor = [UIColor whiteColor];
-    [self addSubview:_timerPane];
-    
-    _totalTimeLbl = [[UILabel alloc] init];
-    _totalTimeLbl.numberOfLines = 1;
-    _totalTimeLbl.textColor = [UIColor blackColor];
-    _totalTimeLbl.backgroundColor = [UIColor whiteColor];
-    _totalTimeLbl.font = kTinyFont;
-    _totalTimeLbl.text = @"考试时间：90分钟";
-    [_timerPane addSubview:_totalTimeLbl];
-    
-    _remainTimeLbl = [[UILabel alloc] init];
-    _remainTimeLbl.numberOfLines = 1;
-    _remainTimeLbl.textColor = [UIColor blackColor];
-    _remainTimeLbl.backgroundColor = [UIColor whiteColor];
-    _remainTimeLbl.font = kTinyFont;
-    _remainTimeLbl.text = @"剩余时间：0小时25分钟28秒";
-    [_timerPane addSubview:_remainTimeLbl];
-}
-
-/**
  初始化右边题号面板
  */
 - (void)initRightPane {
     _rightPane = [[UIView alloc] init];
-    _rightPane.backgroundColor = RGBCOLOR(247, 248, 241);
+    _rightPane.backgroundColor = [UIColor whiteColor];
     [self addSubview:_rightPane];
     
     // 创建一个layout布局类
@@ -219,7 +201,7 @@
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
     // 创建collectionView 通过一个布局策略layout来创建
     UICollectionView *collect = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
-    collect.backgroundColor = [UIColor clearColor];
+    collect.backgroundColor = [UIColor whiteColor];
     collect.showsVerticalScrollIndicator = NO;
     // 代理设置
     collect.delegate = self;
@@ -234,6 +216,13 @@
     _numberView = collect;
     
     [_rightPane addSubview:_numberView];
+    
+    _rightScrollBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_rightScrollBtn setImage:IMAGE_BY_NAMED(@"rightScrollBtn") forState:UIControlStateNormal];
+    [_rightScrollBtn setImage:IMAGE_BY_NAMED(@"rightScrollBtn") forState:UIControlStateHighlighted];
+    _rightScrollBtn.backgroundColor = [UIColor clearColor];
+    [_rightScrollBtn addTarget:self action:@selector(showRightNumber) forControlEvents:UIControlEventTouchUpInside];
+    [_rightPane addSubview:_rightScrollBtn];
 }
 
 /**
@@ -323,6 +312,15 @@
     _bottomPane.backgroundColor = [UIColor clearColor];
     [self addSubview:_bottomPane];
     
+    _remainTimeLbl = [[UILabel alloc] init];
+    _remainTimeLbl.numberOfLines = 1;
+    _remainTimeLbl.textColor = [UIColor darkGrayColor];
+    _remainTimeLbl.backgroundColor = [UIColor clearColor];
+    _remainTimeLbl.font = kTinyFont;
+    _remainTimeLbl.textAlignment = NSTextAlignmentRight;
+    _remainTimeLbl.text = @"剩余时间：01:29:57";
+    [_bottomPane addSubview:_remainTimeLbl];
+    
     _previousBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_previousBtn setTitle:@"上一题" forState:UIControlStateNormal];
     [_previousBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -378,29 +376,14 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     CGRect bounds = self.bounds;
-    CGFloat rightPaneWidth = bounds.size.width / 3.f;
+    CGFloat rightPaneWidth = bounds.size.width + 25.f;
 #pragma mark - topPane
     _topPane.frame = CGRectMake(0, 0, bounds.size.width, topPaneHeight);
     _titleLbl.frame = CGRectMake((bounds.size.width - topLblWidth) / 2.f, (topPaneHeight - 20.f - topBtnHeight) / 2.f + 20.f, topLblWidth, topBtnHeight);
     _backBtn.frame = CGRectMake(kEPadding, (topPaneHeight - 20.f - topBtnHeight) / 2.f + 20.f, topBtnWidth, topBtnHeight);
     _instructionBtn.frame = CGRectMake(bounds.size.width - kEPadding - 100, _backBtn.frame.origin.y, 100, 24);
-#pragma mark - timerPane
-    if (_type == ExamPaneTypeBlank) {
-        _timerPane.frame = CGRectMake(bounds.size.width - rightPaneWidth, topPaneHeight, rightPaneWidth, timerPaneHeight);
-        _totalTimeLbl.frame = CGRectMake(0, 0, rightPaneWidth, timerPaneHeight / 2.f);
-        _remainTimeLbl.frame = CGRectMake(0, _totalTimeLbl.bounds.size.height, _totalTimeLbl.bounds.size.width, _totalTimeLbl.bounds.size.height);
-    } else {
-        _timerPane.hidden = YES;
-    }
-#pragma mark - rightPane
-    if (_timerPane.isHidden) {
-        _rightPane.frame = CGRectMake(bounds.size.width - rightPaneWidth, topPaneHeight, rightPaneWidth, bounds.size.height - topPaneHeight);
-    } else {
-        _rightPane.frame = CGRectMake(bounds.size.width - rightPaneWidth, topPaneHeight + timerPaneHeight, rightPaneWidth, bounds.size.height - topPaneHeight - timerPaneHeight);
-    }
-    _numberView.frame = CGRectMake(kEPadding, 0, _rightPane.bounds.size.width - kEPadding * 2, _rightPane.bounds.size.height);
 #pragma mark - exercisePane
-    _exercisePane.frame = CGRectMake(0, topPaneHeight, bounds.size.width - rightPaneWidth - kEPadding / 2.f, bounds.size.height - topPaneHeight - bottomPaneHeight);
+    _exercisePane.frame = CGRectMake(0, topPaneHeight, bounds.size.width - kEPadding * 4, bounds.size.height - topPaneHeight - bottomPaneHeight);
     _scrollView.frame = _exercisePane.bounds;
     CGFloat kindLblHeight = [UILabel getHeightByWidth:20 title:@"必" font:kTinyFont] - 10.f;
     CGFloat kindLblWidth = kindLblHeight;
@@ -408,24 +391,24 @@
     // 试题label的宽度
     CGFloat lblWidth = _scrollView.bounds.size.width - kEPadding * 4 - _kindLbl.bounds.size.width - kEPadding;
     // 答案label（除去checkbox）的宽度
-    CGFloat answerWidth = lblWidth - 10.f - _checkbox1.checkboxSideLength;
+    CGFloat answerWidth = lblWidth * 2 / 3.f - 10.f - _checkbox1.checkboxSideLength;
+    CGFloat answerTextWidth = answerWidth - 10.f - _checkbox1.checkboxSideLength;
     _questionLbl.frame = CGRectMake(_kindLbl.frame.origin.x + _kindLbl.bounds.size.width + kEPadding, kEPadding * 2, lblWidth, [UILabel getHeightByWidth:lblWidth title:[NSString stringWithFormat:@"第%@题  %@",@(_currentQuestion.question_index + 1),_currentQuestion.question_content] font:kSmallFont] - 10.f);
-    _checkbox1.frame = CGRectMake(_questionLbl.frame.origin.x, _questionLbl.frame.origin.y + _questionLbl.bounds.size.height + kEPadding, lblWidth, [UILabel getHeightByWidth:answerWidth title:[NSString stringWithFormat:@"A.%@",((EAnswer *)_currentQuestion.answers[0]).answer_content] font:kSmallFont]);
-    _checkbox2.frame = CGRectMake(_questionLbl.frame.origin.x, _checkbox1.frame.origin.y + _checkbox1.bounds.size.height + kEPadding, lblWidth, [UILabel getHeightByWidth:answerWidth title:[NSString stringWithFormat:@"B.%@",((EAnswer *)_currentQuestion.answers[1]).answer_content] font:kSmallFont]);
+    _checkbox1.frame = CGRectMake(_questionLbl.frame.origin.x, _questionLbl.frame.origin.y + _questionLbl.bounds.size.height + kEPadding, answerWidth, [UILabel getHeightByWidth:answerTextWidth title:[NSString stringWithFormat:@"A.%@",((EAnswer *)_currentQuestion.answers[0]).answer_content] font:kSmallFont]);
+    _checkbox2.frame = CGRectMake(_questionLbl.frame.origin.x, _checkbox1.frame.origin.y + _checkbox1.bounds.size.height + kEPadding, answerWidth, [UILabel getHeightByWidth:answerTextWidth title:[NSString stringWithFormat:@"B.%@",((EAnswer *)_currentQuestion.answers[1]).answer_content] font:kSmallFont]);
     UIView *lastView = _checkbox2;
     if (_currentQuestion.answers.count == 3) {
-        _checkbox3.frame = CGRectMake(_questionLbl.frame.origin.x, _checkbox2.frame.origin.y + _checkbox2.bounds.size.height + kEPadding, lblWidth, [UILabel getHeightByWidth:answerWidth title:[NSString stringWithFormat:@"C.%@",((EAnswer *)_currentQuestion.answers[2]).answer_content] font:kSmallFont]);
+        _checkbox3.frame = CGRectMake(_questionLbl.frame.origin.x, _checkbox2.frame.origin.y + _checkbox2.bounds.size.height + kEPadding, answerWidth, [UILabel getHeightByWidth:answerTextWidth title:[NSString stringWithFormat:@"C.%@",((EAnswer *)_currentQuestion.answers[2]).answer_content] font:kSmallFont]);
         lastView = _checkbox3;
     } else if (_currentQuestion.answers.count == 4) {
-        _checkbox3.frame = CGRectMake(_questionLbl.frame.origin.x, _checkbox2.frame.origin.y + _checkbox2.bounds.size.height + kEPadding, lblWidth, [UILabel getHeightByWidth:answerWidth title:[NSString stringWithFormat:@"C.%@",((EAnswer *)_currentQuestion.answers[2]).answer_content] font:kSmallFont]);
-        _checkbox4.frame = CGRectMake(_questionLbl.frame.origin.x, _checkbox3.frame.origin.y + _checkbox3.bounds.size.height + kEPadding, lblWidth, [UILabel getHeightByWidth:answerWidth title:[NSString stringWithFormat:@"D.%@",((EAnswer *)_currentQuestion.answers[3]).answer_content] font:kSmallFont]);
+        _checkbox3.frame = CGRectMake(_questionLbl.frame.origin.x, _checkbox2.frame.origin.y + _checkbox2.bounds.size.height + kEPadding, answerWidth, [UILabel getHeightByWidth:answerTextWidth title:[NSString stringWithFormat:@"C.%@",((EAnswer *)_currentQuestion.answers[2]).answer_content] font:kSmallFont]);
+        _checkbox4.frame = CGRectMake(_questionLbl.frame.origin.x, _checkbox3.frame.origin.y + _checkbox3.bounds.size.height + kEPadding, answerWidth, [UILabel getHeightByWidth:answerTextWidth title:[NSString stringWithFormat:@"D.%@",((EAnswer *)_currentQuestion.answers[3]).answer_content] font:kSmallFont]);
         lastView = _checkbox4;
     }
     _scrollView.contentSize = CGSizeMake(_scrollView.bounds.size.width, lastView.frame.origin.y + lastView.bounds.size.height + kEPadding);
 #pragma mark - bottomPane
-    _bottomPane.frame = CGRectMake(0, bounds.size.height - bottomPaneHeight, _exercisePane.bounds.size.width, bottomPaneHeight);
+    _bottomPane.frame = CGRectMake(0, bounds.size.height - bottomPaneHeight, bounds.size.width, bottomPaneHeight);
     _topPane.frame = CGRectMake(0, 0, bounds.size.width, topPaneHeight);
-    CGFloat bottomBtnWidth = (_bottomPane.bounds.size.width - kEPadding * 7) / 4.f;
     if (_currentQuestion.question_index == 0) {
         _nextBtn.frame = CGRectMake(kEPadding, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
         _commitBtn.frame = CGRectMake(_nextBtn.frame.origin.x + kEPadding * 3 + bottomBtnWidth, _nextBtn.frame.origin.y, bottomBtnWidth, bottomBtnHeight);
@@ -439,7 +422,14 @@
             _commitBtn.frame = CGRectMake(_nextBtn.frame.origin.x + kEPadding * 3 + bottomBtnWidth, _nextBtn.frame.origin.y, bottomBtnWidth, bottomBtnHeight);
         }
     }
-    
+    CGFloat timeLblWidth = [UILabel getWidthWithTitle:_remainTimeLbl.text font:_remainTimeLbl.font] + 5.f;
+    CGFloat timeLblHeight = 15.f;
+    _remainTimeLbl.frame = CGRectMake(_bottomPane.bounds.size.width - kEPadding - timeLblWidth, kEPadding, timeLblWidth, timeLblHeight);
+#pragma mark - rightPane
+    _rightPane.frame = CGRectMake(_isRightPaneShowing?0:bounds.size.width - rightScrollBtnWidth, topPaneHeight, rightPaneWidth, bounds.size.height - topPaneHeight - bottomPaneHeight);
+    _numberView.frame = CGRectMake(kEPadding * 2 + rightScrollBtnWidth, 0, _rightPane.bounds.size.width - kEPadding * 4 - rightScrollBtnWidth, _rightPane.bounds.size.height);
+    CGPoint newPoint = [self convertPoint:CGPointMake(0, (self.bounds.size.height - rightScrollBtnHeight) / 2.f) toView:_rightPane];
+    _rightScrollBtn.frame = CGRectMake(0, newPoint.y, rightScrollBtnWidth, rightScrollBtnHeight);
 #pragma mark - Window
     _alertWindow.frame = CGRectMake(0, 0, bounds.size.width, bounds.size.height);
     _instructionWindow.frame = CGRectMake(0, 0, bounds.size.width, bounds.size.height);
@@ -655,6 +645,7 @@
         } else {
             [_checkbox4 setBackgroundColor:RGBCOLOR(222, 224, 220) forControlState:UIControlStateNormal];
         }
+        _isRightPaneShowing = NO;
         [self setNeedsLayout];
     }
 }
@@ -663,6 +654,50 @@
     if (questions && questions.count > 0) {
         _questions = questions;
         [_numberView reloadData];
+    }
+}
+
+- (void)showRightNumber {
+    [self showRightPane:YES];
+}
+
+- (void)hideRightNumber {
+    [self showRightPane:NO];
+}
+
+- (void)showRightPane:(BOOL)show {
+    if (show == _isRightPaneShowing) {
+        return;
+    }
+    __weak typeof (self) weakSelf = self;
+    if (show) { // 显示
+        [UIView animateWithDuration:0.3 animations:^{
+            __strong typeof (self) strongSelf = weakSelf;
+            if (!strongSelf) {
+                return;
+            }
+            strongSelf->_rightPane.frame = CGRectMake(strongSelf->_rightPane.frame.origin.x - strongSelf.bounds.size.width, strongSelf->_rightPane.frame.origin.y, strongSelf->_rightPane.bounds.size.width, strongSelf->_rightPane.bounds.size.height);
+        } completion:^(BOOL finished) {
+            __strong typeof (self) strongSelf = weakSelf;
+            if (!strongSelf) {
+                return;
+            }
+            strongSelf->_isRightPaneShowing = YES;
+        }];
+    } else { // 隐藏
+        [UIView animateWithDuration:0.3 animations:^{
+            __strong typeof (self) strongSelf = weakSelf;
+            if (!strongSelf) {
+                return;
+            }
+            strongSelf->_rightPane.frame = CGRectMake(strongSelf.bounds.size.width - rightScrollBtnWidth, strongSelf->_rightPane.frame.origin.y, strongSelf->_rightPane.bounds.size.width, strongSelf->_rightPane.bounds.size.height);
+        } completion:^(BOOL finished) {
+            __strong typeof (self) strongSelf = weakSelf;
+            if (!strongSelf) {
+                return;
+            }
+            strongSelf->_isRightPaneShowing = NO;
+        }];
     }
 }
 

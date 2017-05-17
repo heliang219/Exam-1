@@ -43,13 +43,9 @@ typedef NS_ENUM(NSInteger,ExamPaneType) {
 @property (nonatomic,strong) UIButton *backBtn;  // 返回
 @property (nonatomic,strong) UIButton *instructionBtn;  // 操作说明
 
-#pragma mark - timerPane
-@property (nonatomic,strong) UIView *timerPane;
-@property (nonatomic,strong) UILabel *totalTimeLbl;  // 考试时间
-@property (nonatomic,strong) UILabel *remainTimeLbl;  // 剩余时间
-
 #pragma mark - rightPane
 @property (nonatomic,strong) UIView *rightPane;
+@property (nonatomic,strong) UIButton *rightScrollBtn; // 右侧滑动按钮
 @property (nonatomic,strong) UICollectionView *numberView;  // 题号视图
 
 #pragma mark - exercisePane
@@ -64,6 +60,7 @@ typedef NS_ENUM(NSInteger,ExamPaneType) {
 
 #pragma mark - bottomPane
 @property (nonatomic,strong) UIView *bottomPane;
+@property (nonatomic,strong) UILabel *remainTimeLbl;  // 剩余时间
 @property (nonatomic,strong) UIButton *previousBtn;  // 上一题
 @property (nonatomic,strong) UIButton *nextBtn;  // 下一题
 @property (nonatomic,strong) UIButton *commitBtn;  // 交卷
@@ -111,5 +108,12 @@ typedef NS_ENUM(NSInteger,ExamPaneType) {
  @param questions 刷洗后的所有试题
  */
 - (void)refreshQuestions:(NSArray *)questions;
+
+/**
+ 显示/隐藏右边栏
+
+ @param show YES显示，NO隐藏
+ */
+- (void)showRightPane:(BOOL)show;
 
 @end

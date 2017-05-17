@@ -149,6 +149,8 @@
 		FA9E27821EBC661E00B30249 /* UShareUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA9E277A1EBC661E00B30249 /* UShareUI.framework */; };
 		FA9E27841EBC66E800B30249 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA9E27831EBC66E800B30249 /* CoreGraphics.framework */; };
 		FA9E27871EBC72EB00B30249 /* EUpdateController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA9E27861EBC72EB00B30249 /* EUpdateController.m */; };
+		FAD5F7121ECC3483006954C2 /* rightScrollBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAD5F7101ECC3483006954C2 /* rightScrollBtn@2x.png */; };
+		FAD5F7131ECC3483006954C2 /* rightScrollBtn@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAD5F7111ECC3483006954C2 /* rightScrollBtn@3x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -394,6 +396,8 @@
 		FA9E27831EBC66E800B30249 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		FA9E27851EBC72EB00B30249 /* EUpdateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EUpdateController.h; sourceTree = "<group>"; };
 		FA9E27861EBC72EB00B30249 /* EUpdateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EUpdateController.m; sourceTree = "<group>"; };
+		FAD5F7101ECC3483006954C2 /* rightScrollBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rightScrollBtn@2x.png"; sourceTree = "<group>"; };
+		FAD5F7111ECC3483006954C2 /* rightScrollBtn@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rightScrollBtn@3x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -872,6 +876,8 @@
 				FA67B35C1EC956C700C34B29 /* indicator@3x.png */,
 				FA67B35F1EC9BA9500C34B29 /* close@2x.png */,
 				FA67B3601EC9BA9500C34B29 /* close@3x.png */,
+				FAD5F7101ECC3483006954C2 /* rightScrollBtn@2x.png */,
+				FAD5F7111ECC3483006954C2 /* rightScrollBtn@3x.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -1045,6 +1051,7 @@
 				FA67B3541EC952F600C34B29 /* maintype_4@3x.png in Resources */,
 				456C8BC61E2FA01A002EA371 /* LaunchScreen.storyboard in Resources */,
 				FA67B3551EC952F600C34B29 /* maintype_5@2x.png in Resources */,
+				FAD5F7121ECC3483006954C2 /* rightScrollBtn@2x.png in Resources */,
 				FA67B3521EC952F600C34B29 /* maintype_3@3x.png in Resources */,
 				FA67B34D1EC952F600C34B29 /* maintype_1@2x.png in Resources */,
 				FA67B34E1EC952F600C34B29 /* maintype_1@3x.png in Resources */,
@@ -1072,6 +1079,7 @@
 				4570AAD31EC75260002476C7 /* eye_open@3x.png in Resources */,
 				FA21E2141EC5B8AB006E86AA /* help_bg@3x.png in Resources */,
 				4570AAD71EC7558C002476C7 /* setting@3x.png in Resources */,
+				FAD5F7131ECC3483006954C2 /* rightScrollBtn@3x.png in Resources */,
 				4570AAD01EC75260002476C7 /* eye_closed@2x.png in Resources */,
 				FA67B3571EC952F600C34B29 /* maintype_6@2x.png in Resources */,
 				FA67B3581EC952F600C34B29 /* maintype_6@3x.png in Resources */,
