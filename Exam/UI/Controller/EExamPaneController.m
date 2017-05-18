@@ -15,7 +15,7 @@
 
 #define totalTimeInSeconds 5400 // 考试总时长（单位：s）
 
-@interface EExamPaneController ()<EExamPaneDelegate,EAlertWindowDelegate>
+@interface EExamPaneController ()<EExamPaneDelegate,EAlertWindowDelegate,UIGestureRecognizerDelegate>
 {
     NSInteger _currentSection;
     NSInteger _currentRow;
@@ -25,6 +25,10 @@
     NSTimer *_remainTimeTimer; // 剩余时间计时器
     
     NSInteger _remainTimeInSeconds; // 剩余时间
+    
+    BOOL _inGesture; // 是否正在进行手势操作
+    CGPoint _gestureBeginPoint; // 手势起点
+    EGestureDirection _gestureDirection; // 手势方向
 }
 
 @property (nonatomic,assign) BOOL fullScreen;  // 是否是全屏
@@ -128,6 +132,10 @@
         [self.examPane refreshCheckboxHeartColor:RGBCOLOR(159, 219, 137)];
         [self.examPane refreshCheckboxBackgroundColor:RGBCOLOR(159, 219, 137)];
     }
+    
+//    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(rightPaneDidPan:)];
+//    panGesture.delegate = self;
+//    [self.examPane addGestureRecognizer:panGesture];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -359,6 +367,82 @@
     }
     _examPane.transform = transform;
     _currentOrientation = orientation;
+}
+
+//#pragma mark - 手势
+//
+//// 左右拖拽
+//- (void)rightPaneDidPan:(id)sender {
+//    // 确定手势方向的最小偏移量
+//    static const int offset = 10.f;
+//    UIPanGestureRecognizer *panGes = (UIPanGestureRecognizer *)sender;
+//    // 手势开始
+//    if (UIGestureRecognizerStateBegan == panGes.state) {
+//        _inGesture = YES;
+//        _gestureBeginPoint = [panGes locationInView:panGes.view];
+//        _gestureDirection = EGestureDirectionUnknown;
+//        DLog(@"拖动开始 (%g,%g)",_gestureBeginPoint.x,_gestureBeginPoint.y);
+//    }
+//    // 手势进行中
+//    else if (UIGestureRecognizerStateChanged == panGes.state) {
+//        if (!_inGesture) {
+//            DLog(@"拖动过程异常，不处理");
+//            return;
+//        }
+//        CGPoint newPoint = [panGes locationInView:panGes.view];
+//        if (_gestureDirection == EGestureDirectionUnknown) {
+//            if (fabs(_gestureBeginPoint.x - newPoint.x) > offset) {
+//                _gestureDirection = EGestureDirectionAxisX;
+//                self refreshRighPaneWithOffset:newPoint.x - _ges
+//            } else if(fabs(_gestureBeginPoint.y - newPoint.y) > offset) {
+//                float distance = newPoint.y-_gestureBeginPoint.y;
+//                _gestureDirection = EGestureDirectionAxisY;
+//            }
+//        }
+//        // 水平拖拽
+//        if (_gestureDirection == EGestureDirectionAxisX) {
+//            [self seekDrag:newPoint.x Total:_playerView.bounds.size.width From:@"drag"];
+//        }
+//        // 垂直拖拽
+//        else if (_gestureDirection == EGestureDirectionAxisY) {
+//            float distance = newPoint.y-_gestureBeginPoint.y;
+//            [self gestureDidPan:distance];
+//        }
+//    }
+//    // 手势结束
+//    else if (UIGestureRecognizerStateEnded == panGes.state) {
+//        CGPoint newPoint = [panGes locationInView:panGes.view];
+//        if (_gestureDirection == EGestureDirectionAxisX) {
+//            float distance = newPoint.x - _gestureBeginPoint.x;
+//            DLog(@"拖动正常结束，X轴拖动 %g",distance);
+//            [self seekDragEnd:newPoint.x Total:_playerView.bounds.size.width From:@"drag"];
+//        } else if(_gestureDirection == EGestureDirectionAxisY) {
+//            float distance = newPoint.y - _gestureBeginPoint.y;
+//            DLog(@"拖动正常结束，Y轴拖动 %g",distance);
+//            [self gestureDidPan:distance];
+//        }
+//        _inGesture = NO;
+//    }
+//    // 手势异常结束
+//    else {
+//        DLog(@"拖动异常结束");
+//        _inGesture = NO;
+//        if(_inDrag)
+//        {
+//            _inDrag=NO;
+//            [self syncPlayerState];
+//        }
+//        
+//    }
+//}
+
+/**
+ 根据水平方向偏移来改变rightpane的坐标
+
+ @param offset x轴偏移量
+ */
+- (void)refreshRighPaneWithOffset:(CGFloat)offset {
+    
 }
 
 #pragma mark - public methods

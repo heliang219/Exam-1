@@ -137,6 +137,7 @@
 		FA8A230B1E31DEFE007D1E38 /* EExamContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8A230A1E31DEFE007D1E38 /* EExamContainer.m */; };
 		FA8A230E1E31E467007D1E38 /* EExamContainController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8A230D1E31E467007D1E38 /* EExamContainController.m */; };
 		FA8A23111E31FFCF007D1E38 /* EInstructionWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8A23101E31FFCF007D1E38 /* EInstructionWindow.m */; };
+		FA98082C1ECD717700A196C8 /* ERightPane.m in Sources */ = {isa = PBXBuildFile; fileRef = FA98082B1ECD717700A196C8 /* ERightPane.m */; };
 		FA9E27661EBC53C700B30249 /* EMyExerciseController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA9E27651EBC53C700B30249 /* EMyExerciseController.m */; };
 		FA9E27691EBC548A00B30249 /* EAboutController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA9E27681EBC548A00B30249 /* EAboutController.m */; };
 		FA9E277B1EBC661E00B30249 /* libSocialQQ.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA9E276D1EBC661E00B30249 /* libSocialQQ.a */; };
@@ -379,6 +380,8 @@
 		FA8A230D1E31E467007D1E38 /* EExamContainController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EExamContainController.m; sourceTree = "<group>"; };
 		FA8A230F1E31FFCF007D1E38 /* EInstructionWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EInstructionWindow.h; sourceTree = "<group>"; };
 		FA8A23101E31FFCF007D1E38 /* EInstructionWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EInstructionWindow.m; sourceTree = "<group>"; };
+		FA98082A1ECD717700A196C8 /* ERightPane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ERightPane.h; sourceTree = "<group>"; };
+		FA98082B1ECD717700A196C8 /* ERightPane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ERightPane.m; sourceTree = "<group>"; };
 		FA9E27641EBC53C700B30249 /* EMyExerciseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMyExerciseController.h; sourceTree = "<group>"; };
 		FA9E27651EBC53C700B30249 /* EMyExerciseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMyExerciseController.m; sourceTree = "<group>"; };
 		FA9E27671EBC548A00B30249 /* EAboutController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EAboutController.h; sourceTree = "<group>"; };
@@ -798,6 +801,8 @@
 				FA08FA621E308E7300C01C49 /* EBlockCell.m */,
 				FA8A23091E31DEFE007D1E38 /* EExamContainer.h */,
 				FA8A230A1E31DEFE007D1E38 /* EExamContainer.m */,
+				FA98082A1ECD717700A196C8 /* ERightPane.h */,
+				FA98082B1ECD717700A196C8 /* ERightPane.m */,
 				FA8A23061E31B9EB007D1E38 /* EExamPane.h */,
 				FA8A23071E31B9EB007D1E38 /* EExamPane.m */,
 				FA7CE10C1E45B81C00C4147B /* EScorePane.h */,
@@ -1172,6 +1177,7 @@
 				459999A31E32431100917562 /* CTCheckbox.m in Sources */,
 				456C8C6C1E2FA4EA002EA371 /* FMResultSet.m in Sources */,
 				45FE371D1E30F0AE003AB348 /* EExerciseListController.m in Sources */,
+				FA98082C1ECD717700A196C8 /* ERightPane.m in Sources */,
 				456C8BB81E2FA01A002EA371 /* main.m in Sources */,
 				FA6234581EBAE5A10021A6F0 /* EUploadIDCardController.m in Sources */,
 				45C493001E2FB09400FBD8B7 /* EPreparationController.m in Sources */,

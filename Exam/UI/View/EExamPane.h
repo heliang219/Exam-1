@@ -11,6 +11,7 @@
 @class EQuestion;
 @class EAlertWindow;
 #import "EInstructionWindow.h"
+@class ERightPane;
 
 typedef NS_ENUM(NSInteger,ExamPaneType) {
     ExamPaneTypeBlank, // 模拟练习
@@ -44,7 +45,7 @@ typedef NS_ENUM(NSInteger,ExamPaneType) {
 @property (nonatomic,strong) UIButton *instructionBtn;  // 操作说明
 
 #pragma mark - rightPane
-@property (nonatomic,strong) UIView *rightPane;
+@property (nonatomic,strong) ERightPane *rightPane;
 @property (nonatomic,strong) UIButton *rightScrollBtn; // 右侧滑动按钮
 @property (nonatomic,strong) UICollectionView *numberView;  // 题号视图
 

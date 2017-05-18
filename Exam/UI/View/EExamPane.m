@@ -14,6 +14,7 @@
 #import "EAnswer.h"
 #import "UILabel+Additions.h"
 #import "EAlertWindow.h"
+#import "ERightPane.h"
 
 #define topPaneHeight 64.f
 #define topLblWidth 120.f
@@ -28,10 +29,11 @@
 
 #define numberOfCols 10
 
-@interface EExamPane()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
+@interface EExamPane()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,ERightPaneDelegate>
 {
     ExamPaneType _type;
     UIColor *_checkboxSelectedBgColor;
+    BOOL _rightPaneDidPan;
     BOOL _isRightPaneShowing;
 }
 
@@ -191,8 +193,9 @@
  初始化右边题号面板
  */
 - (void)initRightPane {
-    _rightPane = [[UIView alloc] init];
+    _rightPane = [[ERightPane alloc] init];
     _rightPane.backgroundColor = [UIColor whiteColor];
+    _rightPane.delegate = self;
     [self addSubview:_rightPane];
     
     // 创建一个layout布局类
@@ -222,6 +225,7 @@
     [_rightScrollBtn setImage:IMAGE_BY_NAMED(@"rightScrollBtn") forState:UIControlStateHighlighted];
     _rightScrollBtn.backgroundColor = [UIColor clearColor];
     [_rightScrollBtn addTarget:self action:@selector(showRightNumber) forControlEvents:UIControlEventTouchUpInside];
+    _rightScrollBtn.userInteractionEnabled = NO;
     [_rightPane addSubview:_rightScrollBtn];
 }
 
@@ -520,6 +524,20 @@
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }
 
+#pragma mark - ERightPaneDelegate
+
+- (void)rightPaneDidPan {
+    _rightPaneDidPan = YES;
+}
+
+- (void)toLeft {
+    [self showRightPane:YES];
+}
+
+- (void)toRight {
+    [self showRightPane:NO];
+}
+
 #pragma mark - public methods
 
 - (void)refreshCheckboxHeartColor:(UIColor *)color {
@@ -666,26 +684,27 @@
 }
 
 - (void)showRightPane:(BOOL)show {
-    if (show == _isRightPaneShowing) {
+    if (show == _isRightPaneShowing && !_rightPaneDidPan) {
         return;
     }
     __weak typeof (self) weakSelf = self;
     if (show) { // 显示
-        [UIView animateWithDuration:0.3 animations:^{
+        [UIView animateWithDuration:0.2 animations:^{
             __strong typeof (self) strongSelf = weakSelf;
             if (!strongSelf) {
                 return;
             }
-            strongSelf->_rightPane.frame = CGRectMake(strongSelf->_rightPane.frame.origin.x - strongSelf.bounds.size.width, strongSelf->_rightPane.frame.origin.y, strongSelf->_rightPane.bounds.size.width, strongSelf->_rightPane.bounds.size.height);
+            strongSelf->_rightPane.frame = CGRectMake(- rightScrollBtnWidth, strongSelf->_rightPane.frame.origin.y, strongSelf->_rightPane.bounds.size.width, strongSelf->_rightPane.bounds.size.height);
         } completion:^(BOOL finished) {
             __strong typeof (self) strongSelf = weakSelf;
             if (!strongSelf) {
                 return;
             }
             strongSelf->_isRightPaneShowing = YES;
+            strongSelf->_rightPaneDidPan = NO;
         }];
     } else { // 隐藏
-        [UIView animateWithDuration:0.3 animations:^{
+        [UIView animateWithDuration:0.2 animations:^{
             __strong typeof (self) strongSelf = weakSelf;
             if (!strongSelf) {
                 return;
@@ -697,6 +716,7 @@
                 return;
             }
             strongSelf->_isRightPaneShowing = NO;
+            strongSelf->_rightPaneDidPan = NO;
         }];
     }
 }

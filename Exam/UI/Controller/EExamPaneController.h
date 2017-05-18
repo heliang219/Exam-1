@@ -10,6 +10,20 @@
 @class EQuestion;
 #import "EExamPane.h"
 
+/**
+ 手势方向
+
+ - EGestureDirectionUnknown: 未知
+ - EGestureDirectionAxisX: 水平方向
+ - EGestureDirectionAxisY: 垂直方向
+ */
+typedef NS_ENUM(NSUInteger,EGestureDirection) {
+    EGestureDirectionUnknown = -1,
+    EGestureDirectionAxisX = 0,
+    EGestureDirectionAxisY = 1,
+    
+};
+
 @protocol EExamPaneControllerDelegate <NSObject>
 
 @optional
