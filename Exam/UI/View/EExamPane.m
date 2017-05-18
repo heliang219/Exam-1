@@ -52,20 +52,6 @@
 }
 */
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        _questions = [NSMutableArray array];
-        [self initTopPane];
-        [self initExercisePane];
-        [self initBottomPane];
-        [self initRightPane];
-//        [self initAlertWindow];
-//        [self initInstructionWindow];
-    }
-    return self;
-}
-
 - (instancetype)initWithFrame:(CGRect)frame type:(ExamPaneType)type {
     self = [super initWithFrame:frame];
     if (self) {
@@ -75,8 +61,8 @@
         [self initExercisePane];
         [self initBottomPane];
         [self initRightPane];
-//        [self initAlertWindow];
-//        [self initInstructionWindow];
+        [self initAlertWindow];
+        [self initInstructionWindow];
         
         UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideRightNumber)];
         [_topPane addGestureRecognizer:tap1];
@@ -100,6 +86,12 @@
     }
 }
 
+- (void)scaleBtnAction:(UIButton *)btn {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(scaleBtnClickedOnPane:controller:)]) {
+        [self.delegate scaleBtnClickedOnPane:self controller:self.delegate];
+    }
+}
+
 - (void)previousBtnAction:(UIButton *)btn {
     if (self.delegate && [self.delegate respondsToSelector:@selector(previousBtnClickedOnPane:controller:)]) {
         [self.delegate previousBtnClickedOnPane:self controller:self.delegate];
@@ -115,6 +107,12 @@
 - (void)commitBtnAction:(UIButton *)btn {
     if (self.delegate && [self.delegate respondsToSelector:@selector(commitBtnClickedOnPane:controller:)]) {
         [self.delegate commitBtnClickedOnPane:self controller:self.delegate];
+    }
+}
+
+- (void)retryBtnAction:(UIButton *)btn {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(retryBtnClickedOnPane:controller:)]) {
+        [self.delegate retryBtnClickedOnPane:self controller:self.delegate];
     }
 }
 
@@ -325,6 +323,18 @@
     _remainTimeLbl.text = @"剩余时间：01:29:57";
     [_bottomPane addSubview:_remainTimeLbl];
     
+    _scaleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_scaleBtn setTitle:@"文字缩放" forState:UIControlStateNormal];
+    [_scaleBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    _scaleBtn.titleLabel.font = kSmallFont;
+    _scaleBtn.backgroundColor = [UIColor clearColor];
+    _scaleBtn.layer.borderColor = kThemeColor.CGColor;
+    _scaleBtn.layer.borderWidth = 1.f;
+    _scaleBtn.layer.cornerRadius = 2.f;
+    _scaleBtn.layer.masksToBounds = YES;
+    [_scaleBtn addTarget:self action:@selector(scaleBtnAction:) forControlEvents:UIControlEventTouchUpInside];
+    [_bottomPane addSubview:_scaleBtn];
+    
     _previousBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_previousBtn setTitle:@"上一题" forState:UIControlStateNormal];
     [_previousBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -360,6 +370,18 @@
     _commitBtn.layer.masksToBounds = YES;
     [_commitBtn addTarget:self action:@selector(commitBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [_bottomPane addSubview:_commitBtn];
+    
+    _retryBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_retryBtn setTitle:@"错题重考" forState:UIControlStateNormal];
+    [_retryBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    _retryBtn.titleLabel.font = kSmallFont;
+    _retryBtn.backgroundColor = [UIColor clearColor];
+    _retryBtn.layer.borderColor = kThemeColor.CGColor;
+    _retryBtn.layer.borderWidth = 1.f;
+    _retryBtn.layer.cornerRadius = 2.f;
+    _retryBtn.layer.masksToBounds = YES;
+    [_retryBtn addTarget:self action:@selector(retryBtnAction:) forControlEvents:UIControlEventTouchUpInside];
+    [_bottomPane addSubview:_retryBtn];
 }
 
 /**
@@ -412,19 +434,71 @@
     _scrollView.contentSize = CGSizeMake(_scrollView.bounds.size.width, lastView.frame.origin.y + lastView.bounds.size.height + kEPadding);
 #pragma mark - bottomPane
     _bottomPane.frame = CGRectMake(0, bounds.size.height - bottomPaneHeight, bounds.size.width, bottomPaneHeight);
-    _topPane.frame = CGRectMake(0, 0, bounds.size.width, topPaneHeight);
-    if (_currentQuestion.question_index == 0) {
-        _nextBtn.frame = CGRectMake(kEPadding, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
-        _commitBtn.frame = CGRectMake(_nextBtn.frame.origin.x + kEPadding * 3 + bottomBtnWidth, _nextBtn.frame.origin.y, bottomBtnWidth, bottomBtnHeight);
-    } else {
-        if (_currentQuestion.question_index == [self getQuestionTotalCount] - 1) {
-            _previousBtn.frame = CGRectMake(kEPadding, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
-            _commitBtn.frame = CGRectMake(_previousBtn.frame.origin.x + kEPadding * 3 + bottomBtnWidth, _previousBtn.frame.origin.y, bottomBtnWidth, bottomBtnHeight);
-        } else {
-            _previousBtn.frame = CGRectMake(kEPadding, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
-            _nextBtn.frame = CGRectMake(_previousBtn.frame.origin.x + kEPadding + bottomBtnWidth, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
-            _commitBtn.frame = CGRectMake(_nextBtn.frame.origin.x + kEPadding * 3 + bottomBtnWidth, _nextBtn.frame.origin.y, bottomBtnWidth, bottomBtnHeight);
+    switch (_type) {
+        case ExamPaneTypeExercise:
+        case ExamPaneTypeRetry:
+        {
+            _scaleBtn.hidden = NO;
+            _scaleBtn.frame = CGRectMake(kEPadding * 2, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
+            _retryBtn.hidden = YES;
+            if (_currentQuestion.question_index == 0) {
+                _previousBtn.hidden = YES;
+                _nextBtn.hidden = NO;
+                _nextBtn.frame = CGRectMake(_scaleBtn.frame.origin.x + bottomBtnWidth + kEPadding * 3, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
+                _commitBtn.hidden = YES;
+            } else {
+                if (_currentQuestion.question_index == [self getQuestionTotalCount] - 1) {
+                    _previousBtn.hidden = NO;
+                    _previousBtn.frame = CGRectMake(_scaleBtn.frame.origin.x + bottomBtnWidth + kEPadding * 3, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
+                    _nextBtn.hidden = YES;
+                    _commitBtn.hidden = NO;
+                    _commitBtn.frame = CGRectMake(_previousBtn.frame.origin.x + kEPadding * 3 + bottomBtnWidth, _previousBtn.frame.origin.y, bottomBtnWidth, bottomBtnHeight);
+                } else {
+                    _previousBtn.hidden = NO;
+                    _previousBtn.frame = CGRectMake(_scaleBtn.frame.origin.x + bottomBtnWidth + kEPadding * 3, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
+                    _nextBtn.hidden = NO;
+                    _nextBtn.frame = CGRectMake(_previousBtn.frame.origin.x + kEPadding * 3 + bottomBtnWidth, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
+                    _commitBtn.hidden = YES;
+                }
+            }
         }
+            break;
+        case ExamPaneTypeView:
+        {
+            _scaleBtn.hidden = YES;
+            _retryBtn.hidden = YES;
+            _commitBtn.hidden = YES;
+            if (_currentQuestion.question_index == 0) {
+                _previousBtn.hidden = YES;
+                _nextBtn.hidden = NO;
+                _nextBtn.frame = CGRectMake(kEPadding * 2, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
+            } else {
+                if (_currentQuestion.question_index == [self getQuestionTotalCount] - 1) {
+                    _previousBtn.hidden = NO;
+                    _previousBtn.frame = CGRectMake(kEPadding * 2, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
+                    _nextBtn.hidden = YES;
+                } else {
+                    _previousBtn.hidden = NO;
+                    _previousBtn.frame = CGRectMake(kEPadding * 2, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
+                    _nextBtn.hidden = NO;
+                    _nextBtn.frame = CGRectMake(_previousBtn.frame.origin.x + kEPadding * 3 + bottomBtnWidth, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
+                }
+            }
+        }
+            break;
+        case ExamPaneTypeCheck:
+        {
+            _scaleBtn.hidden = NO;
+            _scaleBtn.frame = CGRectMake(kEPadding * 2, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
+            _retryBtn.hidden = NO;
+            _retryBtn.frame = CGRectMake(_scaleBtn.frame.origin.x + bottomBtnWidth + kEPadding * 3, (bottomPaneHeight - bottomBtnHeight) / 2.f, bottomBtnWidth, bottomBtnHeight);
+            _previousBtn.hidden = YES;
+            _nextBtn.hidden = YES;
+            _commitBtn.hidden = YES;
+        }
+            break;
+        default:
+            break;
     }
     CGFloat timeLblWidth = [UILabel getWidthWithTitle:_remainTimeLbl.text font:_remainTimeLbl.font] + 5.f;
     CGFloat timeLblHeight = 15.f;

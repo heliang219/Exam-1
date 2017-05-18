@@ -51,7 +51,7 @@
     self.examPaneController = [EExamPaneController createWithController:self view:self.view delegate:self title:_topTitle questions:_questions];
     self.examPaneController.orientationWanted = _orientationWanted;
     if (!_questionRefreshed) {
-        [self refreshQuestion:_questionToRefresh lock:self.examPaneController.type == ExamPaneTypeFull];
+        [self refreshQuestion:_questionToRefresh lock:(self.examPaneController.type == ExamPaneTypeCheck || self.examPaneController.type == ExamPaneTypeView)];
     }
 }
 
@@ -97,7 +97,7 @@
 
 - (void)numberBtnClickedAtSection:(NSInteger)section row:(NSInteger)row {
     DLog(@"您点击了section : %@,row : %@",@(section),@(row));
-    [self.examPaneController refreshQuestion:self.examPaneController.questions[section][row] lock:self.examPaneController.type == ExamPaneTypeFull];
+    [self.examPaneController refreshQuestion:self.examPaneController.questions[section][row] lock:(self.examPaneController.type == ExamPaneTypeView || self.examPaneController.type == ExamPaneTypeCheck)];
 }
 
 /*

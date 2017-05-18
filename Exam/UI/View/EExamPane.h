@@ -14,8 +14,10 @@
 @class ERightPane;
 
 typedef NS_ENUM(NSInteger,ExamPaneType) {
-    ExamPaneTypeBlank, // 模拟练习
-    ExamPaneTypeFull, // 练习复卷/查看题目
+    ExamPaneTypeExercise, // 模拟练习（文字缩放，上一题，下一题，交卷）
+    ExamPaneTypeView, // 查看题目（上一题，下一题）
+    ExamPaneTypeCheck, // 练习复卷（文字缩放，错题重考）
+    ExamPaneTypeRetry, // 错题重考（文字缩放，上一题，下一题，交卷）
 };
 
 @protocol EExamPaneDelegate <NSObject>
@@ -24,9 +26,11 @@ typedef NS_ENUM(NSInteger,ExamPaneType) {
 
 - (void)backBtnClickedOnPane:(UIView *)pane controller:(id<EExamPaneDelegate>)controller;
 - (void)instructionBtnClickedOnPane:(UIView *)pane controller:(id<EExamPaneDelegate>)controller;
+- (void)scaleBtnClickedOnPane:(UIView *)pane controller:(id<EExamPaneDelegate>)controller;
 - (void)previousBtnClickedOnPane:(UIView *)pane controller:(id<EExamPaneDelegate>)controller;
 - (void)nextBtnClickedOnPane:(UIView *)pane controller:(id<EExamPaneDelegate>)controller;
 - (void)commitBtnClickedOnPane:(UIView *)pane controller:(id<EExamPaneDelegate>)controller;
+- (void)retryBtnClickedOnPane:(UIView *)pane controller:(id<EExamPaneDelegate>)controller;
 - (void)numberBtnClickOnPane:(UIView *)pane controller:(id<EExamPaneDelegate>)controller section:(NSInteger)section row:(NSInteger)row;
 
 @end
@@ -62,9 +66,11 @@ typedef NS_ENUM(NSInteger,ExamPaneType) {
 #pragma mark - bottomPane
 @property (nonatomic,strong) UIView *bottomPane;
 @property (nonatomic,strong) UILabel *remainTimeLbl;  // 剩余时间
+@property (nonatomic,strong) UIButton *scaleBtn; // 文字缩放
 @property (nonatomic,strong) UIButton *previousBtn;  // 上一题
 @property (nonatomic,strong) UIButton *nextBtn;  // 下一题
 @property (nonatomic,strong) UIButton *commitBtn;  // 交卷
+@property (nonatomic,strong) UIButton *retryBtn; // 错题重考
 
 #pragma mark - Window
 @property (nonatomic,strong) EAlertWindow *alertWindow; // 弹窗
