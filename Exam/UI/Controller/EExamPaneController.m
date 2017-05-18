@@ -122,7 +122,7 @@
     
     [self refreshTitle:_topTitle];
     [self refreshQuestions:_questions];
-    [self refreshQuestion:_questions[0][0] lock:(_type == ExamPaneTypeView || _type == ExamPaneTypeCheck)];
+    [self refreshQuestion:_questions[0] lock:(_type == ExamPaneTypeView || _type == ExamPaneTypeCheck)];
     
     [self setFullScreen:YES WithAnimation:YES];
     
@@ -386,14 +386,12 @@
 
 - (void)previousQuestion {
     NSInteger currentIndex = self.currentQuestion.question_index - 1;
-    [self getCurrentSectionAndRowWithIndex:currentIndex];
-    [self refreshQuestion:_questions[_currentSection][_currentRow] lock:(_type == ExamPaneTypeView || _type == ExamPaneTypeCheck)];
+    [self refreshQuestion:_questions[currentIndex] lock:(_type == ExamPaneTypeView || _type == ExamPaneTypeCheck)];
 }
 
 - (void)nextQuestion {
     NSInteger currentIndex = self.currentQuestion.question_index + 1;
-    [self getCurrentSectionAndRowWithIndex:currentIndex];
-    [self refreshQuestion:_questions[_currentSection][_currentRow] lock:(_type == ExamPaneTypeView || _type == ExamPaneTypeCheck)];
+    [self refreshQuestion:_questions[currentIndex] lock:(_type == ExamPaneTypeView || _type == ExamPaneTypeCheck)];
 }
 
 - (void)commitExam {
@@ -428,24 +426,6 @@
 }
 
 #pragma mark - other methods
-
-- (void)getCurrentSectionAndRowWithIndex:(NSInteger)index {
-    NSInteger firstIndexOfSection = 0;
-    for (int i = 0; i < _questions.count; i ++) {
-        NSArray *group = _questions[i];
-        for (int j = 0; j < group.count; j ++) {
-            EQuestion *question = group[j];
-            if (j == 0) {
-                firstIndexOfSection = question.question_index;
-            }
-            if (index == question.question_index) {
-                _currentSection = i;
-                _currentRow = index - firstIndexOfSection;
-                break;
-            }
-        }
-    }
-}
 
 - (void)changeRemainTime {
     _remainTimeInSeconds --;

@@ -94,11 +94,7 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSInteger count = 0;
-    for (NSArray *arr in _contentArray) {
-        count += arr.count;
-    }
-    return count;
+    return _contentArray.count;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
@@ -113,12 +109,7 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     EBlockCell *cell  = [collectionView dequeueReusableCellWithReuseIdentifier:@"EBlockCell" forIndexPath:indexPath];
     cell.backgroundColor = [UIColor clearColor];
-    NSInteger totalCount = 0;
-    for (NSInteger i = 0; i < _contentArray.count; i ++) {
-        NSArray *arr = _contentArray[i];
-        totalCount += arr.count;
-    }
-    if (indexPath.row == totalCount - 1) {
+    if (indexPath.row == _contentArray.count - 1) {
         cell.bottomLine.hidden = YES;
     } else {
         cell.bottomLine.hidden = NO;
@@ -131,17 +122,7 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     // 查看题目
     EExamContainController *exam = [[EExamContainController alloc] initWithTitle:@"查看题目" questions:_contentArray orientationWanted:UIInterfaceOrientationPortrait];
-    EQuestion *question = nil;
-    NSInteger totalCount = 0;
-    for (NSInteger i = 0; i < _contentArray.count; i ++) {
-        NSArray *arr = _contentArray[i];
-        totalCount += arr.count;
-        if (indexPath.row < totalCount) {
-            NSInteger lastTotalCount = totalCount - arr.count;
-            question = arr[indexPath.row - lastTotalCount];
-            break;
-        }
-    }
+    EQuestion *question = _contentArray[indexPath.row];
     [exam refreshQuestion:question lock:YES];
     [self.navigationController pushToController:exam animated:YES];
     

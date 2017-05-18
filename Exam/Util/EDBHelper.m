@@ -113,68 +113,7 @@
         }
         [self.examDB close];
     }
-    return [self groupQuestions:questions];
-}
-
-// 试题分组（必知必会题、判断题、单选题、多选题）
-- (NSArray *)groupQuestions:(NSArray *)oldQuestions {
-    NSMutableArray *newQuestions = [NSMutableArray array];
-    NSMutableArray *requiredArray = [NSMutableArray array];
-    NSMutableArray *judgeArray = [NSMutableArray array];
-    NSMutableArray *singleChoiceArray = [NSMutableArray array];
-    NSMutableArray *mutipleChoiceArray = [NSMutableArray array];
-    for (EQuestion *question in oldQuestions) {
-        if (question.question_is_required == 1) {
-            if (!requiredArray || requiredArray.count == 0) {
-                requiredArray = [NSMutableArray array];
-            }
-            [requiredArray addObject:question];
-        } else if ([question.question_type isEqualToString:@"判断题"]) {
-            if (!judgeArray || judgeArray.count == 0) {
-                judgeArray = [NSMutableArray array];
-            }
-            [judgeArray addObject:question];
-        } else if ([question.question_type isEqualToString:@"单选题"]) {
-            if (!singleChoiceArray || singleChoiceArray.count == 0) {
-                singleChoiceArray = [NSMutableArray array];
-            }
-            [singleChoiceArray addObject:question];
-        } else if ([question.question_type isEqualToString:@"多选题"]) {
-            if (!mutipleChoiceArray || mutipleChoiceArray.count == 0) {
-                mutipleChoiceArray = [NSMutableArray array];
-            }
-            [mutipleChoiceArray addObject:question];
-        }
-    }
-    if (requiredArray && requiredArray.count > 0) {
-        for (NSUInteger i = 0; i < requiredArray.count; i ++) {
-            EQuestion *question = requiredArray[i];
-            question.question_index = i;
-        }
-        [newQuestions addObject:requiredArray];
-    }
-    if (judgeArray && judgeArray.count > 0) {
-        for (NSUInteger i = requiredArray.count; i < requiredArray.count + judgeArray.count; i ++) {
-            EQuestion *question = judgeArray[i - requiredArray.count];
-            question.question_index = i;
-        }
-        [newQuestions addObject:judgeArray];
-    }
-    if (singleChoiceArray && singleChoiceArray.count > 0) {
-        for (NSUInteger i = requiredArray.count + judgeArray.count; i < requiredArray.count + judgeArray.count + singleChoiceArray.count; i ++) {
-            EQuestion *question = singleChoiceArray[i - judgeArray.count - requiredArray.count];
-            question.question_index = i;
-        }
-        [newQuestions addObject:singleChoiceArray];
-    }
-    if (mutipleChoiceArray && mutipleChoiceArray.count > 0) {
-        for (NSUInteger i = requiredArray.count + judgeArray.count + singleChoiceArray.count; i < requiredArray.count + judgeArray.count + singleChoiceArray.count + mutipleChoiceArray.count; i ++) {
-            EQuestion *question = mutipleChoiceArray[i - requiredArray.count - judgeArray.count - singleChoiceArray.count];
-            question.question_index = i;
-        }
-        [newQuestions addObject:mutipleChoiceArray];
-    }
-    return newQuestions;
+    return questions;
 }
 
 - (NSArray *)queryAnswers:(NSInteger)question_id {

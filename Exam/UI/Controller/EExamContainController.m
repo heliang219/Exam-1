@@ -97,7 +97,7 @@
 
 - (void)numberBtnClickedAtSection:(NSInteger)section row:(NSInteger)row {
     DLog(@"您点击了section : %@,row : %@",@(section),@(row));
-    [self.examPaneController refreshQuestion:self.examPaneController.questions[section][row] lock:(self.examPaneController.type == ExamPaneTypeView || self.examPaneController.type == ExamPaneTypeCheck)];
+    [self.examPaneController refreshQuestion:self.examPaneController.questions[row] lock:(self.examPaneController.type == ExamPaneTypeView || self.examPaneController.type == ExamPaneTypeCheck)];
 }
 
 /*

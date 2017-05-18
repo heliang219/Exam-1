@@ -125,14 +125,7 @@
 #pragma mark - other methods
 
 - (NSInteger)getQuestionTotalCount {
-    NSInteger count = 0;
-    for (int i = 0; i < _questions.count; i ++) {
-        NSArray *group = _questions[i];
-        for (int j = 0; j < group.count; j ++) {
-            count ++;
-        }
-    }
-    return count;
+    return _questions.count;
 }
 
 - (void)checkboxDidChange:(CTCheckbox *)checkbox {
@@ -209,8 +202,8 @@
     collect.dataSource = self;
     // 注册item类型 这里使用系统的类型
     [collect registerClass:[EBlockCell class] forCellWithReuseIdentifier:@"EBlockCell"];
-    // 注册header
-    [collect registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"UICollectionReusableView"];
+//    // 注册header
+//    [collect registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"UICollectionReusableView"];
     // 注册footer
     [collect registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"UICollectionReusableView"];
     
@@ -516,16 +509,16 @@
 #pragma mark - collection view
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return _questions.count;
+    return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return ((NSArray *)_questions[section]).count;
+    return _questions.count;
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    return CGSizeMake(_rightPane.bounds.size.width - kEPadding * 2, 50);
-}
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+//    return CGSizeMake(_rightPane.bounds.size.width - kEPadding * 2, 50);
+//}
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
     if (section < _questions.count - 1) {
@@ -537,28 +530,7 @@
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     UICollectionReusableView *reusableview = nil;
     
-    if (kind == UICollectionElementKindSectionHeader){
-        
-        UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
-        for (UIView *view in headerView.subviews) {
-            [view removeFromSuperview];
-        }
-        
-        UILabel *titleLbl = [[UILabel alloc] initWithFrame:CGRectMake(0, kEPadding, headerView.bounds.size.width, headerView.bounds.size.height - kEPadding * 2)];
-        titleLbl.backgroundColor = [UIColor clearColor];
-        titleLbl.textColor = [UIColor blackColor];
-        titleLbl.font = kSmallFont;
-        
-        EQuestion *question = (EQuestion *)_questions[indexPath.section][0];
-        NSString *title = question.question_is_required == 1 ? @"必知必会题" : question.question_type;
-        
-        titleLbl.text = title;
-        
-        headerView.backgroundColor = [UIColor clearColor];
-        [headerView addSubview:titleLbl];
-        
-        reusableview = headerView;
-    } else if (kind == UICollectionElementKindSectionFooter) {
+    if (kind == UICollectionElementKindSectionFooter) {
         UICollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
         for (UIView *view in footerView.subviews) {
             [view removeFromSuperview];
@@ -587,7 +559,7 @@
     CGFloat blockHeight = blockWidth * 0.618;
     [cell refreshSize:CGSizeMake(blockWidth, blockHeight)];
     cell.backgroundColor = [UIColor clearColor];
-    EQuestion *question = _questions[indexPath.section][indexPath.row];
+    EQuestion *question = _questions[indexPath.row];
     [cell refreshWithTitle:[NSString stringWithFormat:@"%@",@(question.question_index + 1)] background:[UIImage e_imageWithColor:[UIColor lightGrayColor]]];
     return cell;
 }
