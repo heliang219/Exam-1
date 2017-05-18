@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-@class CTCheckbox;
-@class EQuestion;
-@class EAlertWindow;
 #import "EInstructionWindow.h"
+#import "EQuestion.h"
+@class CTCheckbox;
+@class EAlertWindow;
 @class ERightPane;
 
 typedef NS_ENUM(NSInteger,ExamPaneType) {

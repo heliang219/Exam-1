@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSUInteger,EAnswerType) {
+    EAnswerTypeBlank, // 未作答
+    EAnswerTypeWrong, // 回答错误
+    EAnswerTypeRight, // 回答正确
+};
+
 /**
  question
  */
@@ -21,5 +27,6 @@
 @property (nonatomic,assign) NSInteger question_case_id;
 @property (nonatomic,assign) NSInteger question_is_required;
 @property (nonatomic,strong) NSArray *answers;
+@property (nonatomic,assign) EAnswerType answer_type; // 回答情况
 
 @end

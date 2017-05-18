@@ -10,7 +10,6 @@
 #import "EBlockCell.h"
 #import "UIImage+Additions.h"
 #import "CTCheckbox.h"
-#import "EQuestion.h"
 #import "EAnswer.h"
 #import "UILabel+Additions.h"
 #import "EAlertWindow.h"
@@ -144,6 +143,8 @@
             }
         }
     }
+//    [_numberView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathWithIndex:_currentQuestion.question_index]]];
+    [_numberView reloadData];
 }
 
 #pragma mark - init
@@ -560,7 +561,30 @@
     [cell refreshSize:CGSizeMake(blockWidth, blockHeight)];
     cell.backgroundColor = [UIColor clearColor];
     EQuestion *question = _questions[indexPath.row];
-    [cell refreshWithTitle:[NSString stringWithFormat:@"%@",@(question.question_index + 1)] background:[UIImage e_imageWithColor:[UIColor lightGrayColor]]];
+    UIColor *blockBgColor = nil;
+    switch (question.answer_type) {
+        case EAnswerTypeBlank:
+        {
+            blockBgColor = HEXCOLOR(0xc0c0c0);
+        }
+            break;
+        case EAnswerTypeWrong:
+        {
+            blockBgColor = HEXCOLOR(0xf9a041);
+        }
+            break;
+        case EAnswerTypeRight:
+        {
+            blockBgColor = HEXCOLOR(0x7fdb83);
+        }
+            break;
+        default:
+        {
+            blockBgColor = HEXCOLOR(0xc0c0c0);
+        }
+            break;
+    }
+    [cell refreshWithTitle:[NSString stringWithFormat:@"%@",@(question.question_index + 1)] background:[UIImage e_imageWithColor:blockBgColor]];
     return cell;
 }
 

@@ -39,4 +39,38 @@
     return _answers;
 }
 
+- (EAnswerType)answer_type {
+    EAnswerType at = EAnswerTypeBlank;
+    NSInteger blankCount = 0;
+    for (EAnswer *answer in self.answers) {
+        if ([self.question_type isEqualToString:@"多选题"]) {
+            at = EAnswerTypeRight;
+            if (answer.checked) {
+                if (!answer.answer_correct) {
+                    at = EAnswerTypeWrong;
+                    break;
+                } else continue;
+            } else {
+                blankCount ++;
+            }
+        } else {
+            if (answer.checked) {
+                if (answer.answer_correct) {
+                    at = EAnswerTypeRight;
+                    break;
+                } else {
+                    at = EAnswerTypeWrong;
+                    break;
+                }
+            } else {
+                blankCount ++;
+            }
+        }
+    }
+    if (blankCount == self.answers.count) {
+        at = EAnswerTypeBlank;
+    }
+    return at;
+}
+
 @end
