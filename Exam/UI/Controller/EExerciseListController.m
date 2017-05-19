@@ -12,6 +12,7 @@
 #import "ESubject.h"
 #import "EDBHelper.h"
 #import "EExamContainController.h"
+#import "UINavigationBar+Awesome.h"
 
 #define blockWidth kFrameWidth
 #define blockHeight 54.f / 667.f * kFrameHeight
@@ -50,6 +51,11 @@
     self.title = _subject.subject_title;
     [self initData];
     [self initCollectionView];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar lt_setBackgroundColor:kThemeColor];
 }
 
 - (void)didReceiveMemoryWarning {

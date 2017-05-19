@@ -14,6 +14,7 @@
 #import "UILabel+Additions.h"
 #import "EAlertWindow.h"
 #import "ERightPane.h"
+#import "UIButton+EnlargeTouchArea.h"
 
 #define topPaneHeight 64.f
 #define topLblWidth 120.f
@@ -168,6 +169,7 @@
     [_backBtn setImage:IMAGE_BY_NAMED(@"back") forState:UIControlStateNormal];
     [_backBtn setImage:IMAGE_BY_NAMED(@"back") forState:UIControlStateHighlighted];
     _backBtn.backgroundColor = [UIColor clearColor];
+    [_backBtn setEnlargeEdgeWithTop:10 right:50 bottom:10 left:10];
     [_backBtn addTarget:self action:@selector(backBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [_topPane addSubview:_backBtn];
     
@@ -326,6 +328,7 @@
     _scaleBtn.layer.borderWidth = 1.f;
     _scaleBtn.layer.cornerRadius = 2.f;
     _scaleBtn.layer.masksToBounds = YES;
+    [_scaleBtn setEnlargeEdgeWithTop:10 right:10 bottom:10 left:10];
     [_scaleBtn addTarget:self action:@selector(scaleBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [_bottomPane addSubview:_scaleBtn];
     
@@ -338,6 +341,7 @@
     _previousBtn.layer.borderWidth = 1.f;
     _previousBtn.layer.cornerRadius = 2.f;
     _previousBtn.layer.masksToBounds = YES;
+    [_previousBtn setEnlargeEdgeWithTop:10 right:10 bottom:10 left:10];
     [_previousBtn addTarget:self action:@selector(previousBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [_bottomPane addSubview:_previousBtn];
     
@@ -350,6 +354,7 @@
     _nextBtn.layer.borderWidth = 1.f;
     _nextBtn.layer.cornerRadius = 2.f;
     _nextBtn.layer.masksToBounds = YES;
+    [_nextBtn setEnlargeEdgeWithTop:10 right:10 bottom:10 left:10];
     [_nextBtn addTarget:self action:@selector(nextBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [_bottomPane addSubview:_nextBtn];
     
@@ -362,6 +367,7 @@
     _commitBtn.layer.borderWidth = 1.f;
     _commitBtn.layer.cornerRadius = 2.f;
     _commitBtn.layer.masksToBounds = YES;
+    [_commitBtn setEnlargeEdgeWithTop:10 right:10 bottom:10 left:10];
     [_commitBtn addTarget:self action:@selector(commitBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [_bottomPane addSubview:_commitBtn];
     
@@ -374,6 +380,7 @@
     _retryBtn.layer.borderWidth = 1.f;
     _retryBtn.layer.cornerRadius = 2.f;
     _retryBtn.layer.masksToBounds = YES;
+    [_retryBtn setEnlargeEdgeWithTop:10 right:10 bottom:10 left:10];
     [_retryBtn addTarget:self action:@selector(retryBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [_bottomPane addSubview:_retryBtn];
 }

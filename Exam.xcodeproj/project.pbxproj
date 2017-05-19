@@ -106,6 +106,7 @@
 		FA2371CA1EB8728200DDBD0F /* EUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2371C91EB8728200DDBD0F /* EUtils.m */; };
 		FA2371CD1EB88E6000DDBD0F /* ERegisterSuccessController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2371CC1EB88E6000DDBD0F /* ERegisterSuccessController.m */; };
 		FA3073741EBC4E47004E7048 /* EImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3073731EBC4E47004E7048 /* EImagePickerController.m */; };
+		FA349AC21ECEF8E300D42439 /* UIButton+EnlargeTouchArea.m in Sources */ = {isa = PBXBuildFile; fileRef = FA349AC11ECEF8E300D42439 /* UIButton+EnlargeTouchArea.m */; };
 		FA62344F1EBAD3170021A6F0 /* ESettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA62344E1EBAD3170021A6F0 /* ESettingController.m */; };
 		FA6234581EBAE5A10021A6F0 /* EUploadIDCardController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6234571EBAE5A10021A6F0 /* EUploadIDCardController.m */; };
 		FA66B43B1EB9849D00DB5B04 /* EAlertWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = FA66B43A1EB9849D00DB5B04 /* EAlertWindow.m */; };
@@ -338,6 +339,8 @@
 		FA2371CC1EB88E6000DDBD0F /* ERegisterSuccessController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ERegisterSuccessController.m; sourceTree = "<group>"; };
 		FA3073721EBC4E47004E7048 /* EImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EImagePickerController.h; sourceTree = "<group>"; };
 		FA3073731EBC4E47004E7048 /* EImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EImagePickerController.m; sourceTree = "<group>"; };
+		FA349AC01ECEF8E300D42439 /* UIButton+EnlargeTouchArea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+EnlargeTouchArea.h"; sourceTree = "<group>"; };
+		FA349AC11ECEF8E300D42439 /* UIButton+EnlargeTouchArea.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+EnlargeTouchArea.m"; sourceTree = "<group>"; };
 		FA62344D1EBAD3170021A6F0 /* ESettingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESettingController.h; sourceTree = "<group>"; };
 		FA62344E1EBAD3170021A6F0 /* ESettingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESettingController.m; sourceTree = "<group>"; };
 		FA6234561EBAE5A10021A6F0 /* EUploadIDCardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EUploadIDCardController.h; sourceTree = "<group>"; };
@@ -826,6 +829,8 @@
 				4580E9061E4363300093E5C9 /* UILabel+Additions.m */,
 				FA66B43F1EB9AFE800DB5B04 /* UINavigationController+Additions.h */,
 				FA66B4401EB9AFE800DB5B04 /* UINavigationController+Additions.m */,
+				FA349AC01ECEF8E300D42439 /* UIButton+EnlargeTouchArea.h */,
+				FA349AC11ECEF8E300D42439 /* UIButton+EnlargeTouchArea.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -1175,6 +1180,7 @@
 				FA66B43B1EB9849D00DB5B04 /* EAlertWindow.m in Sources */,
 				FA8A230B1E31DEFE007D1E38 /* EExamContainer.m in Sources */,
 				459999A31E32431100917562 /* CTCheckbox.m in Sources */,
+				FA349AC21ECEF8E300D42439 /* UIButton+EnlargeTouchArea.m in Sources */,
 				456C8C6C1E2FA4EA002EA371 /* FMResultSet.m in Sources */,
 				45FE371D1E30F0AE003AB348 /* EExerciseListController.m in Sources */,
 				FA98082C1ECD717700A196C8 /* ERightPane.m in Sources */,
