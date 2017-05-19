@@ -62,12 +62,7 @@
 
 - (void)settingAction {
     ESettingController *settingVC = [[ESettingController alloc] init];
-    CATransition *transition = [CATransition animation];
-    transition.duration = 0.2;
-    transition.type = kCATransitionMoveIn; // 可更改为其他方式
-    transition.subtype = kCATransitionFromTop; // 可更改为其他方式
-    [self.navigationController.view.layer addAnimation:transition forKey:kCATransition];
-    [self.navigationController pushViewController:settingVC animated:NO];
+    [self.navigationController pushViewController:settingVC animated:YES];
 }
 
 /**

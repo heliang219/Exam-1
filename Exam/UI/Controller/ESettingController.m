@@ -47,23 +47,6 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
     // Dispose of any resources that can be recreated.
 }
 
-- (void)goBack {
-    CATransition *transition = [CATransition animation];
-    transition.duration = 0.2;
-    transition.type = kCATransitionMoveIn; // 可更改为其他方式
-    transition.subtype = kCATransitionFromBottom; // 可更改为其他方式
-    [self.navigationController.view.layer addAnimation:transition forKey:kCATransition];
-    [self.navigationController popViewControllerAnimated:NO];
-}
-
-- (void)configNavigationBar {
-    UIButton *closeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    closeBtn.frame = CGRectMake(0, 0, 40, 20);
-    [closeBtn setImage:IMAGE_BY_NAMED(@"close") forState:UIControlStateNormal];
-    [closeBtn addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:closeBtn];
-}
-
 - (void)initTable {
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kFrameWidth, kFrameHeight) style:UITableViewStyleGrouped];
     _tableView.delegate = self;
