@@ -13,6 +13,7 @@
 #import "EBlockCell.h"
 #import "ESubject.h"
 #import "EDBHelper.h"
+#import "UINavigationBar+Awesome.h"
 
 #define blockWidth 282.f / 350.f * kFrameWidth
 #define blockHeight 62.f / 667.f * kFrameHeight
@@ -46,13 +47,14 @@
     [self initCollectionView];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar lt_setBackgroundColor:kThemeColor];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
 }
 
 #pragma mark - init

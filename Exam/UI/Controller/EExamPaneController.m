@@ -12,6 +12,7 @@
 #import "EScorePaneController.h"
 #import "EAlertWindow.h"
 #import "EScoreContainController.h"
+#import "UINavigationBar+Awesome.h"
 
 #define totalTimeInSeconds 5400 // 考试总时长（单位：s）
 
@@ -52,7 +53,7 @@
     self = [super init];
     if (self) {
         _isLowIOS = NO;
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] <= 8.4f) {
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.4f) {
             _isLowIOS = YES;
         }
         CGSize screenSize = [UIScreen mainScreen].bounds.size;
@@ -141,6 +142,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.navigationController.navigationBar lt_setBackgroundColor:[UIColor clearColor]];
     self.navigationController.navigationBarHidden = YES;
 }
 
