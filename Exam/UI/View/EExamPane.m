@@ -143,7 +143,7 @@
             }
         }
     }
-//    [_numberView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathWithIndex:_currentQuestion.question_index]]];
+    [_currentQuestion refreshAnswerType];
     [_numberView reloadData];
 }
 
@@ -561,7 +561,8 @@
     [cell refreshSize:CGSizeMake(blockWidth, blockHeight)];
     cell.backgroundColor = [UIColor clearColor];
     EQuestion *question = _questions[indexPath.row];
-    UIColor *blockBgColor = nil;
+    UIColor *blockBgColor = HEXCOLOR(0xc0c0c0);
+    DLog(@"beginTime");
     switch (question.answer_type) {
         case EAnswerTypeBlank:
         {
@@ -584,6 +585,7 @@
         }
             break;
     }
+    DLog(@"endTime");
     [cell refreshWithTitle:[NSString stringWithFormat:@"%@",@(question.question_index + 1)] background:[UIImage e_imageWithColor:blockBgColor]];
     return cell;
 }

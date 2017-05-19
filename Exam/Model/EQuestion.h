@@ -29,4 +29,9 @@ typedef NS_ENUM(NSUInteger,EAnswerType) {
 @property (nonatomic,strong) NSArray *answers;
 @property (nonatomic,assign) EAnswerType answer_type; // 回答情况
 
+/**
+ 刷新答题情况
+ */
+- (void)refreshAnswerType;
+
 @end

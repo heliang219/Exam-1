@@ -19,6 +19,8 @@
 
 @implementation EQuestion
 
+@synthesize answer_type = _answer_type;
+
 - (NSString *)question_type {
     if ([_question_type isEqualToString:@"judge"]) {
         return @"判断题";
@@ -39,7 +41,7 @@
     return _answers;
 }
 
-- (EAnswerType)answer_type {
+- (void)refreshAnswerType {
     EAnswerType at = EAnswerTypeBlank;
     NSInteger blankCount = 0;
     for (EAnswer *answer in self.answers) {
@@ -70,7 +72,7 @@
     if (blankCount == self.answers.count) {
         at = EAnswerTypeBlank;
     }
-    return at;
+    _answer_type = at;
 }
 
 @end
