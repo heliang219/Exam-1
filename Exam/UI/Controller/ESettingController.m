@@ -12,15 +12,25 @@
 #import <UShareUI/UShareUI.h>
 #import "EUpdateController.h"
 #import "UINavigationBar+Awesome.h"
+#import "EImagePickerController.h"
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTCarrier.h>
+#import <MobileCoreServices/MobileCoreServices.h>
+#import "UIImage+Additions.h"
+
+#define headerHeight 165.f * kFrameHeight / 667.f
+#define avatorWidth 68.f * kFrameHeight / 667.f
 
 static NSString* const UMS_Title = @"【友盟+】社会化组件U-Share";
 static NSString* const UMS_Web_Desc = @"W欢迎使用【友盟+】社会化组件U-Share，SDK包最小，集成成本最低，助力您的产品开发、运营与推广！";
 static NSString* const UMS_THUMB_IMAGE = @"https://mobile.umeng.com/images/pic/home/social/img-1.png";
 static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
 
-@interface ESettingController ()<UITableViewDelegate,UITableViewDataSource,UMSocialShareMenuViewDelegate>
+@interface ESettingController ()<UITableViewDelegate,UITableViewDataSource,UMSocialShareMenuViewDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 {
     UITableView *_tableView;
+    UIButton *_avatorBtn;
+    UIImage *_selectedHeaderImg;
 }
 
 @end
@@ -31,6 +41,7 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"设置";
+    [self initHeader];
     [self initTable];
     
     // 设置用户自定义的分享平台
@@ -62,8 +73,26 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
     [self.navigationController.navigationBar lt_setBackgroundColor:[UIColor clearColor]];
 }
 
+/**
+ 初始化顶部logo视图
+ */
+- (void)initHeader {
+    UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kFrameWidth, headerHeight)];
+    headView.backgroundColor = kThemeColor;
+    [self.view addSubview:headView];
+    
+    _avatorBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _avatorBtn.frame = CGRectMake(153.f * kFrameWidth / 375.f, kNavigationBarHeight + kEPadding, avatorWidth, avatorWidth);
+    [_avatorBtn setBackgroundImage:IMAGE_BY_NAMED(@"setting_avator") forState:UIControlStateNormal];
+    [_avatorBtn setBackgroundImage:IMAGE_BY_NAMED(@"setting_avator") forState:UIControlStateHighlighted];
+    _avatorBtn.layer.cornerRadius = avatorWidth / 2.f;
+    _avatorBtn.layer.masksToBounds = YES;
+    [_avatorBtn addTarget:self action:@selector(showImagePicker) forControlEvents:UIControlEventTouchUpInside];
+    [headView addSubview:_avatorBtn];
+}
+
 - (void)initTable {
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kFrameWidth, kFrameHeight) style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, headerHeight, kFrameWidth, kFrameHeight - headerHeight) style:UITableViewStyleGrouped];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.showsVerticalScrollIndicator = NO;
@@ -172,6 +201,10 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
     return 2;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 0.1;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
         return 4;
@@ -246,6 +279,72 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
 
 - (void)UMSocialShareMenuViewDidDisappear {
     
+}
+
+#pragma mark - UIImagePickerControllerDelegate
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    UIImage *originImage = [info objectForKey:UIImagePickerControllerEditedImage];
+    _selectedHeaderImg = [originImage resizeToSize:_avatorBtn.frame.size];
+    DLog(@"头像图片大小 : %lu KB",(unsigned long)UIImagePNGRepresentation(_selectedHeaderImg).length / 1024);
+    [self resetImage];
+    
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+}
+
+#pragma mark - Other Methods
+
+- (void)resetImage {
+    [_avatorBtn setBackgroundImage:_selectedHeaderImg forState:UIControlStateNormal];
+    [_avatorBtn setBackgroundImage:_selectedHeaderImg forState:UIControlStateHighlighted];
+}
+
+- (void)showImagePicker {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"选择更换头像的方式" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    __weak typeof (self) weakSelf = self;
+    UIAlertAction *takePhotosAction = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        __strong typeof (self) strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            EImagePickerController *imagePicker = [[EImagePickerController alloc] init];
+            imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            imagePicker.delegate = self;
+            imagePicker.allowsEditing = YES;
+            [strongSelf presentViewController:imagePicker animated:YES completion:nil];
+        }
+    }];
+    UIAlertAction *fromLibrariesAction = [UIAlertAction actionWithTitle:@"从手机相册选取" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        __strong typeof (self) strongSelf = weakSelf;
+        if (!strongSelf) {
+            return;
+        }
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+            EImagePickerController *imagePicker = [[EImagePickerController alloc] init];
+            imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            NSMutableArray *mediaTypes = [[NSMutableArray alloc] init];
+            [mediaTypes addObject:(__bridge NSString *)kUTTypeImage];
+            imagePicker.mediaTypes = mediaTypes;
+            imagePicker.delegate = self;
+            imagePicker.allowsEditing = YES;
+            [strongSelf presentViewController:imagePicker animated:YES completion:nil];
+        }
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [alertController addAction:takePhotosAction];
+    [alertController addAction:fromLibrariesAction];
+    [alertController addAction:cancelAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 /*
