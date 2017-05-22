@@ -11,6 +11,7 @@
 #import "EAboutController.h"
 #import <UShareUI/UShareUI.h>
 #import "EUpdateController.h"
+#import "UINavigationBar+Awesome.h"
 
 static NSString* const UMS_Title = @"【友盟+】社会化组件U-Share";
 static NSString* const UMS_Web_Desc = @"W欢迎使用【友盟+】社会化组件U-Share，SDK包最小，集成成本最低，助力您的产品开发、运营与推广！";
@@ -54,6 +55,11 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar lt_setBackgroundColor:[UIColor clearColor]];
 }
 
 - (void)initTable {

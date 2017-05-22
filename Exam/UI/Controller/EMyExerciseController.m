@@ -7,6 +7,7 @@
 //
 
 #import "EMyExerciseController.h"
+#import "UINavigationBar+Awesome.h"
 
 @interface EMyExerciseController ()<UITableViewDelegate,UITableViewDataSource>
 {
@@ -22,6 +23,11 @@
     // Do any additional setup after loading the view.
     self.title = @"我的题库";
     [self initTable];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar lt_setBackgroundColor:kThemeColor];
 }
 
 - (void)configNavigationBar {

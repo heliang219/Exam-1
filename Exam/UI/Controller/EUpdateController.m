@@ -7,6 +7,7 @@
 //
 
 #import "EUpdateController.h"
+#import "UINavigationBar+Awesome.h"
 
 @interface EUpdateController ()
 {
@@ -32,6 +33,11 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar lt_setBackgroundColor:kThemeColor];
 }
 
 - (void)configNavigationBar {

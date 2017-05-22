@@ -12,6 +12,7 @@
 #import <CoreTelephony/CTCarrier.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "UIImage+Additions.h"
+#import "UINavigationBar+Awesome.h"
 
 @interface EUploadIDCardController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 {
@@ -37,6 +38,11 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar lt_setBackgroundColor:kThemeColor];
 }
 
 - (void)initScrollView {
