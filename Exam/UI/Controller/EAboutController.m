@@ -27,6 +27,15 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)configNavigationBar {
+    UIButton *goBackBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    goBackBtn.frame = CGRectMake(0, 0, 24, 24);
+    [goBackBtn setImage:IMAGE_BY_NAMED(@"setting_back") forState:UIControlStateNormal];
+    [goBackBtn setImage:IMAGE_BY_NAMED(@"setting_back") forState:UIControlStateHighlighted];
+    [goBackBtn addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:goBackBtn];
+}
+
 - (void)initScrollView {
     UIScrollView *scrollPane = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kFrameWidth, kFrameHeight)];
     scrollPane.contentSize = CGSizeMake(scrollPane.bounds.size.width, scrollPane.bounds.size.height - kNavigationBarHeight);

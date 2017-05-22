@@ -46,11 +46,11 @@
     scrollPane.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:scrollPane];
     
-    CGFloat originX = kEPadding * 5;
+    CGFloat originX = 83.5 * kFrameWidth / 375.f;
     CGFloat originY = kEPadding * 3;
     
     CGFloat blockWidth = kFrameWidth - originX * 2;
-    CGFloat blockHeight = blockWidth / 2.f;
+    CGFloat blockHeight = 116.f * kFrameHeight / 667.f;
     CGFloat lblWidth = blockWidth;
     CGFloat lblHeight = 20.f;
     
@@ -64,7 +64,7 @@
     originY += lblHeight + kEPadding * 2;
     topBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     topBtn.frame = CGRectMake(originX, originY, blockWidth, blockHeight);
-    [topBtn setBackgroundImage:IMAGE_BY_NAMED(@"Icon") forState:UIControlStateNormal];
+    [topBtn setBackgroundImage:IMAGE_BY_NAMED(@"add") forState:UIControlStateNormal];
     [topBtn addTarget:self action:@selector(topBtnAction) forControlEvents:UIControlEventTouchUpInside];
     [scrollPane addSubview:topBtn];
     
@@ -79,14 +79,14 @@
     originY += lblHeight + kEPadding * 2;
     bottomBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     bottomBtn.frame = CGRectMake(originX, originY, blockWidth, blockHeight);
-    [bottomBtn setBackgroundImage:IMAGE_BY_NAMED(@"Icon") forState:UIControlStateNormal];
+    [bottomBtn setBackgroundImage:IMAGE_BY_NAMED(@"add") forState:UIControlStateNormal];
     [bottomBtn addTarget:self action:@selector(bottomBtnAction) forControlEvents:UIControlEventTouchUpInside];
     [scrollPane addSubview:bottomBtn];
     
-    originX = kEPadding * 2;
+    originX = kEPadding * 3;
     originY += blockHeight + kEPadding * 8;
     UIButton *submitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    submitBtn.frame = CGRectMake(originX, originY, kFrameWidth - originX * 2, 40);
+    submitBtn.frame = CGRectMake(originX, originY, kFrameWidth - originX * 2, 45);
     submitBtn.backgroundColor = kThemeColor;
     [submitBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [submitBtn setTitle:@"提交" forState:UIControlStateNormal];
@@ -95,6 +95,17 @@
     submitBtn.layer.masksToBounds = YES;
     [submitBtn addTarget:self action:@selector(submitBtnAction) forControlEvents:UIControlEventTouchUpInside];
     [scrollPane addSubview:submitBtn];
+    
+    scrollPane.contentSize = CGSizeMake(scrollPane.bounds.size.width, originY + 45 + 70);
+}
+
+- (void)configNavigationBar {
+    UIButton *goBackBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    goBackBtn.frame = CGRectMake(0, 0, 24, 24);
+    [goBackBtn setImage:IMAGE_BY_NAMED(@"setting_back") forState:UIControlStateNormal];
+    [goBackBtn setImage:IMAGE_BY_NAMED(@"setting_back") forState:UIControlStateHighlighted];
+    [goBackBtn addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:goBackBtn];
 }
 
 - (void)topBtnAction {

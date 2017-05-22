@@ -42,6 +42,15 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
     [UMSocialUIManager setShareMenuViewDelegate:self];
 }
 
+- (void)configNavigationBar {
+    UIButton *goBackBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    goBackBtn.frame = CGRectMake(0, 0, 24, 24);
+    [goBackBtn setImage:IMAGE_BY_NAMED(@"close") forState:UIControlStateNormal];
+    [goBackBtn setImage:IMAGE_BY_NAMED(@"close") forState:UIControlStateHighlighted];
+    [goBackBtn addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:goBackBtn];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -60,7 +69,7 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kFrameWidth, 100)];
     
     UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    shareBtn.frame = CGRectMake(kEPadding * 2, kEPadding * 3, footer.bounds.size.width - kEPadding * 4, footer.bounds.size.height - kEPadding * 6);
+    shareBtn.frame = CGRectMake(kEPadding * 3, kEPadding * 3, footer.bounds.size.width - kEPadding * 6, 45.f);
     [shareBtn setTitle:@"软件分享" forState:UIControlStateNormal];
     [shareBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     shareBtn.backgroundColor = kThemeColor;
