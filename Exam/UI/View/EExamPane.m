@@ -205,8 +205,8 @@
     collect.dataSource = self;
     // 注册item类型 这里使用系统的类型
     [collect registerClass:[EBlockCell class] forCellWithReuseIdentifier:@"EBlockCell"];
-//    // 注册header
-//    [collect registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"UICollectionReusableView"];
+    // 注册header
+    [collect registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"UICollectionReusableView"];
     // 注册footer
     [collect registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"UICollectionReusableView"];
     
@@ -221,6 +221,18 @@
     [_rightScrollBtn addTarget:self action:@selector(showRightNumber) forControlEvents:UIControlEventTouchUpInside];
     _rightScrollBtn.userInteractionEnabled = NO;
     [_rightPane addSubview:_rightScrollBtn];
+}
+
+- (UIView *)buildNumberViewHeader {
+    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _numberView.bounds.size.width, kEPadding)];
+    header.backgroundColor = [UIColor clearColor];
+    return header;
+}
+
+- (UIView *)buildNumberViewFooter {
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _numberView.bounds.size.width, kEPadding)];
+    footer.backgroundColor = [UIColor clearColor];
+    return footer;
 }
 
 /**
@@ -524,21 +536,27 @@
     return _questions.count;
 }
 
-//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-//    return CGSizeMake(_rightPane.bounds.size.width - kEPadding * 2, 50);
-//}
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    return CGSizeMake(_numberView.bounds.size.width, kEPadding);
+}
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
-    if (section < _questions.count - 1) {
-        return CGSizeMake(0, 0);
-    }
-    return CGSizeMake(_rightPane.bounds.size.width - kEPadding * 2, kEPadding);
+    return CGSizeMake(_numberView.bounds.size.width, kEPadding);
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     UICollectionReusableView *reusableview = nil;
     
-    if (kind == UICollectionElementKindSectionFooter) {
+    if (kind == UICollectionElementKindSectionHeader) {
+        UICollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
+        for (UIView *view in footerView.subviews) {
+            [view removeFromSuperview];
+        }
+        
+        footerView.backgroundColor = [UIColor clearColor];
+        
+        reusableview = footerView;
+    } else if (kind == UICollectionElementKindSectionFooter) {
         UICollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"UICollectionReusableView" forIndexPath:indexPath];
         for (UIView *view in footerView.subviews) {
             [view removeFromSuperview];
