@@ -12,6 +12,10 @@
 #import "EMainTypeController.h"
 
 @interface EScorePaneController ()<EScorePaneDelegate>
+{
+    ScorePaneType _type;
+    NSString *_topTitle;
+}
 
 @property (nonatomic,assign) BOOL fullScreen;  // 是否是全屏
 @property (nonatomic,assign) UIInterfaceOrientation currentOrientation; // 当前的方向
@@ -34,11 +38,24 @@
     if (self) {
         _questions = questions;
         _isLowIOS = NO;
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] <= 8.4f) {
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.4f) {
             _isLowIOS = YES;
         }
         CGSize screenSize = [UIScreen mainScreen].bounds.size;
         _originFrame.size = CGSizeMake(MIN(screenSize.width, screenSize.height), MAX(screenSize.width, screenSize.height));
+    }
+    return self;
+}
+
+- (instancetype)initWithTitle:(NSString *)title questions:(NSArray *)questions {
+    self = [self initWithQuestions:questions];
+    if (self) {
+        _topTitle = title;
+        if ([_topTitle isEqualToString:@"模拟练习成绩"]) {
+            _type = ScorePaneTypeExercise;
+        } else if ([_topTitle isEqualToString:@"练习复卷成绩"]) {
+            _type = ScorePaneTypeCheck;
+        }
     }
     return self;
 }
@@ -51,10 +68,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.scorePane = [[EScorePane alloc] initWithFrame:self.view.bounds];
+    self.scorePane = [[EScorePane alloc] initWithFrame:self.view.bounds type:_type];
     self.scorePane.delegate = self;
     [self.view addSubview:self.scorePane];
     
+    [self refreshTitle:_topTitle];
     [self refreshScore:@"10" rate:@"10%"];
     
     [self setFullScreen:YES WithAnimation:NO];
@@ -94,8 +112,8 @@
     DLog(@"EScorePaneController即将释放");
 }
 
-+ (instancetype)createWithController:(UIViewController *)controller view:(UIView *)view delegate:(id<EScorePaneControllerDelegate>)delegate questions:(NSArray *)questions {
-    EScorePaneController *scoreVC = [[EScorePaneController alloc] initWithQuestions:questions];
++ (instancetype)createWithController:(UIViewController *)controller view:(UIView *)view delegate:(id<EScorePaneControllerDelegate>)delegate title:(NSString *)title questions:(NSArray *)questions {
+    EScorePaneController *scoreVC = [[EScorePaneController alloc] initWithTitle:title questions:questions];
     scoreVC.delegate = delegate;
     [view addSubview:scoreVC.view];
     [controller addChildViewController:scoreVC];
@@ -230,13 +248,17 @@
     }
 }
 
-- (void)correctBtnClickedOnPane:(UIView *)pane controller:(id<EScorePaneDelegate>)controller {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(correctBtnClicked)]) {
-        [self.delegate correctBtnClicked];
+- (void)bottomBtnClickedOnPane:(UIView *)pane controller:(id<EScorePaneDelegate>)controller {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(bottomBtnClicked)]) {
+        [self.delegate bottomBtnClicked];
     }
 }
 
 #pragma mark - public methods
+
+- (void)refreshTitle:(NSString *)title {
+    [self.scorePane refreshTitle:title];
+}
 
 - (void)refreshScore:(NSString *)score rate:(NSString *)rate {
     [self.scorePane refreshScore:score rate:rate];

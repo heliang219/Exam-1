@@ -10,6 +10,6 @@
 
 @interface EScoreContainController : UIViewController
 
-- (instancetype)initWithQuestions:(NSArray *)questions;
+- (instancetype)initWithTitle:(NSString *)title questions:(NSArray *)questions;
 
 @end

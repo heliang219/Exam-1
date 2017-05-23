@@ -7,8 +7,8 @@
 //
 
 #import "EBaseController.h"
-@class EQuestion;
 #import "EExamPane.h"
+@class EQuestion;
 
 /**
  手势方向
@@ -32,9 +32,11 @@ typedef NS_ENUM(NSUInteger,EGestureDirection) {
 
 - (void)backBtnClicked;
 - (void)instructionBtnClicked;
+- (void)scaleBtnClicked;
 - (void)previousBtnClicked;
 - (void)nextBtnClicked;
 - (void)commitBtnClicked;
+- (void)retryBtnClicked;
 - (void)numberBtnClickedAtSection:(NSInteger)section row:(NSInteger)row;
 
 @end

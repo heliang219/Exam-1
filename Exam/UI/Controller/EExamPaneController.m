@@ -203,6 +203,15 @@
     }
 }
 
+- (void)scaleBtnClickedOnPane:(UIView *)pane controller:(id<EExamPaneDelegate>)controller {
+    if (!self.view.window) {
+        return;
+    }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(scaleBtnClicked)]) {
+        [self.delegate scaleBtnClicked];
+    }
+}
+
 - (void)previousBtnClickedOnPane:(UIView *)pane controller:(id<EExamPaneDelegate>)controller {
     if (!self.view.window) {
         return;
@@ -230,6 +239,15 @@
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(commitBtnClicked)]) {
         [self.delegate commitBtnClicked];
+    }
+}
+
+- (void)retryBtnClickedOnPane:(UIView *)pane controller:(id<EExamPaneDelegate>)controller {
+    if (!self.view.window) {
+        return;
+    }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(retryBtnClicked)]) {
+        [self.delegate retryBtnClicked];
     }
 }
 
@@ -470,7 +488,8 @@
     // 隐藏弹窗
     [self.examPane.alertWindow hide];
     // 交卷
-    EScoreContainController *score = [[EScoreContainController alloc] initWithQuestions:self.questions];
+    NSString *title = _type == ExamPaneTypeExercise ? @"模拟练习成绩" : @"练习复卷成绩";
+    EScoreContainController *score = [[EScoreContainController alloc] initWithTitle:title questions:self.questions];
     [self.navigationController pushViewController:score animated:YES];
 }
 

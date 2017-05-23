@@ -7,13 +7,14 @@
 //
 
 #import "EBaseController.h"
+#import "EScorePane.h"
 
 @protocol EScorePaneControllerDelegate <NSObject>
 
 @required
 
 - (void)backBtnClicked;
-- (void)correctBtnClicked;
+- (void)bottomBtnClicked;
 
 @end
 
@@ -26,7 +27,18 @@
 @property (nonatomic,strong,readonly) NSArray *questions;  // 所有试题
 @property (nonatomic,assign) UIInterfaceOrientation orientationWanted; // 期望返回到的页面的方向
 
-+ (instancetype)createWithController:(UIViewController *)controller view:(UIView *)view delegate:(id<EScorePaneControllerDelegate>)delegate questions:(NSArray *)questions;
+#pragma mark - 初始化方法
+
++ (instancetype)createWithController:(UIViewController *)controller view:(UIView *)view delegate:(id<EScorePaneControllerDelegate>)delegate title:(NSString *)title questions:(NSArray *)questions;
+
+#pragma mark - public methods
+
+/**
+ 刷新标题
+ 
+ @param title 标题
+ */
+- (void)refreshTitle:(NSString *)title;
 
 - (void)refreshScore:(NSString *)score rate:(NSString *)rate;
 

@@ -14,15 +14,17 @@
 @interface EScoreContainController ()<EScorePaneControllerDelegate>
 
 @property (nonatomic,strong) EScorePaneController *scorePaneController;
+@property (nonatomic,copy) NSString *topTitle;
 @property (nonatomic,strong) NSArray *questions;
 
 @end
 
 @implementation EScoreContainController
 
-- (instancetype)initWithQuestions:(NSArray *)questions {
+- (instancetype)initWithTitle:(NSString *)title questions:(NSArray *)questions {
     self = [super init];
     if (self) {
+        _topTitle = title;
         _questions = questions;
     }
     return self;
@@ -32,7 +34,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
-    self.scorePaneController = [EScorePaneController createWithController:self view:self.view delegate:self questions:_questions];
+    self.scorePaneController = [EScorePaneController createWithController:self view:self.view delegate:self title:_topTitle questions:_questions];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -46,7 +48,7 @@
     [self.scorePaneController goBack];
 }
 
-- (void)correctBtnClicked {
+- (void)bottomBtnClicked {
     // 练习复卷
     EExamContainController *exam = [[EExamContainController alloc] initWithTitle:@"练习复卷" questions:self.scorePaneController.questions orientationWanted:UIInterfaceOrientationLandscapeRight];
     [self.navigationController pushViewController:exam animated:YES];

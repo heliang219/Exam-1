@@ -17,7 +17,7 @@
 }
 
 @property (nonatomic,strong) EExamPaneController *examPaneController;
-@property (nonatomic,strong) NSString *topTitle;
+@property (nonatomic,copy) NSString *topTitle;
 @property (nonatomic,strong) NSArray *questions;
 @property (nonatomic,assign) UIInterfaceOrientation orientationWanted; // 期望返回到的页面的方向
 
@@ -83,6 +83,10 @@
     [self.examPaneController showInstructions];
 }
 
+- (void)scaleBtnClicked {
+    DLog(@"文字缩放");
+}
+
 - (void)previousBtnClicked {
     [self.examPaneController previousQuestion];
 }
@@ -93,6 +97,13 @@
 
 - (void)commitBtnClicked {
     [self.examPaneController commitExam];
+}
+
+- (void)retryBtnClicked {
+    DLog(@"错题重考");
+    // 错题重考
+    EExamContainController *exam = [[EExamContainController alloc] initWithTitle:@"错题重考" questions:_questions orientationWanted:UIInterfaceOrientationLandscapeRight];
+    [self.navigationController pushViewController:exam animated:YES];
 }
 
 - (void)numberBtnClickedAtSection:(NSInteger)section row:(NSInteger)row {
