@@ -8,6 +8,10 @@
 
 #import "ENavigationController.h"
 #import "UINavigationBar+Awesome.h"
+#import "EExamContainController.h"
+#import "EExamPaneController.h"
+#import "EScoreContainController.h"
+#import "EScorePaneController.h"
 
 @interface ENavigationController ()
 
@@ -30,6 +34,11 @@
     [self.navigationBar lt_setBackgroundColor:kThemeColor];
     // 去掉导航的黑色边框线条效果 【设置了shodowImage就必须设置backgroundImage，否则无效】
     [self.navigationBar setShadowImage:[UIImage new]];
+    // 禁止手势滑动返回
+    [self addFullScreenPopBlackListItem:[EExamContainController new]];
+    [self addFullScreenPopBlackListItem:[EExamPaneController new]];
+    [self addFullScreenPopBlackListItem:[EScoreContainController new]];
+    [self addFullScreenPopBlackListItem:[EScorePaneController new]];
 }
 
 - (void)didReceiveMemoryWarning {

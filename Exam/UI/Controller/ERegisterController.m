@@ -10,9 +10,12 @@
 #import "ECheckTextField.h"
 #include "ERegisterSuccessController.h"
 #import "ELoginController.h"
+#import "EApiClient.h"
+#import "NSString+Additions.h"
 
 @interface ERegisterController ()
 {
+    ECheckTextField *_nameTf;
     ECheckTextField *_idTf;
     ECheckTextField *_phoneTf;
 }
@@ -52,10 +55,10 @@
     [scrollPane addSubview:nameLbl];
     
     originY += lblHeight + 9;
-    ECheckTextField *nameTf = [[ECheckTextField alloc] initWithFrame:CGRectMake(originX, originY, kFrameWidth - originX * 2, barHeight)];
-    nameTf.font = kMediumFont;
-    nameTf.clearButtonMode = UITextFieldViewModeWhileEditing;
-    [scrollPane addSubview:nameTf];
+    _nameTf = [[ECheckTextField alloc] initWithFrame:CGRectMake(originX, originY, kFrameWidth - originX * 2, barHeight)];
+    _nameTf.font = kMediumFont;
+    _nameTf.clearButtonMode = UITextFieldViewModeWhileEditing;
+    [scrollPane addSubview:_nameTf];
     
     originY += barHeight + 15;
     UILabel *idLbl = [[UILabel alloc] initWithFrame:CGRectMake(originX, originY, 100, lblHeight)];
@@ -69,6 +72,7 @@
     _idTf.secureTextEntry = YES;
     _idTf.clearButtonMode = UITextFieldViewModeWhileEditing;
     _idTf.immediatelyCheck = YES;
+    _idTf.checkType = ETextFieldTypeIDCard;
     UIButton *eyeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     eyeBtn.frame = CGRectMake(0, 0, 20, 20);
     [eyeBtn setBackgroundImage:IMAGE_BY_NAMED(@"eye_closed") forState:UIControlStateNormal];
@@ -89,6 +93,7 @@
     _phoneTf.keyboardType = UIKeyboardTypeNumberPad;
     _phoneTf.clearButtonMode = UITextFieldViewModeWhileEditing;
     _phoneTf.immediatelyCheck = YES;
+    _phoneTf.checkType = ETextFieldTypePhone;
     [scrollPane addSubview:_phoneTf];
     
     originY += barHeight * 2;
@@ -119,23 +124,34 @@
 }
 
 - (void)registerBtnAction {
-    DLog(@"注册");
-//    BOOL idCardOK = [_idTf check:ETextFieldTypeIDCard];
-//    BOOL phoneOK = [_phoneTf check:ETextFieldTypePhone];
-//    if (idCardOK && phoneOK) {
-        ERegisterSuccessController *registerSuccess = [[ERegisterSuccessController alloc] init];
-        [self.navigationController pushViewController:registerSuccess animated:YES];
-//    }
+    BOOL idCardOK = [_idTf check:ETextFieldTypeIDCard];
+    BOOL phoneOK = [_phoneTf check:ETextFieldTypePhone];
+    NSString *name = [_nameTf.text realString];
+    if (!name) {
+        [self showTips:@"姓名不能为空" time:1 completion:nil];
+    } else if (idCardOK && phoneOK) {
+        [self startLoading:YES];
+        WEAK
+        [[EApiClient sharedClient] userRegister:name certificate:[_idTf.text realString] phone:[_phoneTf.text realString] completion:^(id responseObject, NSError *error) {
+            STRONG
+            [strongSelf startLoading:NO];
+            if (responseObject) {
+                ERegisterSuccessController *registerSuccess = [[ERegisterSuccessController alloc] init];
+                [strongSelf.navigationController pushViewController:registerSuccess animated:YES];
+            } else {
+                NSString *info = error.userInfo[@"error"];
+                [strongSelf showTips:info time:1 completion:nil];
+            }
+        }];
+    }
 }
 
 - (void)loginAction {
-    DLog(@"登录");
     ELoginController *loginController = [[ELoginController alloc] init];
     [self.navigationController pushToController:loginController animated:YES];
 }
 
 - (void)eyeButtonAction:(UIButton *)btn {
-    DLog(@"eye");
     _idTf.secureTextEntry = !_idTf.secureTextEntry;
     [btn setBackgroundImage:IMAGE_BY_NAMED(_idTf.secureTextEntry?@"eye_closed":@"eye_open") forState:UIControlStateNormal];
 }

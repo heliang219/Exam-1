@@ -8,6 +8,7 @@
 
 #import "ECheckTextField.h"
 #import "EUtils.h"
+#import "NSString+Additions.h"
 
 #define errorTipLabelHeight 20.f
 #define errorTipLabelBottomMargin 9.f
@@ -102,6 +103,10 @@
     }
 }
 
+- (void)setCheckType:(ETextFieldType)checkType {
+    _type = checkType;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     CGRect realFrame = CGRectMake(frame.origin.x, frame.origin.y - errorTipLabelHeight - errorTipLabelBottomMargin, frame.size.width, frame.size.height + errorTipLabelHeight + errorTipLabelBottomMargin);
     self = [super initWithFrame:realFrame];
@@ -118,7 +123,8 @@
         
         _tf = [[ETextField alloc] initWithFrame:CGRectMake(0, errorTipLabelHeight + errorTipLabelBottomMargin, frame.size.width, frame.size.height)];
         _tf.layer.cornerRadius = 5.f;
-        _tf.layer.masksToBounds = YES;_tf.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _tf.layer.masksToBounds = YES;
+        _tf.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tf.leftViewMode = UITextFieldViewModeAlways;
         _tf.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 5, 0)];
         [_tf addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
@@ -144,28 +150,28 @@
 
 - (BOOL)check:(ETextFieldType)tfType {
     _type = tfType;
-    if (!_tf.text) {
+    if (![_tf.text realString]) {
         _checkFail = YES;
     }
     switch (tfType) {
         case ETextFieldTypePhone:
         {
-            _checkFail = ![EUtils IsPhoneNumber:_tf.text];
+            _checkFail = ![EUtils IsPhoneNumber:[_tf.text realString]];
         }
             break;
         case ETextFieldTypeEmail:
         {
-            _checkFail = ![EUtils IsEmailAdress:_tf.text];
+            _checkFail = ![EUtils IsEmailAdress:[_tf.text realString]];
         }
             break;
         case ETextFieldTypeIDCard:
         {
-            _checkFail = ![EUtils IsIdentityCard:_tf.text];
+            _checkFail = ![EUtils IsIdentityCard:[_tf.text realString]];
         }
             break;
         case ETextFieldTypeBankCard:
         {
-            _checkFail = ![EUtils IsBankCard:_tf.text];
+            _checkFail = ![EUtils IsBankCard:[_tf.text realString]];
         }
             break;
         case ETextFieldTypeOther:
@@ -184,7 +190,7 @@
 
 - (void)textFieldChanged:(UITextField *)textField {
     if (self.immediatelyCheck) {
-        if (textField.text && ![textField.text isEqualToString:@""]) {
+        if ([textField.text realString]) {
             [self check:_type];
         } else {
             _checkFail = NO;

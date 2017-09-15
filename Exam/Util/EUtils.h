@@ -14,6 +14,20 @@
 @interface EUtils : NSObject
 
 /**
+ 保存头像图片到本地
+ 
+ @param image 要保存的图片源文件
+ */
++ (void)saveLocalAvator:(UIImage *)image;
+
+/**
+ 从本地读取保存的头像图片
+ 
+ @return 返回头像文件
+ */
++ (UIImage *)getLocalAvator;
+
+/**
  手机号格式检查
 
  @param number 手机号

@@ -75,8 +75,6 @@
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
-    [self switchToLoginRegisterController];
-    
     // 增加标识，用于判断是否是第一次启动应用...
     if (![kUserDefaults boolForKey:@"everLaunched"]) {
         [kUserDefaults setBool:YES forKey:@"everLaunched"];
@@ -92,6 +90,13 @@
         [self copyDBFile];
     } else {
         
+    }
+    
+    BOOL isLogin = [kUserDefaults boolForKey:kIsLogin];
+    if (isLogin) {
+        [self switchToNavigationController];
+    } else {
+        [self switchToLoginRegisterController];
     }
     
     [self.window makeKeyAndVisible];

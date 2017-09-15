@@ -36,6 +36,16 @@
 // 导航栏高度
 #define kNavigationBarHeight 64.f
 
+/**
+ 按比例缩放
+ */
+#define StandardWidth 375.f
+#define StandardHeight 667.f
+#define UX(x) x * kFrameWidth / StandardWidth
+//#define UY(y) y * kFrameHeight / StandardHeight
+#define UY(y) UX(y)
+#define URect(x,y,width,height) CGRectMake(UX(x),UY(y),UX(width),UY(height))
+
 // 图片
 #define IMAGENAME(Value) [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:NSLocalizedString(Value, nil) ofType:nil]]
 #define IMAGE_BY_NAMED(value) [UIImage imageNamed:NSLocalizedString((value), nil)]
@@ -46,7 +56,33 @@
 #define kSmallFont [UIFont systemFontOfSize:15.f]    // 小号字体
 #define kTinyFont [UIFont systemFontOfSize:12.f]    // 微小字体
 
+#define UFont(s) [UIFont fontWithName:@"PingFangSC-Regular" size:(s)]
+
+// 线程安全
+#define dispatch_main_async_safe(block)\
+if ([NSThread isMainThread]) {\
+block();\
+} else {\
+dispatch_async(dispatch_get_main_queue(), block);\
+}
+
+// __weak __strong
+#define WEAK __weak typeof(self) weakSelf = self;
+#define STRONG __strong typeof(self) strongSelf = weakSelf; \
+if (!strongSelf) { \
+return; \
+}
+
 #define kUserDefaults [NSUserDefaults standardUserDefaults]
+#define kIsLogin @"Exam_User_Is_Login"
+#define kUserId @"ExamUserId"
+#define kAccess_Token @"Exam_Access_Token"
+#define kAvatorUrl @"Exam_Avator_Url"
+#define kName @"Exam_User_name"
+#define kPhone @"Exam_User_phone"
+#define kTrailCount @"Exam_Trail_Count"
+#define kCertificateFront @"Exam_Certificate_Front"
+#define kCertificateBack @"Exam_Certificate_Back"
 
 #define kNumberOfBlocksPerRow 1 // 每行的block数量
 #define kBlockWidth (kFrameWidth - kEPadding * (kNumberOfBlocksPerRow + 1)) / kNumberOfBlocksPerRow  // 方块block的size

@@ -10,6 +10,38 @@
 
 @implementation EUtils
 
++ (void)saveLocalAvator:(UIImage *)image {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *avatorDirectory = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"Avator"];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL directoryExists = [fileManager fileExistsAtPath:avatorDirectory];
+    if (!directoryExists) {
+        [fileManager createDirectoryAtPath:avatorDirectory  withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    NSString *avatorFilePath = [avatorDirectory stringByAppendingPathComponent:@"avator.png"];
+    BOOL fileExists = [fileManager fileExistsAtPath:avatorFilePath];
+    if (!fileExists) {
+        [fileManager createFileAtPath:avatorFilePath contents:nil attributes:nil];
+    }
+    NSFileHandle *fileHandler = [NSFileHandle fileHandleForWritingAtPath:avatorFilePath];
+    [fileHandler writeData:UIImageJPEGRepresentation(image, 0.5)];
+    [fileHandler closeFile];
+}
+
++ (UIImage *)getLocalAvator {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *avatorDirectory = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"Avator"];
+    NSString *avatorFilePath = [avatorDirectory stringByAppendingPathComponent:@"avator.png"];
+    NSFileManager *fm = [NSFileManager defaultManager];
+    if ([fm fileExistsAtPath:avatorFilePath]) {
+        NSData *data = [NSData dataWithContentsOfFile:avatorFilePath];
+        UIImage *image = [UIImage imageWithData:data];
+        return image;
+    }
+    return nil;
+}
+
 + (BOOL)IsPhoneNumber:(NSString *)number {
     NSString *phoneRegex1 = @"1[34578]([0-9]){9}";
     NSPredicate *phoneTest1 = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",phoneRegex1];

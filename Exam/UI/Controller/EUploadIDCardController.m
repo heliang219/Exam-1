@@ -13,6 +13,7 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "UIImage+Additions.h"
 #import "UINavigationBar+Awesome.h"
+#import "EApiClient.h"
 
 @interface EUploadIDCardController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 {
@@ -169,7 +170,40 @@
 }
 
 - (void)submitBtnAction {
-    DLog(@"提交");
+    if (!selectedTopImage) {
+        [self showTips:@"请上传身份证正面" time:1 completion:nil];
+    } else if (!selectedBottomImage) {
+        [self showTips:@"请上传身份证反面" time:1 completion:nil];
+    } else {
+        [self startLoading:YES];
+        NSInteger userId = [kUserDefaults integerForKey:kUserId];
+        NSString *accessToken = [kUserDefaults objectForKey:kAccess_Token];
+        NSData *imageData_top = UIImageJPEGRepresentation(selectedTopImage,0.5);
+        NSString *dataStr_top = [imageData_top base64EncodedStringWithOptions:0];
+        dataStr_top = [@"data:image/jpeg;base64," stringByAppendingString:dataStr_top];
+        WEAK
+        [[EApiClient sharedClient] uploadPicture:userId imageType:@"certificate_image_front" imageData:dataStr_top accessToken:accessToken completion:^(id responseObject, NSError *error) {
+            STRONG
+            if (responseObject) {
+                NSData *imageData_bottom = UIImageJPEGRepresentation(selectedTopImage,0.5);
+                NSString *dataStr_bottom = [imageData_bottom base64EncodedStringWithOptions:0];
+                dataStr_bottom = [@"data:image/jpeg;base64," stringByAppendingString:dataStr_bottom];
+                [[EApiClient sharedClient] uploadPicture:userId imageType:@"certificate_image_back" imageData:dataStr_bottom accessToken:accessToken completion:^(id responseObject, NSError *error) {
+                    STRONG
+                    [strongSelf startLoading:NO];
+                    if (responseObject) {
+                        [strongSelf showTips:@"身份证上传成功" time:1 completion:nil];
+                        [strongSelf.navigationController popViewControllerAnimated:YES];
+                    } else {
+                        [strongSelf showTips:@"身份证反面上传失败" time:1 completion:nil];
+                    }
+                }];
+            } else {
+                [strongSelf startLoading:NO];
+                [strongSelf showTips:@"身份证正面上传失败" time:1 completion:nil];
+            }
+        }];
+    }
 }
 
 - (void)resetImage {
@@ -195,11 +229,11 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *originImage = [info objectForKey:UIImagePickerControllerEditedImage];
     if (isTopImage) {
-        selectedTopImage = [originImage resizeToSize:CGSizeMake(kFrameWidth - kEPadding * 10, (kFrameWidth - kEPadding * 10) / 2.f)];
-        DLog(@"正面图片大小 : %lu KB",(unsigned long)UIImagePNGRepresentation(selectedTopImage).length / 1024);
+        selectedTopImage = originImage;
+        DLog(@"正面图片大小 : %lu KB",(unsigned long)UIImageJPEGRepresentation(selectedTopImage,0.5).length / 1024);
     } else {
-        selectedBottomImage = [originImage resizeToSize:CGSizeMake(kFrameWidth - kEPadding * 10, (kFrameWidth - kEPadding * 10) / 2.f)];
-        DLog(@"反面图片大小 : %lu KB",(unsigned long)UIImagePNGRepresentation(selectedBottomImage).length / 1024);
+        selectedBottomImage = originImage;
+        DLog(@"反面图片大小 : %lu KB",(unsigned long)UIImageJPEGRepresentation(selectedBottomImage,0.5).length / 1024);
     }
     [self resetImage];
     

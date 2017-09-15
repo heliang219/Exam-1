@@ -13,10 +13,15 @@
 #import "EUpdateController.h"
 #import "UINavigationBar+Awesome.h"
 #import "EImagePickerController.h"
-#import <CoreTelephony/CTTelephonyNetworkInfo.h>
-#import <CoreTelephony/CTCarrier.h>
+#import "UIButton+WebCache.h"
+//#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+//#import <CoreTelephony/CTCarrier.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "UIImage+Additions.h"
+#import "EApiClient.h"
+#import "EUtils.h"
+#import "NSDictionary+Additions.h"
+#import "NSString+Additions.h"
 
 #define headerHeight 165.f * kFrameHeight / 667.f
 #define avatorWidth 68.f * kFrameHeight / 667.f
@@ -36,6 +41,8 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
 @end
 
 @implementation ESettingController
+
+#pragma mark - Life Cycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -73,6 +80,11 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
     [self.navigationController.navigationBar lt_setBackgroundColor:[UIColor clearColor]];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self getUserInfo];
+}
+
 /**
  初始化顶部logo视图
  */
@@ -83,8 +95,9 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
     
     _avatorBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _avatorBtn.frame = CGRectMake(153.f * kFrameWidth / 375.f, kNavigationBarHeight + kEPadding, avatorWidth, avatorWidth);
-    [_avatorBtn setBackgroundImage:IMAGE_BY_NAMED(@"setting_avator") forState:UIControlStateNormal];
-    [_avatorBtn setBackgroundImage:IMAGE_BY_NAMED(@"setting_avator") forState:UIControlStateHighlighted];
+    UIImage *localAvator = [EUtils getLocalAvator] ?: IMAGE_BY_NAMED(@"setting_avator");
+    [_avatorBtn setBackgroundImage:localAvator forState:UIControlStateNormal];
+    [_avatorBtn setBackgroundImage:localAvator forState:UIControlStateHighlighted];
     _avatorBtn.layer.cornerRadius = avatorWidth / 2.f;
     _avatorBtn.layer.masksToBounds = YES;
     [_avatorBtn addTarget:self action:@selector(showImagePicker) forControlEvents:UIControlEventTouchUpInside];
@@ -146,12 +159,9 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
     messageObject.shareObject = shareObject;
     
     // 调用分享接口
-    __weak typeof (self) weakSelf = self;
+    WEAK
     [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) {
-        __strong typeof (self) strongSelf = weakSelf;
-        if (!strongSelf) {
-            return;
-        }
+        STRONG
         if (error) {
             UMSocialLogInfo(@"************Share fail with error %@*********",error);
         } else {
@@ -195,7 +205,7 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
     [alert show];
 }
 
-#pragma mark - UITableViewDelegate
+#pragma mark - UITableDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 2;
@@ -213,13 +223,60 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
     }
 }
 
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"UITableViewCell"];
+    }
+    if (indexPath.section == 0) {
+        if (indexPath.row == 0) {
+            cell.textLabel.text = @"使用者姓名";
+            cell.detailTextLabel.text = [kUserDefaults objectForKey:kName] ?: @"匿名用户";
+        } else if (indexPath.row == 1) {
+            cell.textLabel.text = @"身份证上传";
+            NSString *frontUrl = [[kUserDefaults objectForKey:kCertificateFront] realString];
+            NSString *backUrl = [[kUserDefaults objectForKey:kCertificateBack] realString];
+            if (frontUrl && backUrl) {
+                cell.detailTextLabel.text = @"已上传";
+                cell.accessoryType = UITableViewCellAccessoryNone;
+            } else {
+                cell.detailTextLabel.text = @"未上传";
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            }
+        } else if (indexPath.row == 2) {
+            cell.textLabel.text = @"我的题库";
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        } else {
+            cell.textLabel.text = @"剩余练习次数";
+            cell.detailTextLabel.text = [kUserDefaults integerForKey:kTrailCount] ? [NSString stringWithFormat:@"%@次",@([kUserDefaults integerForKey:kTrailCount])] : @"0次";
+        }
+    } else {
+        if (indexPath.row == 0) {
+            cell.textLabel.text = @"关于腾飞安培";
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        } else {
+            cell.textLabel.text = @"软件更新";
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+    }
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             
         } else if (indexPath.row == 1) {
-            EUploadIDCardController *uploadIDCardController = [[EUploadIDCardController alloc] init];
-            [self.navigationController pushToController:uploadIDCardController animated:YES];
+            NSString *frontUrl = [[kUserDefaults objectForKey:kCertificateFront] realString];
+            NSString *backUrl = [[kUserDefaults objectForKey:kCertificateBack] realString];
+            if (frontUrl && backUrl) {
+                
+            } else {
+                EUploadIDCardController *uploadIDCardController = [[EUploadIDCardController alloc] init];
+                [self.navigationController pushToController:uploadIDCardController animated:YES];
+            }
         } else if (indexPath.row == 2) {
             
         } else {
@@ -237,40 +294,6 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-#pragma mark - UITableDataSource
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"UITableViewCell"];
-    }
-    if (indexPath.section == 0) {
-        if (indexPath.row == 0) {
-            cell.textLabel.text = @"使用者姓名";
-            cell.detailTextLabel.text = @"张三";
-        } else if (indexPath.row == 1) {
-            cell.textLabel.text = @"身份证上传";
-            cell.detailTextLabel.text = @"未上传";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        } else if (indexPath.row == 2) {
-            cell.textLabel.text = @"我的题库";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        } else {
-            cell.textLabel.text = @"剩余练习次数";
-            cell.detailTextLabel.text = @"3次";
-        }
-    } else {
-        if (indexPath.row == 0) {
-            cell.textLabel.text = @"关于腾飞安培";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        } else {
-            cell.textLabel.text = @"软件更新";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
-    }
-    return cell;
-}
-
 #pragma mark - UMSocialShareMenuViewDelegate
 
 - (void)UMSocialShareMenuViewDidAppear {
@@ -286,8 +309,23 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *originImage = [info objectForKey:UIImagePickerControllerEditedImage];
     _selectedHeaderImg = [originImage resizeToSize:_avatorBtn.frame.size];
-    DLog(@"头像图片大小 : %lu KB",(unsigned long)UIImagePNGRepresentation(_selectedHeaderImg).length / 1024);
+    NSData *imageData = UIImageJPEGRepresentation(originImage,0.5);
+    NSString *dataStr = [imageData base64EncodedStringWithOptions:0];
+    dataStr = [@"data:image/jpeg;base64," stringByAppendingString:dataStr];
+    DLog(@"头像图片大小 : %lu KB",(unsigned long)imageData.length / 1024);
     [self resetImage];
+    NSInteger userId = [kUserDefaults integerForKey:kUserId];
+    NSString *accessToken = [kUserDefaults objectForKey:kAccess_Token];
+    WEAK
+    [[EApiClient sharedClient] uploadPicture:userId imageType:@"avatar" imageData:dataStr accessToken:accessToken completion:^(id responseObject, NSError *error) {
+        STRONG
+        if (responseObject) {
+            [strongSelf showTips:@"头像上传成功" time:1 completion:nil];
+            [EUtils saveLocalAvator:originImage];
+        } else {
+            [strongSelf showTips:@"头像上传失败" time:1 completion:nil];
+        }
+    }];
     
     [picker dismissViewControllerAnimated:YES completion:nil];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
@@ -300,6 +338,73 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
 
 #pragma mark - Other Methods
 
+/**
+ 获取用户信息
+ */
+- (void)getUserInfo {
+    NSInteger user_Id = [kUserDefaults integerForKey:kUserId];
+    NSString *accessToken = [kUserDefaults objectForKey:kAccess_Token];
+    WEAK
+    [[EApiClient sharedClient] getUserInfo:user_Id accessToken:accessToken completion:^(id responseObject, NSError *error) {
+        STRONG
+        if (responseObject) {
+            // 保存用户信息
+            NSInteger userId = [responseObject integerValueForKey:@"id" defaultValue:-1];
+            NSString *accessToken = [responseObject stringValueForKey:@"access_token" defaultValue:nil];
+            NSString *name = [responseObject stringValueForKey:@"name" defaultValue:nil];
+            NSString *phone = [responseObject stringValueForKey:@"phone" defaultValue:nil];
+            NSInteger trailCount = [responseObject integerValueForKey:@"trail_count" defaultValue:0];
+            NSDictionary *avatorDic = [responseObject dictionaryValueForKey:@"avatar" defaultValue:nil];
+            if (avatorDic) {
+                NSString *avatorUrl = [avatorDic stringValueForKey:@"url" defaultValue:nil];
+                avatorUrl = [[EApiClient sharedClient].baseUrl stringByAppendingString:avatorUrl];
+                [kUserDefaults setObject:avatorUrl forKey:kAvatorUrl];
+                [kUserDefaults synchronize];
+                [strongSelf->_avatorBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:avatorUrl] forState:UIControlStateNormal placeholderImage:IMAGE_BY_NAMED(@"setting_avator") options:SDWebImageRefreshCached completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                    // 保存图片到本地
+                    if (image) {
+                        [EUtils saveLocalAvator:image];
+                    } else {
+                        [EUtils saveLocalAvator:IMAGE_BY_NAMED(@"setting_avator")];
+                    }
+                }];
+            }
+            NSDictionary *certificate_frontDic = [responseObject dictionaryValueForKey:@"certificate_image_front" defaultValue:nil];
+            if (certificate_frontDic) {
+                NSString *frontUrl = [certificate_frontDic stringValueForKey:@"url" defaultValue:nil];
+                [kUserDefaults setObject:frontUrl forKey:kCertificateFront];
+                [kUserDefaults synchronize];
+            }
+            NSDictionary *certificate_backDic = [responseObject dictionaryValueForKey:@"certificate_image_back" defaultValue:nil];
+            if (certificate_backDic) {
+                NSString *backUrl = [certificate_backDic stringValueForKey:@"url" defaultValue:nil];
+                [kUserDefaults setObject:backUrl forKey:kCertificateBack];
+                [kUserDefaults synchronize];
+            }
+            [kUserDefaults setBool:YES forKey:kIsLogin];
+            [kUserDefaults synchronize];
+            [kUserDefaults setInteger:userId forKey:kUserId];
+            [kUserDefaults synchronize];
+            [kUserDefaults setObject:accessToken forKey:kAccess_Token];
+            [kUserDefaults synchronize];
+            [kUserDefaults setObject:name forKey:kName];
+            [kUserDefaults synchronize];
+            [kUserDefaults setObject:phone forKey:kPhone];
+            [kUserDefaults synchronize];
+            [kUserDefaults setInteger:trailCount forKey:kTrailCount];
+            [kUserDefaults synchronize];
+            // 激活状态
+            NSString *activateStatus = [responseObject stringValueForKey:@"activation_status" defaultValue:@""];
+            if ([activateStatus isEqualToString:@"trail"]) { // 未激活
+                DLog(@"账号未激活");
+            } else { // 已激活
+                DLog(@"账号已激活");
+            }
+            [strongSelf->_tableView reloadData];
+        }
+    }];
+}
+
 - (void)resetImage {
     [_avatorBtn setBackgroundImage:_selectedHeaderImg forState:UIControlStateNormal];
     [_avatorBtn setBackgroundImage:_selectedHeaderImg forState:UIControlStateHighlighted];
@@ -307,12 +412,9 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
 
 - (void)showImagePicker {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"选择更换头像的方式" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    __weak typeof (self) weakSelf = self;
+    WEAK
     UIAlertAction *takePhotosAction = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        __strong typeof (self) strongSelf = weakSelf;
-        if (!strongSelf) {
-            return;
-        }
+        STRONG
         if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
             EImagePickerController *imagePicker = [[EImagePickerController alloc] init];
             imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -322,10 +424,7 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
         }
     }];
     UIAlertAction *fromLibrariesAction = [UIAlertAction actionWithTitle:@"从手机相册选取" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        __strong typeof (self) strongSelf = weakSelf;
-        if (!strongSelf) {
-            return;
-        }
+        STRONG
         if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
             EImagePickerController *imagePicker = [[EImagePickerController alloc] init];
             imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;

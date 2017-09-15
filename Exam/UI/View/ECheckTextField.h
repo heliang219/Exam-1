@@ -29,6 +29,7 @@ typedef NS_ENUM(NSUInteger,ETextFieldType) {
 @property (nonatomic,assign) UITextFieldViewMode clearButtonMode;
 @property (nonatomic,strong) UIView *rightView; // 输入框右侧视图
 @property (nonatomic,assign) BOOL immediatelyCheck; // 输入变化后立即检查输入格式是否符合，默认NO
+@property (nonatomic,assign) ETextFieldType checkType;
 
 /**
  格式检查

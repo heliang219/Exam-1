@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "KLTNavigationController.h"
 
 /**
  导航器父类
  */
-@interface ENavigationController : UINavigationController
+@interface ENavigationController : KLTNavigationController
 
 @end
