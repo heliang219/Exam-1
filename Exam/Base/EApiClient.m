@@ -17,7 +17,8 @@
 #define GET_USER_INFO @"/api/users/6.json" // 获取用户信息
 #define USER_ACTIVATE @"/api/users/6/request_activation.json" // 用户请求激活
 #define SELECT_SUBJECT_OR_NOT @"/api/users/6/select_subjects.json" // 用户选择或者取消选择科目
-
+#define CHECK_VERSION @"/api/check_version.json" // 客户端最新版本检查
+#define UPDATE_QUESTIONS @"/api/questions/update_questions" // 更新题库
 
 @implementation EApiClient
 
@@ -151,6 +152,23 @@
         params[@"remove"] = @(YES);
     }
     [self postAsyncWithShortUrl:[SELECT_SUBJECT_OR_NOT stringByReplacingOccurrencesOfString:@"6" withString:[NSString stringWithFormat:@"%@",@(userId)]] params:params completion:completion];
+}
+
+- (void)getLatestVersion:(NSString *)client
+          currentVersion:(NSString *)currentVersion
+              completion:(EApiRequestCompletionBlock)completion {
+    NSDictionary *params = @{@"client":@"ios",@"current_version":currentVersion};
+    [self getAsyncWithShortUrl:CHECK_VERSION params:params completion:completion];
+}
+
+- (void)updateQuestions:(NSString *)accessToken
+         lastUpdateTime:(NSString *)lastUpdateTime
+             updateType:(NSString *)updateType
+                   page:(NSInteger)page
+                   size:(NSInteger)size
+             completion:(EApiRequestCompletionBlock)completion {
+    NSDictionary *params = @{@"access_token":accessToken,@"last_updated_at":lastUpdateTime,@"update_type":updateType,@"page":@(page),@"page_size":@(size)};
+    [self postAsyncWithShortUrl:UPDATE_QUESTIONS params:params completion:completion];
 }
 
 @end

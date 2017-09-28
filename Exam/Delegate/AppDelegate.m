@@ -62,6 +62,10 @@
     // Override point for customization after application launch.
     DLog(@"document路径 : %@",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES)[0]);
     
+    // 清空NSUserDefaults
+    NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
+    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
+    
     /* 打开调试日志 */
     [[UMSocialManager defaultManager] openLog:YES];
     

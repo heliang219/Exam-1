@@ -9,7 +9,7 @@
 #import "EBaseController.h"
 
 /**
- 更新
+ 题库更新
  */
 @interface EUpdateController : EBaseController
 

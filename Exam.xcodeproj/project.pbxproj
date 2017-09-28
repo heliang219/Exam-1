@@ -173,6 +173,7 @@
 		FA76554D1ED28EC800430158 /* setting_back@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA7655471ED28EC800430158 /* setting_back@3x.png */; };
 		FA7CE10E1E45B81C00C4147B /* EScorePane.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7CE10D1E45B81C00C4147B /* EScorePane.m */; };
 		FA7CE1111E45C11100C4147B /* EScoreContainController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7CE1101E45C11100C4147B /* EScoreContainController.m */; };
+		FA875EF11F7CAF8800282BFB /* EMySubjectsController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA875EF01F7CAF8800282BFB /* EMySubjectsController.m */; };
 		FA8A23081E31B9EB007D1E38 /* EExamPane.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8A23071E31B9EB007D1E38 /* EExamPane.m */; };
 		FA8A230B1E31DEFE007D1E38 /* EExamContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8A230A1E31DEFE007D1E38 /* EExamContainer.m */; };
 		FA8A230E1E31E467007D1E38 /* EExamContainController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8A230D1E31E467007D1E38 /* EExamContainController.m */; };
@@ -473,6 +474,8 @@
 		FA7CE10D1E45B81C00C4147B /* EScorePane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EScorePane.m; sourceTree = "<group>"; };
 		FA7CE10F1E45C11100C4147B /* EScoreContainController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EScoreContainController.h; sourceTree = "<group>"; };
 		FA7CE1101E45C11100C4147B /* EScoreContainController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EScoreContainController.m; sourceTree = "<group>"; };
+		FA875EEF1F7CAF8800282BFB /* EMySubjectsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EMySubjectsController.h; sourceTree = "<group>"; };
+		FA875EF01F7CAF8800282BFB /* EMySubjectsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EMySubjectsController.m; sourceTree = "<group>"; };
 		FA8A23061E31B9EB007D1E38 /* EExamPane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EExamPane.h; sourceTree = "<group>"; };
 		FA8A23071E31B9EB007D1E38 /* EExamPane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EExamPane.m; sourceTree = "<group>"; };
 		FA8A23091E31DEFE007D1E38 /* EExamContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EExamContainer.h; sourceTree = "<group>"; };
@@ -906,6 +909,8 @@
 				FA66B43D1EB9A7CC00DB5B04 /* ELoginController.m */,
 				45C492F51E2FACC500FBD8B7 /* EMainTypeController.h */,
 				45C492F61E2FACC500FBD8B7 /* EMainTypeController.m */,
+				FA875EEF1F7CAF8800282BFB /* EMySubjectsController.h */,
+				FA875EF01F7CAF8800282BFB /* EMySubjectsController.m */,
 				45C492FB1E2FB04500FBD8B7 /* ESubjectController.h */,
 				45C492FC1E2FB04500FBD8B7 /* ESubjectController.m */,
 				45C492FE1E2FB09400FBD8B7 /* EPreparationController.h */,
@@ -1423,6 +1428,7 @@
 				456C8C401E2FA21C002EA371 /* MASConstraint.m in Sources */,
 				FAB4D93F1F6A688000C00168 /* AFURLRequestSerialization.m in Sources */,
 				FAB4D9461F6A688000C00168 /* UIButton+AFNetworking.m in Sources */,
+				FA875EF11F7CAF8800282BFB /* EMySubjectsController.m in Sources */,
 				FAB4D9451F6A688000C00168 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				456C8C391E2FA21C002EA371 /* IQTextView.m in Sources */,
 				FAB4D9471F6A688000C00168 /* UIImageView+AFNetworking.m in Sources */,

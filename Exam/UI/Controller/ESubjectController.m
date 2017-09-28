@@ -14,6 +14,7 @@
 #import "ESubject.h"
 #import "EDBHelper.h"
 #import "UINavigationBar+Awesome.h"
+#import "EApiClient.h"
 
 #define blockWidth kFrameWidth
 #define blockHeight 70.f / 667.f * kFrameHeight
@@ -22,6 +23,7 @@
 {
     NSMutableArray *_contentArray;
     ESubject *_subject;
+    ESubjectType _type;
 }
 
 @end
@@ -46,12 +48,33 @@
     return self;
 }
 
+- (instancetype)initWithSubject:(ESubject *)subject type:(ESubjectType)type {
+    self = [self initWithSubject:subject];
+    if (self) {
+        _type = type;
+    }
+    return self;
+}
+
+- (instancetype)initWithContentArray:(NSMutableArray *)contentArray type:(ESubjectType)type {
+    self = [self init];
+    if (self) {
+        if (contentArray && contentArray.count > 0) {
+            _contentArray = contentArray;
+        }
+        _type = type;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = kBackgroundColor;
     self.title = _subject.subject_title;
-    [self initData];
+    if (!_contentArray || _contentArray.count == 0) {
+        [self loadData];
+    }
     [self initCollectionView];
 }
 
@@ -70,7 +93,7 @@
 /**
  初始化数据
  */
-- (void)initData {
+- (void)loadData {
     _contentArray = [NSMutableArray array];
     [_contentArray addObjectsFromArray:[[EDBHelper defaultHelper] querySubTypes:_subject.subject_id]];
 }
@@ -155,8 +178,41 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    EPreparationController *subject = [[EPreparationController alloc] initWithSubject:_contentArray[indexPath.row] parentSubject:_subject];
-    [self.navigationController pushViewController:subject animated:YES];
+    // 选择科目
+    if (_type == ESubjectTypeSelection) {
+        NSArray *selectedNumbers = (NSArray *)[kUserDefaults objectForKey:kSelectedNumbers];
+        ESubject *subject = _contentArray[indexPath.row];
+        if (!selectedNumbers) { // 第一次选择
+            NSArray *numbers = @[@(subject.subject_id)];
+            [kUserDefaults setObject:numbers forKey:kSelectedNumbers];
+            [kUserDefaults synchronize];
+            WEAK
+            [self showTips:@"请再选择一门科目" time:1 completion:^(BOOL finished){
+                STRONG
+                [strongSelf.navigationController popViewControllerAnimated:YES];
+            }];
+        } else { // 第二次选择
+            NSMutableArray *muArr = [NSMutableArray arrayWithArray:selectedNumbers];
+            [muArr addObject:@(subject.subject_id)];
+            [kUserDefaults setObject:muArr forKey:kSelectedNumbers];
+            [kUserDefaults synchronize];
+            
+            NSInteger userId = [kUserDefaults integerForKey:kUserId];
+            NSString *accessToken = [kUserDefaults objectForKey:kAccess_Token];
+            WEAK
+            [[EApiClient sharedClient] selectSubjectsOrNot:userId accessToken:accessToken subjectIds:muArr removeOrNot:NO completion:^(id responseObject, NSError *error) {
+                STRONG
+                if (responseObject) {
+                    [strongSelf showTips:@"科目选择成功" time:1 completion:nil];
+                } else {
+                    [strongSelf showTips:@"科目选择失败" time:1 completion:nil];
+                }
+            }];
+        }
+    } else {
+        EPreparationController *subject = [[EPreparationController alloc] initWithSubject:_contentArray[indexPath.row] parentSubject:_subject];
+        [self.navigationController pushViewController:subject animated:YES];
+    }
     
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }

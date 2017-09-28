@@ -21,4 +21,12 @@
 
 - (NSString *)htmlEntityDecodeString;
 
+/**
+ 将日期转化成字符串格式
+ 
+ @param date 日期
+ @return 转化后的字符串格式
+ */
++ (NSString *)stringWithDate:(NSDate *)date;
+
 @end

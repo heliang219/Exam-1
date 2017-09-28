@@ -7,7 +7,6 @@
 //
 
 #import "EMainTypeController.h"
-#import "ESubjectController.h"
 #import "EBlockCell.h"
 #import "XLPlainFlowLayout.h"
 #import "EDBHelper.h"
@@ -18,6 +17,7 @@
 @interface EMainTypeController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 {
     NSMutableArray *_contentArray;
+    ESubjectType _type;
 }
 
 @end
@@ -25,6 +25,10 @@
 @implementation EMainTypeController
 
 #pragma mark - Life Cycle
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (instancetype)init {
     self = [super init];
@@ -34,12 +38,22 @@
     return self;
 }
 
+- (instancetype)initWithSubjectType:(ESubjectType)type {
+    self = [self init];
+    if (self) {
+        _type = type;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"选择工种";
-    [self initData];
+    [self loadData];
     [self initCollectionView];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectSubjectsNotification:) name:kSelectSubjectsNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -60,6 +74,10 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:settingBtn];
 }
 
+- (void)selectSubjectsNotification:(NSNotification *)notification {
+    _type = ESubjectTypeSelection;
+}
+
 - (void)settingAction {
     ESettingController *settingVC = [[ESettingController alloc] init];
     [self.navigationController pushViewController:settingVC animated:YES];
@@ -68,7 +86,7 @@
 /**
  初始化数据
  */
-- (void)initData {
+- (void)loadData {
     _contentArray = [NSMutableArray array];
     [_contentArray addObjectsFromArray:[[EDBHelper defaultHelper] queryAllTypes]];
 }
@@ -158,7 +176,7 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    ESubjectController *subject = [[ESubjectController alloc] initWithSubject:_contentArray[indexPath.row]];
+    ESubjectController *subject = [[ESubjectController alloc] initWithSubject:_contentArray[indexPath.row] type:_type];
     [self.navigationController pushViewController:subject animated:YES];
     
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];

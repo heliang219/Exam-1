@@ -198,6 +198,14 @@
                     [kUserDefaults synchronize];
                     [kUserDefaults setInteger:trailCount forKey:kTrailCount];
                     [kUserDefaults synchronize];
+                    NSArray *subjectsArr = [responseObject arrayValueForKey:@"selected_subjects" defaultValue:nil];
+                    if (subjectsArr && subjectsArr.count > 0) {
+                        [kUserDefaults setObject:subjectsArr forKey:kSelectedNumbers];
+                        [kUserDefaults synchronize];
+                    } else {
+                        [kUserDefaults setObject:nil forKey:kSelectedNumbers];
+                        [kUserDefaults synchronize];
+                    }
                     // 激活状态
                     NSString *activateStatus = [responseObject stringValueForKey:@"activation_status" defaultValue:@""];
                     if ([activateStatus isEqualToString:@"trail"]) { // 未激活

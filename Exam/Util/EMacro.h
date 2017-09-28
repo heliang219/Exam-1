@@ -84,11 +84,16 @@ return; \
 #define kCertificateFront @"Exam_Certificate_Front"
 #define kCertificateBack @"Exam_Certificate_Back"
 
+// 常量
 #define kNumberOfBlocksPerRow 1 // 每行的block数量
 #define kBlockWidth (kFrameWidth - kEPadding * (kNumberOfBlocksPerRow + 1)) / kNumberOfBlocksPerRow  // 方块block的size
 #define kBlockHeight kBlockWidth * 180.f / 702.f
 #define kLogoHeight 105.f
 #define kLogoWidth kLogoHeight
 #define kHeaderViewHeight 200.f // 头部视图高度（从导航栏顶部开始）
+#define kSelectedNumbers @"kExamSelectedNumbers"
+#define kSelectSubjectsNotification @"kExamSelectSubjectsNotification"
+#define kLastUpdateTime_subjects @"kExamLastUpdateTime_subjects"
+#define kLastUpdateTime_questions @"kExamLastUpdateTime_questions"
 
 #endif /* EMacro_h */

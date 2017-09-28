@@ -7,10 +7,13 @@
 //
 
 #import "EBaseController.h"
+#import "ESubjectController.h"
 
 /**
  工种
  */
 @interface EMainTypeController : EBaseController
+
+- (instancetype)initWithSubjectType:(ESubjectType)type;
 
 @end

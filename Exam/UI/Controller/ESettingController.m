@@ -14,14 +14,14 @@
 #import "UINavigationBar+Awesome.h"
 #import "EImagePickerController.h"
 #import "UIButton+WebCache.h"
-//#import <CoreTelephony/CTTelephonyNetworkInfo.h>
-//#import <CoreTelephony/CTCarrier.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "UIImage+Additions.h"
 #import "EApiClient.h"
 #import "EUtils.h"
 #import "NSDictionary+Additions.h"
 #import "NSString+Additions.h"
+#import "EMySubjectsController.h"
+#import "EDBHelper.h"
 
 #define headerHeight 165.f * kFrameHeight / 667.f
 #define avatorWidth 68.f * kFrameHeight / 667.f
@@ -238,11 +238,10 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
             NSString *backUrl = [[kUserDefaults objectForKey:kCertificateBack] realString];
             if (frontUrl && backUrl) {
                 cell.detailTextLabel.text = @"已上传";
-                cell.accessoryType = UITableViewCellAccessoryNone;
             } else {
                 cell.detailTextLabel.text = @"未上传";
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             }
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         } else if (indexPath.row == 2) {
             cell.textLabel.text = @"我的题库";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -255,7 +254,7 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
             cell.textLabel.text = @"关于腾飞安培";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         } else {
-            cell.textLabel.text = @"软件更新";
+            cell.textLabel.text = @"题库更新";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
     }
@@ -268,17 +267,21 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             
-        } else if (indexPath.row == 1) {
-            NSString *frontUrl = [[kUserDefaults objectForKey:kCertificateFront] realString];
-            NSString *backUrl = [[kUserDefaults objectForKey:kCertificateBack] realString];
-            if (frontUrl && backUrl) {
-                
-            } else {
-                EUploadIDCardController *uploadIDCardController = [[EUploadIDCardController alloc] init];
-                [self.navigationController pushToController:uploadIDCardController animated:YES];
+        } else if (indexPath.row == 1) { // 身份证上传
+            EUploadIDCardController *uploadIDCardController = [[EUploadIDCardController alloc] init];
+            [self.navigationController pushToController:uploadIDCardController animated:YES];
+        } else if (indexPath.row == 2) { // 我的题库
+            NSMutableArray *subjects = [kUserDefaults objectForKey:kSelectedNumbers];
+            NSMutableArray *arr = [NSMutableArray array];
+            if (subjects && subjects.count > 0) {
+                for (int i = 0; i < subjects.count; i ++) {
+                    NSInteger subjectId = [subjects[i] integerValue];
+                    ESubject *subject = [[EDBHelper defaultHelper] querySubjectById:subjectId];
+                    [arr addObject:subject];
+                }
             }
-        } else if (indexPath.row == 2) {
-            
+            EMySubjectsController *controller = [[EMySubjectsController alloc] initWithContentArray:arr];
+            [self.navigationController pushToController:controller animated:YES];
         } else {
             
         }
@@ -371,16 +374,17 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
             }
             NSDictionary *certificate_frontDic = [responseObject dictionaryValueForKey:@"certificate_image_front" defaultValue:nil];
             if (certificate_frontDic) {
-                NSString *frontUrl = [certificate_frontDic stringValueForKey:@"url" defaultValue:nil];
+                NSString *frontUrl = [NSString stringWithFormat:@"%@%@",[EApiClient sharedClient].baseURL,[certificate_frontDic stringValueForKey:@"url" defaultValue:nil]];
                 [kUserDefaults setObject:frontUrl forKey:kCertificateFront];
                 [kUserDefaults synchronize];
             }
             NSDictionary *certificate_backDic = [responseObject dictionaryValueForKey:@"certificate_image_back" defaultValue:nil];
             if (certificate_backDic) {
-                NSString *backUrl = [certificate_backDic stringValueForKey:@"url" defaultValue:nil];
+                NSString *backUrl = [NSString stringWithFormat:@"%@%@",[EApiClient sharedClient].baseURL,[certificate_backDic stringValueForKey:@"url" defaultValue:nil]];
                 [kUserDefaults setObject:backUrl forKey:kCertificateBack];
                 [kUserDefaults synchronize];
             }
+            // 保存用户信息
             [kUserDefaults setBool:YES forKey:kIsLogin];
             [kUserDefaults synchronize];
             [kUserDefaults setInteger:userId forKey:kUserId];
@@ -393,6 +397,14 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
             [kUserDefaults synchronize];
             [kUserDefaults setInteger:trailCount forKey:kTrailCount];
             [kUserDefaults synchronize];
+            NSArray *subjectsArr = [responseObject arrayValueForKey:@"selected_subjects" defaultValue:nil];
+            if (subjectsArr && subjectsArr.count > 0) {
+                [kUserDefaults setObject:subjectsArr forKey:kSelectedNumbers];
+                [kUserDefaults synchronize];
+            } else {
+                [kUserDefaults setObject:nil forKey:kSelectedNumbers];
+                [kUserDefaults synchronize];
+            }
             // 激活状态
             NSString *activateStatus = [responseObject stringValueForKey:@"activation_status" defaultValue:@""];
             if ([activateStatus isEqualToString:@"trail"]) { // 未激活

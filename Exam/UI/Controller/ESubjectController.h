@@ -9,11 +9,20 @@
 #import "EBaseController.h"
 @class ESubject;
 
+typedef NS_ENUM(NSInteger,ESubjectType) {
+    ESubjectTypeNormal,
+    ESubjectTypeSelection,
+};
+
 /**
  科目
  */
 @interface ESubjectController : EBaseController
 
 - (instancetype)initWithSubject:(ESubject *)subject;
+
+- (instancetype)initWithSubject:(ESubject *)subject type:(ESubjectType)type;
+
+- (instancetype)initWithContentArray:(NSMutableArray *)contentArray type:(ESubjectType)type;
 
 @end

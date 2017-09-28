@@ -56,4 +56,16 @@ typedef void (^EApiRequestCompletionBlock) (id responseObject,NSError *error);
                 removeOrNot:(BOOL)removeOrNot
                  completion:(EApiRequestCompletionBlock)completion;
 
+- (void)getLatestVersion:(NSString *)client
+          currentVersion:(NSString *)currentVersion
+              completion:(EApiRequestCompletionBlock)completion;
+
+// 先 update_type=subjects 新种类，然后再 questions 新具体的题
+- (void)updateQuestions:(NSString *)accessToken
+         lastUpdateTime:(NSString *)lastUpdateTime
+             updateType:(NSString *)updateType // subjects for subject update, questions for questions update
+                   page:(NSInteger)page // default to 1, index from 1
+                   size:(NSInteger)size // default to 100, maximum 1000
+             completion:(EApiRequestCompletionBlock)completion;
+
 @end

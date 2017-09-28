@@ -14,6 +14,8 @@
 #import "UIImage+Additions.h"
 #import "UINavigationBar+Awesome.h"
 #import "EApiClient.h"
+#import "NSString+Additions.h"
+#import "UIButton+WebCache.h"
 
 @interface EUploadIDCardController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 {
@@ -23,6 +25,7 @@
     
     UIButton *topBtn;
     UIButton *bottomBtn;
+    UIButton *submitBtn;
 }
 
 @end
@@ -34,6 +37,15 @@
     // Do any additional setup after loading the view.
     self.title = @"身份认证";
     [self initScrollView];
+    
+    // 身份证已经上传
+    NSString *frontUrl = [[kUserDefaults objectForKey:kCertificateFront] realString];
+    NSString *backUrl = [[kUserDefaults objectForKey:kCertificateBack] realString];
+    if (frontUrl && backUrl) {
+        submitBtn.hidden = YES;
+    } else {
+        submitBtn.hidden = NO;
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -92,7 +104,7 @@
     
     originX = kEPadding * 3;
     originY += blockHeight + kEPadding * 8;
-    UIButton *submitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    submitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     submitBtn.frame = CGRectMake(originX, originY, kFrameWidth - originX * 2, 45);
     submitBtn.backgroundColor = kThemeColor;
     [submitBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -104,6 +116,26 @@
     [scrollPane addSubview:submitBtn];
     
     scrollPane.contentSize = CGSizeMake(scrollPane.bounds.size.width, originY + 45 + 70);
+    
+    // 身份证已经上传
+    NSString *frontUrl = [[kUserDefaults objectForKey:kCertificateFront] realString];
+    NSString *backUrl = [[kUserDefaults objectForKey:kCertificateBack] realString];
+    if (frontUrl && backUrl) {
+        topLbl.text = @"身份证正面";
+        bottomLbl.text = @"身份证反面";
+        topBtn.userInteractionEnabled = NO;
+        bottomBtn.userInteractionEnabled = NO;
+        [topBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:frontUrl] forState:UIControlStateNormal completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            if (image) {
+                
+            }
+        }];
+        [bottomBtn sd_setBackgroundImageWithURL:[NSURL URLWithString:backUrl] forState:UIControlStateNormal completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            if (image) {
+                
+            }
+        }];
+    }
 }
 
 - (void)configNavigationBar {
@@ -116,13 +148,25 @@
 }
 
 - (void)topBtnAction {
-    DLog(@"上传身份证正面");
+    // 身份证已经上传
+    NSString *frontUrl = [[kUserDefaults objectForKey:kCertificateFront] realString];
+    NSString *backUrl = [[kUserDefaults objectForKey:kCertificateBack] realString];
+    if (frontUrl && backUrl) {
+        return;
+    }
+    
     isTopImage = YES;
     [self showImagePicker];
 }
 
 - (void)bottomBtnAction {
-    DLog(@"上传身份证反面");
+    // 身份证已经上传
+    NSString *frontUrl = [[kUserDefaults objectForKey:kCertificateFront] realString];
+    NSString *backUrl = [[kUserDefaults objectForKey:kCertificateBack] realString];
+    if (frontUrl && backUrl) {
+        return;
+    }
+    
     isTopImage = NO;
     [self showImagePicker];
 }
