@@ -271,17 +271,26 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
             EUploadIDCardController *uploadIDCardController = [[EUploadIDCardController alloc] init];
             [self.navigationController pushToController:uploadIDCardController animated:YES];
         } else if (indexPath.row == 2) { // 我的题库
-            NSMutableArray *subjects = [kUserDefaults objectForKey:kSelectedNumbers];
-            NSMutableArray *arr = [NSMutableArray array];
-            if (subjects && subjects.count > 0) {
-                for (int i = 0; i < subjects.count; i ++) {
-                    NSInteger subjectId = [subjects[i] integerValue];
-                    ESubject *subject = [[EDBHelper defaultHelper] querySubjectById:subjectId];
-                    [arr addObject:subject];
+            BOOL activated = [kUserDefaults boolForKey:kIsActivated];
+            if (activated) {
+                NSString *filePath = [EUtils dataFilePath];
+                NSMutableArray *subjects = nil;
+                if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+                    subjects = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
                 }
+                NSMutableArray *arr = [NSMutableArray array];
+                if (subjects && subjects.count > 0) {
+                    for (int i = 0; i < subjects.count; i ++) {
+                        NSInteger subjectId = [subjects[i] integerValue];
+                        ESubject *subject = [[EDBHelper defaultHelper] queryTypeBySubId:subjectId];
+                        [arr addObject:subject];
+                    }
+                }
+                EMySubjectsController *controller = [[EMySubjectsController alloc] initWithContentArray:arr];
+                [self.navigationController pushToController:controller animated:YES];
+            } else {
+                [self showTips:@"您的账号还未激活" time:1 completion:nil];
             }
-            EMySubjectsController *controller = [[EMySubjectsController alloc] initWithContentArray:arr];
-            [self.navigationController pushToController:controller animated:YES];
         } else {
             
         }
@@ -398,19 +407,24 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
             [kUserDefaults setInteger:trailCount forKey:kTrailCount];
             [kUserDefaults synchronize];
             NSArray *subjectsArr = [responseObject arrayValueForKey:@"selected_subjects" defaultValue:nil];
+            NSString *filePath = [EUtils dataFilePath];
             if (subjectsArr && subjectsArr.count > 0) {
-                [kUserDefaults setObject:subjectsArr forKey:kSelectedNumbers];
-                [kUserDefaults synchronize];
+                if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+                    [subjectsArr writeToFile:filePath atomically:YES];
+                }
             } else {
-                [kUserDefaults setObject:nil forKey:kSelectedNumbers];
-                [kUserDefaults synchronize];
+                
             }
             // 激活状态
-            NSString *activateStatus = [responseObject stringValueForKey:@"activation_status" defaultValue:@""];
+            NSString *activateStatus = [responseObject stringValueForKey:@"activation_status1" defaultValue:@"activated"];
             if ([activateStatus isEqualToString:@"trail"]) { // 未激活
                 DLog(@"账号未激活");
+                [kUserDefaults setBool:NO forKey:kIsActivated];
+                [kUserDefaults synchronize];
             } else { // 已激活
                 DLog(@"账号已激活");
+                [kUserDefaults setBool:YES forKey:kIsActivated];
+                [kUserDefaults synchronize];
             }
             [strongSelf->_tableView reloadData];
         }

@@ -38,6 +38,8 @@
  */
 - (NSArray *)querySubTypes:(NSInteger)subject_id;
 
+- (ESubject *)queryTypeBySubId:(NSInteger)subject_id;
+
 /**
  根据ID查询subject
 

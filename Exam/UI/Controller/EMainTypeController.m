@@ -54,11 +54,17 @@
     [self initCollectionView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectSubjectsNotification:) name:kSelectSubjectsNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deselectSubjectsNotification:) name:kDeSelectSubjectsNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar lt_setBackgroundColor:[UIColor clearColor]];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    _type = 0;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -76,6 +82,10 @@
 
 - (void)selectSubjectsNotification:(NSNotification *)notification {
     _type = ESubjectTypeSelection;
+}
+
+- (void)deselectSubjectsNotification:(NSNotification *)notification {
+    _type = 0;
 }
 
 - (void)settingAction {

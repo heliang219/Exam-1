@@ -13,6 +13,8 @@
  */
 @interface EUtils : NSObject
 
++ (NSString *)dataFilePath;
+
 /**
  保存头像图片到本地
  

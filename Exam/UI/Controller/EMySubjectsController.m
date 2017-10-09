@@ -97,6 +97,8 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     if (!_contentArray || _contentArray.count == 0) {
+        return 2;
+    } else if (_contentArray.count == 1) {
         return 1;
     }
     return _contentArray.count;
@@ -148,8 +150,29 @@
         cell.backgroundColor = [UIColor clearColor];
         NSString *imageName = [NSString stringWithFormat:@"maintype_%@",@(0)];
         UIImage *bgImage = IMAGE_BY_NAMED(imageName);
-        [cell refreshWithTitle:@"请选择科目" background:bgImage];
+        if (indexPath.row == 0) {
+            [cell refreshWithTitle:@"请选择科目一" background:bgImage];
+        } else {
+            [cell refreshWithTitle:@"请选择科目二" background:bgImage];
+        }
         return cell;
+    } else if (_contentArray.count == 1) { // 只选择了科目一
+        if (indexPath.row == 0) {
+            EBlockCell *cell  = [collectionView dequeueReusableCellWithReuseIdentifier:@"EBlockCell" forIndexPath:indexPath];
+            cell.backgroundColor = [UIColor clearColor];
+            ESubject *subject = _contentArray[indexPath.row];
+            NSString *imageName = [NSString stringWithFormat:@"maintype_%@",@(indexPath.row)];
+            UIImage *bgImage = IMAGE_BY_NAMED(imageName);
+            [cell refreshWithTitle:subject.subject_title background:bgImage];
+            return cell;
+        } else {
+            EBlockCell *cell  = [collectionView dequeueReusableCellWithReuseIdentifier:@"EBlockCell" forIndexPath:indexPath];
+            cell.backgroundColor = [UIColor clearColor];
+            NSString *imageName = [NSString stringWithFormat:@"maintype_%@",@(0)];
+            UIImage *bgImage = IMAGE_BY_NAMED(imageName);
+            [cell refreshWithTitle:@"请选择科目二" background:bgImage];
+            return cell;
+        }
     } else {
         EBlockCell *cell  = [collectionView dequeueReusableCellWithReuseIdentifier:@"EBlockCell" forIndexPath:indexPath];
         cell.backgroundColor = [UIColor clearColor];
@@ -165,9 +188,18 @@
     if (!_contentArray || _contentArray.count == 0) { // 题库为空
         EMainTypeController *controller = [[EMainTypeController alloc] init];
         [self.navigationController pushToController:controller animated:YES];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kSelectSubjectsNotification object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kDeSelectSubjectsNotification object:nil];
+    } else if (_contentArray.count == 1) { // 只选择了科目一
+        if (indexPath.row == 0) {
+            ESubjectController *subject = [[ESubjectController alloc] initWithSubject:_contentArray[indexPath.row]];
+            [self.navigationController pushViewController:subject animated:YES];
+        } else {
+            EMainTypeController *controller = [[EMainTypeController alloc] init];
+            [self.navigationController pushToController:controller animated:YES];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kDeSelectSubjectsNotification object:nil];
+        }
     } else {
-        ESubjectController *subject = [[ESubjectController alloc] initWithSubject:_contentArray[indexPath.row]];
+        ESubjectController *subject = [[ESubjectController alloc] initWithSubject:_contentArray[indexPath.row] type:ESubjectTypeSelection];
         [self.navigationController pushViewController:subject animated:YES];
     }
     

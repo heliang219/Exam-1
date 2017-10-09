@@ -15,6 +15,7 @@
 #import "EDBHelper.h"
 #import "UINavigationBar+Awesome.h"
 #import "EApiClient.h"
+#import "EUtils.h"
 
 #define blockWidth kFrameWidth
 #define blockHeight 70.f / 667.f * kFrameHeight
@@ -81,6 +82,11 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar lt_setBackgroundColor:kThemeColor];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    _type = 0;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -172,40 +178,76 @@
     [cell refreshSize:CGSizeMake(blockWidth, blockHeight)];
     UIImage *bgImg = nil;
     ESubject *subject = _contentArray[indexPath.row];
+    NSString *filePath = [EUtils dataFilePath];
+    NSMutableArray *subjects = nil;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        subjects = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
+    }
+    if (_type == ESubjectTypeSelection) {
+        if (subjects && subjects.count > 0) { // 已选择了科目
+            cell.contentView.alpha = 0.2f;
+            cell.contentView.userInteractionEnabled = NO;
+            for (NSNumber *sub_id in subjects) {
+                if ([sub_id integerValue] == subject.subject_id) {
+                    cell.contentView.alpha = 1.f;
+                    cell.contentView.userInteractionEnabled = YES;
+                    break;
+                }
+            }
+        }
+    } else {
+        cell.contentView.alpha = 1.f;
+        cell.contentView.userInteractionEnabled = YES;
+    }
     [cell refreshWithTitle:subject.subject_title background:bgImg];
     
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+    if (cell.contentView.alpha < 1.f) {
+        return;
+    }
     // 选择科目
-    if (_type == ESubjectTypeSelection) {
-        NSArray *selectedNumbers = (NSArray *)[kUserDefaults objectForKey:kSelectedNumbers];
+    if ([kUserDefaults boolForKey:kIsChoosing]) {
         ESubject *subject = _contentArray[indexPath.row];
+        NSString *filePath = [EUtils dataFilePath];
+        NSArray *selectedNumbers = nil;
+        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+            selectedNumbers = [[NSArray alloc] initWithContentsOfFile:filePath];
+        }
         if (!selectedNumbers) { // 第一次选择
             NSArray *numbers = @[@(subject.subject_id)];
-            [kUserDefaults setObject:numbers forKey:kSelectedNumbers];
-            [kUserDefaults synchronize];
+            [numbers writeToFile:filePath atomically:YES];
             WEAK
             [self showTips:@"请再选择一门科目" time:1 completion:^(BOOL finished){
                 STRONG
                 [strongSelf.navigationController popViewControllerAnimated:YES];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kDeSelectSubjectsNotification object:nil];
             }];
         } else { // 第二次选择
             NSMutableArray *muArr = [NSMutableArray arrayWithArray:selectedNumbers];
             [muArr addObject:@(subject.subject_id)];
-            [kUserDefaults setObject:muArr forKey:kSelectedNumbers];
-            [kUserDefaults synchronize];
+            [muArr writeToFile:filePath atomically:YES];
             
             NSInteger userId = [kUserDefaults integerForKey:kUserId];
             NSString *accessToken = [kUserDefaults objectForKey:kAccess_Token];
             WEAK
             [[EApiClient sharedClient] selectSubjectsOrNot:userId accessToken:accessToken subjectIds:muArr removeOrNot:NO completion:^(id responseObject, NSError *error) {
                 STRONG
+                [kUserDefaults setBool:NO forKey:kIsChoosing];
                 if (responseObject) {
-                    [strongSelf showTips:@"科目选择成功" time:1 completion:nil];
+                    [strongSelf showTips:@"科目选择成功" time:1 completion:^(BOOL finished){
+                        [strongSelf.navigationController popViewControllerAnimated:YES];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:kDeSelectSubjectsNotification object:nil];
+                    }];
                 } else {
-                    [strongSelf showTips:@"科目选择失败" time:1 completion:nil];
+                    [strongSelf showTips:@"科目选择失败" time:1 completion:^(BOOL finished){
+                        [strongSelf.navigationController popViewControllerAnimated:YES];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:kDeSelectSubjectsNotification object:nil];
+                    }];
+                    DLog(@"error : %@",error.localizedDescription);
                 }
             }];
         }

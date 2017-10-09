@@ -11,6 +11,7 @@
 #import "ERegisterController.h"
 #import "ELoginController.h"
 #import <UMSocialCore/UMSocialCore.h>
+#import "EUtils.h"
 
 #define DB_NAME @"exam"
 #define USHARE_DEMO_APPKEY @"5861e5daf5ade41326001eab"
@@ -46,6 +47,19 @@
     }
 }
 
+- (void)initDataFile {
+    NSString *filePath = [EUtils dataFilePath];
+    NSFileManager *fm = [NSFileManager defaultManager];
+    if (![fm fileExistsAtPath:filePath]) {
+        NSError *error = nil;
+        // 取得源文件路径
+        NSString *srcPath = [[NSBundle mainBundle] pathForResource:@"data" ofType:@"plist"];
+        if (![fm copyItemAtPath:srcPath toPath:filePath error:&error]) {
+            DLog(@"ERR : copy info.plist file failed : %@",error);
+        }
+    }
+}
+
 - (void)switchToLoginRegisterController {
     ELoginController *loginController = [[ELoginController alloc] init];
     self.nav = [[ENavigationController alloc] initWithRootViewController:loginController];
@@ -58,6 +72,12 @@
     self.window.rootViewController = self.nav;
 }
 
+- (void)switchToNavigationControllerWithType:(NSInteger)type {
+    EMainTypeController *mainType = [[EMainTypeController alloc] initWithSubjectType:type];
+    self.nav = [[ENavigationController alloc] initWithRootViewController:mainType];
+    self.window.rootViewController = self.nav;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     DLog(@"document路径 : %@",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES)[0]);
@@ -65,6 +85,8 @@
     // 清空NSUserDefaults
     NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
     [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
+    
+    [self initDataFile];
     
     /* 打开调试日志 */
     [[UMSocialManager defaultManager] openLog:YES];

@@ -18,5 +18,7 @@
 
 - (void)switchToNavigationController;
 
+- (void)switchToNavigationControllerWithType:(NSInteger)type;
+
 @end
 

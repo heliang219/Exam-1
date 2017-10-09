@@ -86,6 +86,26 @@
     return subjects;
 }
 
+- (ESubject *)queryTypeBySubId:(NSInteger)subject_id {
+    ESubject *subject = [[ESubject alloc] init];
+    if ([self.examDB open]) {
+        NSString *sql = [NSString stringWithFormat:
+                         @"SELECT * FROM %@ where subject_id = (SELECT subject_p_id FROM %@ where subject_id = '%@')",TB_SUBJECT,TB_SUBJECT,@(subject_id)];
+        FMResultSet *rs = [self.examDB executeQuery:sql];
+        while ([rs next]) {
+            NSInteger subject_id = [rs intForColumn:@"subject_id"];
+            NSInteger subject_p_id = [rs intForColumn:@"subject_p_id"];
+            NSString *subject_title = [rs stringForColumn:@"subject_title"];
+            
+            subject.subject_id = subject_id;
+            subject.subject_p_id = subject_p_id;
+            subject.subject_title = subject_title;
+        }
+        [self.examDB close];
+    }
+    return subject;
+}
+
 - (ESubject *)querySubjectById:(NSInteger)subject_id {
     ESubject *subject = [[ESubject alloc] init];
     if ([self.examDB open]) {

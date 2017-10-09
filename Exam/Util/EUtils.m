@@ -10,6 +10,16 @@
 
 @implementation EUtils
 
++ (NSString *)dataFilePath {
+    // 1.获取文件路径数组，这个是因为考虑到为mac编写代码的原因
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);  // 注意，括号里面的第一个元素是NSDocumentDirectory，而不是NSDocumentationDirectory
+    // 2.获取文件路径数组的第一个元素，因为我们只需要这一个
+    NSString *documentPath = [paths objectAtIndex:0];
+    // 3.获取第2步得到的元素的字符串，并创建一个名为data.plist的.plist文件用于保存数据
+    NSString *fileName = [documentPath stringByAppendingPathComponent:@"data.plist"];
+    return fileName;
+}
+
 + (void)saveLocalAvator:(UIImage *)image {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *avatorDirectory = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"Avator"];

@@ -75,6 +75,7 @@
     originY += lblHeight + 9;
     _phoneTf = [[ECheckTextField alloc] initWithFrame:CGRectMake(originX, originY, kFrameWidth - originX * 2, barHeight)];
     _phoneTf.font = kMediumFont;
+    _phoneTf.text = @"13262953685";
     _phoneTf.keyboardType = UIKeyboardTypeNumberPad;
     _phoneTf.clearButtonMode = UITextFieldViewModeWhileEditing;
     _phoneTf.immediatelyCheck = YES;
@@ -198,31 +199,42 @@
                     [kUserDefaults synchronize];
                     [kUserDefaults setInteger:trailCount forKey:kTrailCount];
                     [kUserDefaults synchronize];
+                    // 已选择的科目
+                    
                     NSArray *subjectsArr = [responseObject arrayValueForKey:@"selected_subjects" defaultValue:nil];
+                    NSString *filePath = [EUtils dataFilePath];
                     if (subjectsArr && subjectsArr.count > 0) {
-                        [kUserDefaults setObject:subjectsArr forKey:kSelectedNumbers];
-                        [kUserDefaults synchronize];
+                        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+                            [subjectsArr writeToFile:filePath atomically:YES];
+                        }
                     } else {
-                        [kUserDefaults setObject:nil forKey:kSelectedNumbers];
-                        [kUserDefaults synchronize];
+                        
                     }
                     // 激活状态
-                    NSString *activateStatus = [responseObject stringValueForKey:@"activation_status" defaultValue:@""];
+                    NSString *activateStatus = [responseObject stringValueForKey:@"activation_status1" defaultValue:@"activated"];
                     if ([activateStatus isEqualToString:@"trail"]) { // 未激活
                         DLog(@"账号未激活");
+                        [kUserDefaults setBool:NO forKey:kIsActivated];
+                        [kUserDefaults synchronize];
+                        AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                        [delegate switchToNavigationController];
                     } else { // 已激活
                         DLog(@"账号已激活");
+                        [kUserDefaults setBool:YES forKey:kIsActivated];
+                        [kUserDefaults synchronize];
+                        if (subjectsArr && subjectsArr.count == 0) {
+                            EAlertWindow *alertWindow = [EAlertWindow sharedWindow];
+                            alertWindow.style = EAlertWindowStyleCustom;
+                            alertWindow.icon = IMAGE_BY_NAMED(@"registerSuccess_logo");
+                            alertWindow.titleFont = [UIFont boldSystemFontOfSize:24.f];
+                            alertWindow.bgColor = [UIColor clearColor];
+                            alertWindow.confirmBtnBgColor = kThemeColor;
+                            alertWindow.confirmBtnTitleColor = [UIColor blackColor];
+                            alertWindow.btnInset = UIEdgeInsetsMake(0, kEPadding, kEPadding, kEPadding);
+                            alertWindow.delegate = self;
+                            [alertWindow showWithTitle:@"您的账号已被激活!" cancelTitle:nil confirmTitle:@"选择两项科目"];
+                        }
                     }
-                    EAlertWindow *alertWindow = [EAlertWindow sharedWindow];
-                    alertWindow.style = EAlertWindowStyleCustom;
-                    alertWindow.icon = IMAGE_BY_NAMED(@"registerSuccess_logo");
-                    alertWindow.titleFont = [UIFont boldSystemFontOfSize:24.f];
-                    alertWindow.bgColor = [UIColor clearColor];
-                    alertWindow.confirmBtnBgColor = kThemeColor;
-                    alertWindow.confirmBtnTitleColor = [UIColor blackColor];
-                    alertWindow.btnInset = UIEdgeInsetsMake(0, kEPadding, kEPadding, kEPadding);
-                    alertWindow.delegate = self;
-                    [alertWindow showWithTitle:@"您的账号已被激活!" cancelTitle:nil confirmTitle:@"选择两项科目"];
                 } else {
                     NSString *info = error.userInfo[@"error"];
                     [strongSelf showTips:info time:1 completion:nil];
@@ -233,7 +245,7 @@
 }
 
 /**
- 禁止/允许‘获取验证码’按钮点击相应
+ 禁止/允许‘获取验证码’按钮点击响应
  */
 - (void)setEnableYanzhengmaBtn:(BOOL)enable {
     if (enable) {
@@ -286,7 +298,9 @@
 
 - (void)eAlertWindow:(EAlertWindow *)alertWindow didClickedAtIndex:(NSInteger)index {
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [delegate switchToNavigationController];
+    [delegate switchToNavigationControllerWithType:0];
+    [kUserDefaults setBool:YES forKey:kIsChoosing];
+    [kUserDefaults synchronize];
 }
 
 /*

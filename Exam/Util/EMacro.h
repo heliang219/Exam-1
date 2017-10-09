@@ -91,9 +91,11 @@ return; \
 #define kLogoHeight 105.f
 #define kLogoWidth kLogoHeight
 #define kHeaderViewHeight 200.f // 头部视图高度（从导航栏顶部开始）
-#define kSelectedNumbers @"kExamSelectedNumbers"
 #define kSelectSubjectsNotification @"kExamSelectSubjectsNotification"
+#define kDeSelectSubjectsNotification @"kExamDeSelectSubjectsNotification"
 #define kLastUpdateTime_subjects @"kExamLastUpdateTime_subjects"
 #define kLastUpdateTime_questions @"kExamLastUpdateTime_questions"
+#define kIsActivated @"kExamAccountIsActivated" // 账号是否已激活
+#define kIsChoosing @"kExamIsChoosing"
 
 #endif /* EMacro_h */
