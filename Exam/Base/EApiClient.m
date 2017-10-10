@@ -19,6 +19,7 @@
 #define SELECT_SUBJECT_OR_NOT @"/api/users/6/select_subjects.json" // 用户选择或者取消选择科目
 #define CHECK_VERSION @"/api/check_version.json" // 客户端最新版本检查
 #define UPDATE_QUESTIONS @"/api/questions/update_questions" // 更新题库
+#define EXAM_COMMIT @"/api/exam" // 考试交卷
 
 @implementation EApiClient
 
@@ -27,6 +28,25 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedClient = [[EApiClient alloc] initWithBaseURL:[NSURL URLWithString:EApiClientBaseURLString]];
+        sharedClient.requestSerializer = [AFJSONRequestSerializer serializer];
+        // 设置请求超时时间（直接设置无效）
+        [sharedClient.requestSerializer willChangeValueForKey:@"timeoutInterval"];
+        [sharedClient.requestSerializer setTimeoutInterval:30];
+        [sharedClient.requestSerializer didChangeValueForKey:@"timeoutInterval"];
+        // 设置请求头
+        // 设置响应头
+        sharedClient.responseSerializer = [AFJSONResponseSerializer serializer];
+        sharedClient.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/plain",@"text/xml",@"image/jpeg",@"text/html", nil];
+    });
+    
+    return sharedClient;
+}
+
++ (instancetype)onlineClient {
+    static EApiClient *sharedClient = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedClient = [[EApiClient alloc] initWithBaseURL:[NSURL URLWithString:@"http://121.41.117.167:3000"]];
         sharedClient.requestSerializer = [AFJSONRequestSerializer serializer];
         // 设置请求超时时间（直接设置无效）
         [sharedClient.requestSerializer willChangeValueForKey:@"timeoutInterval"];
@@ -169,6 +189,19 @@
              completion:(EApiRequestCompletionBlock)completion {
     NSDictionary *params = @{@"access_token":accessToken,@"last_updated_at":lastUpdateTime,@"update_type":updateType,@"page":@(page),@"page_size":@(size)};
     [self postAsyncWithShortUrl:UPDATE_QUESTIONS params:params completion:completion];
+}
+
+// 交卷
+- (void)examCommit:(NSString *)accessToken
+         startTime:(NSString *)startTime
+           endTime:(NSString *)endTime
+totalQuestionCount:(NSInteger)totalQuestionCount
+correctQuestionCount:(NSInteger)correctQuestionCount
+            isPass:(BOOL)isPass
+  questionResponse:(NSArray *)questionResponse
+        completion:(EApiRequestCompletionBlock)completion {
+    NSDictionary *params = @{@"token":accessToken,@"started_at":startTime,@"end_at":endTime,@"total_question_count":@(totalQuestionCount),@"correct_question_count":@(correctQuestionCount),@"passed":@(isPass),@"question_responses":questionResponse};
+    [self postAsyncWithShortUrl:EXAM_COMMIT params:params completion:completion];
 }
 
 @end

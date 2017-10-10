@@ -40,6 +40,6 @@
  */
 - (void)refreshTitle:(NSString *)title;
 
-- (void)refreshScore:(NSString *)score rate:(NSString *)rate;
+- (void)refreshScore:(NSString *)score average:(NSString *)average;
 
 @end

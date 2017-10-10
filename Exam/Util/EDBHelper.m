@@ -16,6 +16,7 @@
 #define TB_QUESTION @"exam_question"
 #define TB_RESULT @"exam_result"
 #define TB_ANSWER @"exam_answer"
+#define TB_RESULT @"exam_result"
 
 @interface EDBHelper()
 
@@ -328,6 +329,36 @@
         [self.examDB close];
     }
     return res;
+}
+
+- (BOOL)insertExam:(EExam *)exam {
+    BOOL res = NO;
+    if ([self.examDB open]) {
+        NSInteger is_pass = exam.is_pass;
+        NSInteger score = exam.score;
+        NSString *insertSql= [NSString stringWithFormat:
+                              @"INSERT INTO '%@' ('is_pass','score') VALUES ('%@','%@')",
+                              TB_RESULT,@(is_pass),@(score)];
+        res = [self.examDB executeUpdate:insertSql];
+        [self.examDB close];
+    }
+    return res;
+}
+
+- (NSInteger)queryAverageScore {
+    NSInteger score = 0;
+    if ([self.examDB open]) {
+        NSString *insertSql= [NSString stringWithFormat:
+                              @"select avg(score) avg_score from '%@'",
+                              TB_RESULT];
+        FMResultSet *rs = [self.examDB executeQuery:insertSql];
+        while ([rs next]) {
+            double avg_score = [rs doubleForColumn:@"avg_score"];
+            score = (int)avg_score;
+        }
+        [self.examDB close];
+    }
+    return score;
 }
 
 @end

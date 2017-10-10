@@ -10,6 +10,8 @@
 #import "EScorePane.h"
 #import "EExamContainer.h"
 #import "EMainTypeController.h"
+#import "EQuestion.h"
+#import "EDBHelper.h"
 
 @interface EScorePaneController ()<EScorePaneDelegate>
 {
@@ -73,7 +75,7 @@
     [self.view addSubview:self.scorePane];
     
     [self refreshTitle:_topTitle];
-    [self refreshScore:@"10" rate:@"10%"];
+    [self calculateScores];
     
     [self setFullScreen:YES WithAnimation:NO];
 }
@@ -214,6 +216,47 @@
     }
 }
 
+#pragma mark - other
+
+// 计算得分
+- (void)calculateScores {
+    CGFloat correct_count = 0.f;
+    NSInteger required_count = 0;
+    NSInteger required_correct_count = 0;
+    BOOL is_pass = NO;
+    for (EQuestion *question in self.questions) {
+        if (question.question_is_required != 1) { // 非必知必会题
+            if (question.answer_type == EAnswerTypeRight) {
+                correct_count ++;
+            }
+        } else { // 必知必会题
+            required_count ++;
+            if (question.answer_type == EAnswerTypeRight) {
+                required_correct_count ++;
+            }
+        }
+    }
+    NSInteger total_count = self.questions.count - required_count;
+    NSInteger score = (int)(correct_count / total_count * 100);
+    is_pass = required_correct_count == required_count;
+    if (required_correct_count < required_count) {
+        is_pass = NO;
+    } else {
+        is_pass = (score >= 80);
+    }
+    EExam *exam = [[EExam alloc] init];
+    exam.is_pass = is_pass;
+    exam.score = score;
+    BOOL insertSuccess = [[EDBHelper defaultHelper] insertExam:exam];
+    NSInteger avg_score = score;
+    if (insertSuccess) {
+        avg_score = [[EDBHelper defaultHelper] queryAverageScore];
+    }
+    NSString *scoreStr = [NSString stringWithFormat:@"%@分",@(score)];
+    NSString *avgScoreStr = [NSString stringWithFormat:@"%@分",@(avg_score)];
+    [_scorePane refreshScore:scoreStr average:avgScoreStr];
+}
+
 #pragma mark - 旋转
 
 - (void)rotate:(UIInterfaceOrientation)orientation {
@@ -260,8 +303,8 @@
     [self.scorePane refreshTitle:title];
 }
 
-- (void)refreshScore:(NSString *)score rate:(NSString *)rate {
-    [self.scorePane refreshScore:score rate:rate];
+- (void)refreshScore:(NSString *)score average:(NSString *)average {
+    [self.scorePane refreshScore:score average:average];
 }
 
 /*

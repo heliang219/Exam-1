@@ -13,6 +13,8 @@
 #import "EAlertWindow.h"
 #import "EScoreContainController.h"
 #import "UINavigationBar+Awesome.h"
+#import "EExam.h"
+#import "NSString+Additions.h"
 
 #define totalTimeInSeconds 5400 // 考试总时长（单位：s）
 
@@ -30,6 +32,8 @@
     BOOL _inGesture; // 是否正在进行手势操作
     CGPoint _gestureBeginPoint; // 手势起点
     EGestureDirection _gestureDirection; // 手势方向
+    
+    EExam *_exam;
 }
 
 @property (nonatomic,assign) BOOL fullScreen;  // 是否是全屏
@@ -133,6 +137,9 @@
         _remainTimeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(changeRemainTime) userInfo:nil repeats:YES];
         _remainTimeInSeconds = totalTimeInSeconds;
         [_remainTimeTimer fire];
+        _exam = [[EExam alloc] init];
+        // 记录考试开始时间
+        _exam.startTime = [NSString stringWithDate:[NSDate date]];
     } else {
         self.examPane.remainTimeLbl.hidden = YES;
         [self.examPane refreshCheckboxHeartColor:RGBCOLOR(159, 219, 137)];
@@ -259,6 +266,7 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(numberBtnClickedAtSection:row:)]) {
         [self.delegate numberBtnClickedAtSection:section row:row];
     }
+    _examPane.tipLbl.alpha = 0.f;
 }
 
 #pragma mark - EAlertWindowDelegate
@@ -485,6 +493,8 @@
         [_remainTimeTimer invalidate];
         _remainTimeTimer = nil;
     }
+    // 记录考试结束时间
+    _exam.endTime = [NSString stringWithDate:[NSDate date]];
     // 隐藏弹窗
     [self.examPane.alertWindow hide];
     // 交卷

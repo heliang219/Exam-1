@@ -66,6 +66,7 @@ typedef NS_ENUM(NSInteger,ExamPaneType) {
 #pragma mark - bottomPane
 @property (nonatomic,strong) UIView *bottomPane;
 @property (nonatomic,strong) UILabel *remainTimeLbl;  // 剩余时间
+@property (nonatomic,strong) UILabel *tipLbl; // 提示文本
 @property (nonatomic,strong) UIButton *scaleBtn; // 文字缩放
 @property (nonatomic,strong) UIButton *previousBtn;  // 上一题
 @property (nonatomic,strong) UIButton *nextBtn;  // 下一题

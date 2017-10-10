@@ -185,6 +185,7 @@
     _bottom_btn.backgroundColor = [UIColor clearColor];
     _bottom_btn.layer.borderColor = kThemeColor.CGColor;
     _bottom_btn.layer.borderWidth = 1.f;
+    _bottom_btn.titleLabel.adjustsFontSizeToFitWidth = YES;
     [_bottom_btn addTarget:self action:@selector(bottomBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [_bottomPane addSubview:_bottom_btn];
 }
@@ -251,9 +252,9 @@
             _bottom_timesLbl.hidden = NO;
             _separator1.hidden = NO;
             _separator2.hidden = NO;
-            CGFloat lblTopMargin = 30.f * kFrameHeight / 375.f;
+            CGFloat lblTopMargin = 20.f * kFrameHeight / 375.f;
             CGFloat lblLeftMargin = 40.f * kFrameWidth / 667.f;
-            CGFloat lblHeight = 44.f * kFrameHeight / 375.f;
+            CGFloat lblHeight = 64.f * kFrameHeight / 375.f;
             CGFloat lbl1Width = [UILabel getWidthWithTitle:_bottom_averageScoreLbl.text font:_bottom_averageScoreLbl.font];
             _bottom_averageScoreLbl.frame = CGRectMake(lblLeftMargin, lblTopMargin, lbl1Width, lblHeight);
             CGFloat lbl2Width = [UILabel getWidthWithTitle:_bottom_maxScoreLbl.text font:_bottom_maxScoreLbl.font];
@@ -281,22 +282,24 @@
     }
 }
 
-- (void)refreshScore:(NSString *)score rate:(NSString *)rate {
-//    NSString *scoreStr = [NSString stringWithFormat:@"得分\n\n%@",score];
-//    // 创建NSMutableAttributedString
-//    NSMutableAttributedString *scoreAttrStr = [[NSMutableAttributedString alloc] initWithString:scoreStr];
-//    // 设置字体和设置字体的范围
-//    [scoreAttrStr addAttribute:NSFontAttributeName value:kMediumFont range:NSMakeRange(0, 4)];
-//    [scoreAttrStr addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:40.f] range:NSMakeRange(4, scoreStr.length - 4)];
-//    _scoreLbl.attributedText = scoreAttrStr;
-//    
-//    NSString *rateStr = [NSString stringWithFormat:@"通过率\n\n%@",rate];
-//    // 创建NSMutableAttributedString
-//    NSMutableAttributedString *rateAttrStr = [[NSMutableAttributedString alloc] initWithString:rateStr];
-//    // 设置字体和设置字体的范围
-//    [rateAttrStr addAttribute:NSFontAttributeName value:kMediumFont range:NSMakeRange(0, 5)];
-//    [rateAttrStr addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:40.f] range:NSMakeRange(5, rateStr.length - 5)];
-//    _rateLbl.attributedText = rateAttrStr;
+- (void)refreshScore:(NSString *)score average:(NSString *)average {
+    NSString *scoreStr = score;
+    // 创建NSMutableAttributedString
+    NSMutableAttributedString *scoreAttrStr = [[NSMutableAttributedString alloc] initWithString:scoreStr];
+    // 设置字体和设置字体的范围
+    [scoreAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:50.f] range:NSMakeRange(0, scoreStr.length - 1)];
+    [scoreAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:25.f] range:NSMakeRange(scoreStr.length - 1, 1)];
+    [scoreAttrStr addAttribute:NSForegroundColorAttributeName value:kThemeColor range:NSMakeRange(0, scoreStr.length)];
+    _currentScoreLbl.attributedText = scoreAttrStr;
+    
+    NSString *averageStr = average;
+    // 创建NSMutableAttributedString
+    NSMutableAttributedString *averageAttrStr = [[NSMutableAttributedString alloc] initWithString:averageStr];
+    // 设置字体和设置字体的范围
+    [averageAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:50.f] range:NSMakeRange(0, averageStr.length - 1)];
+    [averageAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:25.f] range:NSMakeRange(averageStr.length - 1, 1)];
+    [averageAttrStr addAttribute:NSForegroundColorAttributeName value:kThemeColor range:NSMakeRange(0, averageStr.length)];
+    _averageScoreLbl.attributedText = averageAttrStr;
 }
 
 #pragma mark - Button Action

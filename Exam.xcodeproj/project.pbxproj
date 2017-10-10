@@ -209,6 +209,7 @@
 		FAB4D94D1F6A68B000C00168 /* EApiClient.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB4D94C1F6A68B000C00168 /* EApiClient.m */; };
 		FAB4D9501F6A773700C00168 /* NSString+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = FAB4D94F1F6A773700C00168 /* NSString+Additions.m */; };
 		FAC0CC131F8B424A0070634C /* data.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAC0CC121F8B424A0070634C /* data.plist */; };
+		FAC0CC161F8B85950070634C /* EExam.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC0CC151F8B85950070634C /* EExam.m */; };
 		FAD5F7121ECC3483006954C2 /* rightScrollBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAD5F7101ECC3483006954C2 /* rightScrollBtn@2x.png */; };
 		FAD5F7131ECC3483006954C2 /* rightScrollBtn@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAD5F7111ECC3483006954C2 /* rightScrollBtn@3x.png */; };
 /* End PBXBuildFile section */
@@ -542,6 +543,8 @@
 		FAB4D94E1F6A773700C00168 /* NSString+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Additions.h"; sourceTree = "<group>"; };
 		FAB4D94F1F6A773700C00168 /* NSString+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Additions.m"; sourceTree = "<group>"; };
 		FAC0CC121F8B424A0070634C /* data.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = data.plist; sourceTree = "<group>"; };
+		FAC0CC141F8B85950070634C /* EExam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EExam.h; sourceTree = "<group>"; };
+		FAC0CC151F8B85950070634C /* EExam.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EExam.m; sourceTree = "<group>"; };
 		FAD5F7101ECC3483006954C2 /* rightScrollBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rightScrollBtn@2x.png"; sourceTree = "<group>"; };
 		FAD5F7111ECC3483006954C2 /* rightScrollBtn@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rightScrollBtn@3x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -888,6 +891,8 @@
 				4512C6671E4320C300DB8358 /* EQuestion.m */,
 				4580E9021E4355AC0093E5C9 /* EAnswer.h */,
 				4580E9031E4355AC0093E5C9 /* EAnswer.m */,
+				FAC0CC141F8B85950070634C /* EExam.h */,
+				FAC0CC151F8B85950070634C /* EExam.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1452,6 +1457,7 @@
 				456C8C471E2FA21D002EA371 /* View+MASAdditions.m in Sources */,
 				456C8C481E2FA21D002EA371 /* MBProgressHUD.m in Sources */,
 				45C493031E2FB0E100FBD8B7 /* EExamPaneController.m in Sources */,
+				FAC0CC161F8B85950070634C /* EExam.m in Sources */,
 				FA08FA631E308E7300C01C49 /* EBlockCell.m in Sources */,
 				456C8C3C1E2FA21C002EA371 /* IQToolbar.m in Sources */,
 				FAB4D9411F6A688000C00168 /* AFURLSessionManager.m in Sources */,

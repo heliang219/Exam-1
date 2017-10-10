@@ -11,6 +11,7 @@
 #import "ESubject.h"
 #import "EQuestion.h"
 #import "EAnswer.h"
+#import "EExam.h"
 
 /**
  本地数据库存取
@@ -103,5 +104,9 @@
 - (BOOL)insertAnswer:(EAnswer *)answer;
 
 - (BOOL)updateAnswer:(EAnswer *)answer;
+
+- (BOOL)insertExam:(EExam *)exam;
+
+- (NSInteger)queryAverageScore;
 
 @end

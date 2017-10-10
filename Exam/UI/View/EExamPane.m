@@ -328,8 +328,18 @@
     _remainTimeLbl.backgroundColor = [UIColor clearColor];
     _remainTimeLbl.font = kTinyFont;
     _remainTimeLbl.textAlignment = NSTextAlignmentRight;
-    _remainTimeLbl.text = @"剩余时间：01:29:57";
+    _remainTimeLbl.text = @"剩余时间：01:29:59";
     [_bottomPane addSubview:_remainTimeLbl];
+    
+    _tipLbl = [[UILabel alloc] init];
+    _tipLbl.numberOfLines = 1;
+    _tipLbl.textColor = [UIColor darkGrayColor];
+    _tipLbl.backgroundColor = [UIColor clearColor];
+    _tipLbl.font = kTinyFont;
+    _tipLbl.textAlignment = NSTextAlignmentRight;
+    _tipLbl.text = @"橙色为答错题，绿色为答对题，灰色为未答题";
+    [_bottomPane addSubview:_tipLbl];
+    _tipLbl.alpha = 0.f;
     
     _scaleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_scaleBtn setTitle:@"文字缩放" forState:UIControlStateNormal];
@@ -516,6 +526,9 @@
     CGFloat timeLblWidth = [UILabel getWidthWithTitle:_remainTimeLbl.text font:_remainTimeLbl.font] + 5.f;
     CGFloat timeLblHeight = 15.f;
     _remainTimeLbl.frame = CGRectMake(_bottomPane.bounds.size.width - kEPadding - timeLblWidth, kEPadding, timeLblWidth, timeLblHeight);
+    CGFloat tipLblWidth = [UILabel getWidthWithTitle:_tipLbl.text font:_tipLbl.font] + 5.f;
+    CGFloat tipLblHeight = 15.f;
+    _tipLbl.frame = CGRectMake(_bottomPane.bounds.size.width - kEPadding - tipLblWidth, kEPadding, tipLblWidth, tipLblHeight);
 #pragma mark - rightPane
     _rightPane.frame = CGRectMake(_isRightPaneShowing?0:bounds.size.width - rightScrollBtnWidth, topPaneHeight, rightPaneWidth, bounds.size.height - topPaneHeight - bottomPaneHeight);
     _numberView.frame = CGRectMake(kEPadding * 2 + rightScrollBtnWidth, 0, _rightPane.bounds.size.width - kEPadding * 4 - rightScrollBtnWidth, _rightPane.bounds.size.height);
@@ -590,17 +603,17 @@
     switch (question.answer_type) {
         case EAnswerTypeBlank:
         {
-            blockBgColor = HEXCOLOR(0xc0c0c0);
+            blockBgColor = HEXCOLOR(0xc0c0c0); // 灰色
         }
             break;
         case EAnswerTypeWrong:
         {
-            blockBgColor = HEXCOLOR(0xf9a041);
+            blockBgColor = HEXCOLOR(0xf9a041); // 橙色
         }
             break;
         case EAnswerTypeRight:
         {
-            blockBgColor = HEXCOLOR(0x7fdb83);
+            blockBgColor = HEXCOLOR(0x7fdb83); // 绿色
         }
             break;
         default:
@@ -790,6 +803,9 @@
                 return;
             }
             strongSelf->_rightPane.frame = CGRectMake(- rightScrollBtnWidth, strongSelf->_rightPane.frame.origin.y, strongSelf->_rightPane.bounds.size.width, strongSelf->_rightPane.bounds.size.height);
+            if (strongSelf->_type == ExamPaneTypeCheck) {
+                strongSelf.tipLbl.alpha = 1.f;
+            }
         } completion:^(BOOL finished) {
             __strong typeof (self) strongSelf = weakSelf;
             if (!strongSelf) {
@@ -805,6 +821,9 @@
                 return;
             }
             strongSelf->_rightPane.frame = CGRectMake(strongSelf.bounds.size.width - rightScrollBtnWidth, strongSelf->_rightPane.frame.origin.y, strongSelf->_rightPane.bounds.size.width, strongSelf->_rightPane.bounds.size.height);
+            if (strongSelf->_type == ExamPaneTypeCheck) {
+                strongSelf.tipLbl.alpha = 0.f;
+            }
         } completion:^(BOOL finished) {
             __strong typeof (self) strongSelf = weakSelf;
             if (!strongSelf) {
