@@ -67,6 +67,12 @@
     [self GET:shortUrl parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         DLog(@"%@ responseObject : %@",shortUrl,responseObject);
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO]; // 关闭状态来网络请求指示
+        if (![responseObject isKindOfClass:[NSDictionary class]]) {
+            NSString *receiveStr = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
+            NSData *data = [receiveStr dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+            responseObject = jsonDict;
+        }
         if ([responseObject objectForKey:@"error"]) {
             if (completion) {
                 completion([NSError errorWithDomain:NSOSStatusErrorDomain code:-1 userInfo:@{@"error":[responseObject objectForKey:@"error"]}],nil);
@@ -91,6 +97,12 @@
     [self POST:shortUrl parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         DLog(@"%@ responseObject : %@",shortUrl,responseObject);
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO]; // 关闭状态来网络请求指示
+        if (![responseObject isKindOfClass:[NSDictionary class]]) {
+            NSString *receiveStr = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
+            NSData *data = [receiveStr dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+            responseObject = jsonDict;
+        }
         if ([responseObject objectForKey:@"error"]) {
             if (completion) {
                 completion([NSError errorWithDomain:NSOSStatusErrorDomain code:-1 userInfo:@{@"error":[responseObject objectForKey:@"error"]}],nil);

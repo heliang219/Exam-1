@@ -16,16 +16,18 @@
 @property (nonatomic,strong) EScorePaneController *scorePaneController;
 @property (nonatomic,copy) NSString *topTitle;
 @property (nonatomic,strong) NSArray *questions;
+@property (nonatomic,strong) EExam *exam;
 
 @end
 
 @implementation EScoreContainController
 
-- (instancetype)initWithTitle:(NSString *)title questions:(NSArray *)questions {
+- (instancetype)initWithTitle:(NSString *)title questions:(NSArray *)questions exam:(EExam *)exam {
     self = [super init];
     if (self) {
         _topTitle = title;
         _questions = questions;
+        _exam = exam;
     }
     return self;
 }
@@ -34,7 +36,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
-    self.scorePaneController = [EScorePaneController createWithController:self view:self.view delegate:self title:_topTitle questions:_questions];
+    self.scorePaneController = [EScorePaneController createWithController:self view:self.view delegate:self title:_topTitle questions:_questions exam:_exam];
 }
 
 - (void)didReceiveMemoryWarning {

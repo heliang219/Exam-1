@@ -233,8 +233,11 @@
             
             NSInteger userId = [kUserDefaults integerForKey:kUserId];
             NSString *accessToken = [kUserDefaults objectForKey:kAccess_Token];
+            EApiClient *sharedClient = [EApiClient sharedClient];
+            sharedClient.responseSerializer = [AFHTTPResponseSerializer serializer];
+            sharedClient.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/plain",@"text/xml",@"image/jpeg",@"text/html", nil];
             WEAK
-            [[EApiClient sharedClient] selectSubjectsOrNot:userId accessToken:accessToken subjectIds:muArr removeOrNot:NO completion:^(id responseObject, NSError *error) {
+            [sharedClient selectSubjectsOrNot:userId accessToken:accessToken subjectIds:muArr removeOrNot:NO completion:^(id responseObject, NSError *error) {
                 STRONG
                 [kUserDefaults setBool:NO forKey:kIsChoosing];
                 if (responseObject) {

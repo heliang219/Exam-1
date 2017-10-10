@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EExam.h"
 
 @interface EScoreContainController : UIViewController
 
-- (instancetype)initWithTitle:(NSString *)title questions:(NSArray *)questions;
+- (instancetype)initWithTitle:(NSString *)title questions:(NSArray *)questions exam:(EExam *)exam;
 
 @end

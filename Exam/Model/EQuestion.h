@@ -28,6 +28,7 @@ typedef NS_ENUM(NSUInteger,EAnswerType) {
 @property (nonatomic,assign) NSInteger question_is_required;
 @property (nonatomic,strong) NSArray *answers;
 @property (nonatomic,assign) EAnswerType answer_type; // 回答情况
+@property (nonatomic,copy) NSString *selectedAnswerString; // 用户选择的答案(如"AB"、"BD")
 
 /**
  刷新答题情况

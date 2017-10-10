@@ -12,11 +12,13 @@
 #import "EMainTypeController.h"
 #import "EQuestion.h"
 #import "EDBHelper.h"
+#import "EApiClient.h"
 
 @interface EScorePaneController ()<EScorePaneDelegate>
 {
     ScorePaneType _type;
     NSString *_topTitle;
+    BOOL _needLoading;
 }
 
 @property (nonatomic,assign) BOOL fullScreen;  // 是否是全屏
@@ -28,6 +30,7 @@
 @property (nonatomic,strong) EScorePane *scorePane;
 @property (nonatomic,assign) CGRect originFrame;  // 初始化尺寸
 @property (nonatomic,strong,readwrite) NSArray *questions;  // 所有试题
+@property (nonatomic,strong) EExam *exam;
 
 @end
 
@@ -40,6 +43,7 @@
     if (self) {
         _questions = questions;
         _isLowIOS = NO;
+        _needLoading = YES;
         if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.4f) {
             _isLowIOS = YES;
         }
@@ -49,7 +53,7 @@
     return self;
 }
 
-- (instancetype)initWithTitle:(NSString *)title questions:(NSArray *)questions {
+- (instancetype)initWithTitle:(NSString *)title questions:(NSArray *)questions exam:(EExam *)exam {
     self = [self initWithQuestions:questions];
     if (self) {
         _topTitle = title;
@@ -58,6 +62,7 @@
         } else if ([_topTitle isEqualToString:@"练习复卷成绩"]) {
             _type = ScorePaneTypeCheck;
         }
+        _exam = exam;
     }
     return self;
 }
@@ -108,14 +113,41 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    if (_needLoading) {
+        NSString *accessToken = [kUserDefaults objectForKey:kAccess_Token];
+        NSMutableArray *questionsResponses = [NSMutableArray array];
+        for (EQuestion *question in self.questions) {
+            NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+            dic[@"question_id"] = @(question.question_id);
+            dic[@"answer"] = question.selectedAnswerString;
+            dic[@"correct"] = @(question.answer_type == EAnswerTypeRight);
+            [questionsResponses addObject:dic];
+        }
+        WEAK
+        [[EApiClient sharedClient] examCommit:accessToken startTime:_exam.startTime endTime:_exam.endTime totalQuestionCount:_questions.count correctQuestionCount:_exam.correctCount isPass:_exam.is_pass questionResponse:questionsResponses completion:^(id responseObject, NSError *error) {
+            STRONG
+            if (responseObject) {
+                DLog(@"提交成功");
+            } else {
+                DLog(@"提交失败");
+            }
+            strongSelf->_needLoading = NO;
+        }];
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    _needLoading = NO;
 }
 
 - (void)dealloc {
     DLog(@"EScorePaneController即将释放");
 }
 
-+ (instancetype)createWithController:(UIViewController *)controller view:(UIView *)view delegate:(id<EScorePaneControllerDelegate>)delegate title:(NSString *)title questions:(NSArray *)questions {
-    EScorePaneController *scoreVC = [[EScorePaneController alloc] initWithTitle:title questions:questions];
++ (instancetype)createWithController:(UIViewController *)controller view:(UIView *)view delegate:(id<EScorePaneControllerDelegate>)delegate title:(NSString *)title questions:(NSArray *)questions exam:(EExam *)exam {
+    EScorePaneController *scoreVC = [[EScorePaneController alloc] initWithTitle:title questions:questions exam:exam];
     scoreVC.delegate = delegate;
     [view addSubview:scoreVC.view];
     [controller addChildViewController:scoreVC];

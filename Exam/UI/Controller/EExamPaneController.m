@@ -15,6 +15,7 @@
 #import "UINavigationBar+Awesome.h"
 #import "EExam.h"
 #import "NSString+Additions.h"
+#import "EApiClient.h"
 
 #define totalTimeInSeconds 5400 // 考试总时长（单位：s）
 
@@ -499,8 +500,35 @@
     [self.examPane.alertWindow hide];
     // 交卷
     NSString *title = _type == ExamPaneTypeExercise ? @"模拟练习成绩" : @"练习复卷成绩";
-    EScoreContainController *score = [[EScoreContainController alloc] initWithTitle:title questions:self.questions];
-    [self.navigationController pushViewController:score animated:YES];
+    
+    CGFloat correct_count = 0.f;
+    NSInteger required_count = 0;
+    NSInteger required_correct_count = 0;
+    BOOL is_pass = NO;
+    for (EQuestion *question in self.questions) {
+        if (question.question_is_required != 1) { // 非必知必会题
+            if (question.answer_type == EAnswerTypeRight) {
+                correct_count ++;
+            }
+        } else { // 必知必会题
+            required_count ++;
+            if (question.answer_type == EAnswerTypeRight) {
+                required_correct_count ++;
+            }
+        }
+    }
+    NSInteger total_count = self.questions.count - required_count;
+    NSInteger score = (int)(correct_count / total_count * 100);
+    is_pass = required_correct_count == required_count;
+    if (required_correct_count < required_count) {
+        is_pass = NO;
+    } else {
+        is_pass = (score >= 80);
+    }
+    _exam.is_pass = is_pass;
+    _exam.correctCount = (int)correct_count;
+    EScoreContainController *scoreVC = [[EScoreContainController alloc] initWithTitle:title questions:self.questions exam:_exam];
+    [self.navigationController pushViewController:scoreVC animated:YES];
 }
 
 /*

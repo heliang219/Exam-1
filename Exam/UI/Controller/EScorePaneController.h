@@ -8,6 +8,7 @@
 
 #import "EBaseController.h"
 #import "EScorePane.h"
+#import "EExam.h"
 
 @protocol EScorePaneControllerDelegate <NSObject>
 
@@ -29,7 +30,7 @@
 
 #pragma mark - 初始化方法
 
-+ (instancetype)createWithController:(UIViewController *)controller view:(UIView *)view delegate:(id<EScorePaneControllerDelegate>)delegate title:(NSString *)title questions:(NSArray *)questions;
++ (instancetype)createWithController:(UIViewController *)controller view:(UIView *)view delegate:(id<EScorePaneControllerDelegate>)delegate title:(NSString *)title questions:(NSArray *)questions exam:(EExam *)exam;
 
 #pragma mark - public methods
 

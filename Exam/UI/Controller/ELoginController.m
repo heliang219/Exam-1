@@ -75,7 +75,8 @@
     originY += lblHeight + 9;
     _phoneTf = [[ECheckTextField alloc] initWithFrame:CGRectMake(originX, originY, kFrameWidth - originX * 2, barHeight)];
     _phoneTf.font = kMediumFont;
-    _phoneTf.text = @"13262953685";
+//    _phoneTf.text = @"13541141058"; // 激活的账号
+    _phoneTf.text = @"13262953685"; // 未激活的账号
     _phoneTf.keyboardType = UIKeyboardTypeNumberPad;
     _phoneTf.clearButtonMode = UITextFieldViewModeWhileEditing;
     _phoneTf.immediatelyCheck = YES;
@@ -162,7 +163,7 @@
                     NSInteger trailCount = [responseObject integerValueForKey:@"trail_count" defaultValue:0];
                     NSDictionary *avatorDic = [responseObject dictionaryValueForKey:@"avatar" defaultValue:nil];
                     if (avatorDic) {
-                        NSString *avatorUrl = [avatorDic stringValueForKey:@"url" defaultValue:nil];
+                        NSString *avatorUrl = [avatorDic stringValueForKey:@"url" defaultValue:@""];
                         avatorUrl = [[EApiClient sharedClient].baseUrl stringByAppendingString:avatorUrl];
                         [kUserDefaults setObject:avatorUrl forKey:kAvatorUrl];
                         [kUserDefaults synchronize];
@@ -208,7 +209,11 @@
                             [subjectsArr writeToFile:filePath atomically:YES];
                         }
                     } else {
-                        
+                        // 使用本地保存的已选择科目
+                        NSArray *subjects = [[NSArray alloc] initWithContentsOfFile:filePath];
+                        if (subjects) {
+                            subjectsArr = subjects;
+                        }
                     }
                     // 激活状态
                     NSString *activateStatus = [responseObject stringValueForKey:@"activation_status1" defaultValue:@"activated"];
@@ -233,6 +238,9 @@
                             alertWindow.btnInset = UIEdgeInsetsMake(0, kEPadding, kEPadding, kEPadding);
                             alertWindow.delegate = self;
                             [alertWindow showWithTitle:@"您的账号已被激活!" cancelTitle:nil confirmTitle:@"选择两项科目"];
+                        } else {
+                            AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                            [delegate switchToNavigationController];
                         }
                     }
                 } else {
@@ -264,6 +272,9 @@
     BOOL phoneOK = [_phoneTf check:ETextFieldTypePhone];
     if (phoneOK) {
         [self setEnableYanzhengmaBtn:NO];
+        seconds = 60;
+        timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(changeSeconds) userInfo:nil repeats:YES];
+        [timer fire];
         WEAK
         [[EApiClient sharedClient] sendSMSCode:[_phoneTf.text realString] completion:^(id responseObject, NSError *error) {
             STRONG
@@ -271,13 +282,12 @@
                 [strongSelf showTips:@"验证码已发送" time:1 completion:nil];
                 strongSelf->_verifyTf.text = [responseObject stringValueForKey:@"verification_code" defaultValue:nil];
             } else {
-                NSString *info = error.userInfo[@"error"];
-                [strongSelf showTips:info time:1 completion:nil];
+                [strongSelf showTips:@"验证码发送失败，请重试" time:1 completion:nil];
+                [strongSelf setEnableYanzhengmaBtn:YES];
+                [strongSelf->timer invalidate];
+                strongSelf->timer = nil;
             }
         }];
-        seconds = 60;
-        timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(changeSeconds) userInfo:nil repeats:YES];
-        [timer fire];
     }
 }
 

@@ -368,7 +368,7 @@ static NSString* const UMS_WebLink = @"http://mobile.umeng.com/social";
             NSInteger trailCount = [responseObject integerValueForKey:@"trail_count" defaultValue:0];
             NSDictionary *avatorDic = [responseObject dictionaryValueForKey:@"avatar" defaultValue:nil];
             if (avatorDic) {
-                NSString *avatorUrl = [avatorDic stringValueForKey:@"url" defaultValue:nil];
+                NSString *avatorUrl = [avatorDic stringValueForKey:@"url" defaultValue:@""];
                 avatorUrl = [[EApiClient sharedClient].baseUrl stringByAppendingString:avatorUrl];
                 [kUserDefaults setObject:avatorUrl forKey:kAvatorUrl];
                 [kUserDefaults synchronize];

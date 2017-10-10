@@ -75,4 +75,52 @@
     _answer_type = at;
 }
 
+- (NSString *)selectedAnswerString {
+    NSString *answerStr = @"";
+    switch (self.answers.count) {
+        case 2:
+        {
+            if (((EAnswer *)self.answers[0]).checked) {
+                answerStr = [answerStr stringByAppendingString:@"A"];
+            }
+            if (((EAnswer *)self.answers[1]).checked) {
+                answerStr = [answerStr stringByAppendingString:@"B"];
+            }
+        }
+            break;
+        case 3:
+        {
+            if (((EAnswer *)self.answers[0]).checked) {
+                answerStr = [answerStr stringByAppendingString:@"A"];
+            }
+            if (((EAnswer *)self.answers[1]).checked) {
+                answerStr = [answerStr stringByAppendingString:@"B"];
+            }
+            if (((EAnswer *)self.answers[2]).checked) {
+                answerStr = [answerStr stringByAppendingString:@"C"];
+            }
+        }
+            break;
+        case 4:
+        {
+            if (((EAnswer *)self.answers[0]).checked) {
+                answerStr = [answerStr stringByAppendingString:@"A"];
+            }
+            if (((EAnswer *)self.answers[1]).checked) {
+                answerStr = [answerStr stringByAppendingString:@"B"];
+            }
+            if (((EAnswer *)self.answers[2]).checked) {
+                answerStr = [answerStr stringByAppendingString:@"C"];
+            }
+            if (((EAnswer *)self.answers[3]).checked) {
+                answerStr = [answerStr stringByAppendingString:@"D"];
+            }
+        }
+            break;
+        default:
+            break;
+    }
+    return answerStr;
+}
+
 @end
