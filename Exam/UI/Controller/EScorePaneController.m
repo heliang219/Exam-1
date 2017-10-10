@@ -254,7 +254,19 @@
     }
     NSString *scoreStr = [NSString stringWithFormat:@"%@分",@(score)];
     NSString *avgScoreStr = [NSString stringWithFormat:@"%@分",@(avg_score)];
-    [_scorePane refreshScore:scoreStr average:avgScoreStr];
+    if (_type == ScorePaneTypeExercise) {
+        [_scorePane refreshScore:scoreStr average:avgScoreStr];
+    } else {
+        NSInteger max_score = score;
+        NSInteger counts = 1;
+        if (insertSuccess) {
+            max_score = [[EDBHelper defaultHelper] queryMaxScore];
+            counts = [[EDBHelper defaultHelper] queryExamCount];
+        }
+        NSString *maxScoreStr = [NSString stringWithFormat:@"%@分",@(max_score)];
+        NSString *countsStr = [NSString stringWithFormat:@"%@次",@(counts)];
+        [_scorePane refreshScore:scoreStr average:avgScoreStr max:maxScoreStr counts:countsStr];
+    }
 }
 
 #pragma mark - 旋转

@@ -62,4 +62,6 @@ typedef NS_ENUM(NSInteger,ScorePaneType) {
 
 - (void)refreshScore:(NSString *)score average:(NSString *)average;
 
+- (void)refreshScore:(NSString *)score average:(NSString *)average max:(NSString *)max counts:(NSString *)counts;
+
 @end

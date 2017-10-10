@@ -144,7 +144,9 @@
             }
         }
     }
-    [_currentQuestion refreshAnswerType];
+    if (_type != ExamPaneTypeCheck) {
+        [_currentQuestion refreshAnswerType];
+    }
     [_numberView reloadData];
 }
 

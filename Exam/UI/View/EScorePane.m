@@ -113,7 +113,7 @@
     _currentScoreLbl.textAlignment = NSTextAlignmentCenter;
     _currentScoreLbl.font = [UIFont systemFontOfSize:50.f];
     _currentScoreLbl.backgroundColor = [UIColor clearColor];
-    _currentScoreLbl.text = @"100分";
+    _currentScoreLbl.text = @"0分";
     _currentScoreLbl.textColor = kThemeColor;
     [_middlePane addSubview:_currentScoreLbl];
     
@@ -133,7 +133,7 @@
     _averageScoreLbl.textAlignment = NSTextAlignmentCenter;
     _averageScoreLbl.font = [UIFont systemFontOfSize:50.f];
     _averageScoreLbl.backgroundColor = [UIColor clearColor];
-    _averageScoreLbl.text = @"60分";
+    _averageScoreLbl.text = @"0分";
     _averageScoreLbl.textColor = kThemeColor;
     [_middlePane addSubview:_averageScoreLbl];
 }
@@ -147,7 +147,7 @@
     _bottom_averageScoreLbl.textAlignment = NSTextAlignmentLeft;
     _bottom_averageScoreLbl.font = kMediumFont;
     _bottom_averageScoreLbl.backgroundColor = [UIColor clearColor];
-    _bottom_averageScoreLbl.text = @"练习平均分\n75分";
+    _bottom_averageScoreLbl.text = @"练习平均分\n0分";
     _bottom_averageScoreLbl.numberOfLines = 2;
     _bottom_averageScoreLbl.textColor = [UIColor blackColor];
     [_bottomPane addSubview:_bottom_averageScoreLbl];
@@ -160,7 +160,7 @@
     _bottom_maxScoreLbl.textAlignment = NSTextAlignmentLeft;
     _bottom_maxScoreLbl.font = kMediumFont;
     _bottom_maxScoreLbl.backgroundColor = [UIColor clearColor];
-    _bottom_maxScoreLbl.text = @"练习最高分\n75分";
+    _bottom_maxScoreLbl.text = @"练习最高分\n0分";
     _bottom_maxScoreLbl.numberOfLines = 2;
     _bottom_maxScoreLbl.textColor = [UIColor blackColor];
     [_bottomPane addSubview:_bottom_maxScoreLbl];
@@ -173,7 +173,7 @@
     _bottom_timesLbl.textAlignment = NSTextAlignmentLeft;
     _bottom_timesLbl.font = kMediumFont;
     _bottom_timesLbl.backgroundColor = [UIColor clearColor];
-    _bottom_timesLbl.text = @"练习次数\n3次";
+    _bottom_timesLbl.text = @"练习次数\n1次";
     _bottom_timesLbl.numberOfLines = 2;
     _bottom_timesLbl.textColor = [UIColor blackColor];
     [_bottomPane addSubview:_bottom_timesLbl];
@@ -300,6 +300,13 @@
     [averageAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:25.f] range:NSMakeRange(averageStr.length - 1, 1)];
     [averageAttrStr addAttribute:NSForegroundColorAttributeName value:kThemeColor range:NSMakeRange(0, averageStr.length)];
     _averageScoreLbl.attributedText = averageAttrStr;
+}
+
+- (void)refreshScore:(NSString *)score average:(NSString *)average max:(NSString *)max counts:(NSString *)counts {
+    [self refreshScore:score average:average];
+    _bottom_averageScoreLbl.text = [NSString stringWithFormat:@"练习平均分\n%@",average];
+    _bottom_maxScoreLbl.text = [NSString stringWithFormat:@"练习最高分\n%@",max];
+    _bottom_timesLbl.text = [NSString stringWithFormat:@"练习次数\n%@",counts];
 }
 
 #pragma mark - Button Action

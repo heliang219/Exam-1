@@ -109,4 +109,8 @@
 
 - (NSInteger)queryAverageScore;
 
+- (NSInteger)queryMaxScore;
+
+- (NSInteger)queryExamCount;
+
 @end

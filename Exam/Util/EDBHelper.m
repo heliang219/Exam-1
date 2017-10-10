@@ -361,4 +361,34 @@
     return score;
 }
 
+- (NSInteger)queryMaxScore {
+    NSInteger score = 0;
+    if ([self.examDB open]) {
+        NSString *insertSql= [NSString stringWithFormat:
+                              @"select max(score) max_score from '%@'",
+                              TB_RESULT];
+        FMResultSet *rs = [self.examDB executeQuery:insertSql];
+        while ([rs next]) {
+            score = [rs intForColumn:@"max_score"];
+        }
+        [self.examDB close];
+    }
+    return score;
+}
+
+- (NSInteger)queryExamCount {
+    NSInteger counts = 0;
+    if ([self.examDB open]) {
+        NSString *insertSql= [NSString stringWithFormat:
+                              @"select count(score) counts from '%@'",
+                              TB_RESULT];
+        FMResultSet *rs = [self.examDB executeQuery:insertSql];
+        while ([rs next]) {
+            counts = [rs intForColumn:@"counts"];
+        }
+        [self.examDB close];
+    }
+    return counts;
+}
+
 @end
